@@ -103,9 +103,9 @@ function RoomInner() {
 
   const lobby = room.status === "waiting" ? (
     <Surface>
-      <div className="flex flex-wrap items-center gap-2"><Badge><Users className="size-3" /> Lobby</Badge><Badge>{online > 1 ? "friend online" : "waiting"}</Badge></div>
+      <div className="flex flex-wrap items-center gap-2"><Badge><Users className="size-3" /> Лобби</Badge><Badge>{online > 1 ? "друг онлайн" : "ожидание"}</Badge></div>
       <h2 className="mt-5 font-display text-3xl font-semibold">Пригласите второго игрока</h2>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">Белые уже в комнате. Черные подключатся по invite link, после чего статус станет active.</p>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">Белые уже в комнате. Черные подключатся по ссылке, после чего партия станет активной.</p>
       <Button className="mt-5 w-full" variant="secondary" onClick={copyLink} type="button"><Copy className="size-4" /> {copied ? "Ссылка скопирована" : "Копировать ссылку"}</Button>
       <Button className="mt-3 w-full" variant="ghost" onClick={() => void reload()} type="button"><RotateCcw className="size-4" /> Обновить состояние</Button>
     </Surface>
@@ -114,8 +114,8 @@ function RoomInner() {
   return (
     <>
       <GameShell
-        title={`Room ${room.id}`}
-        description="Realtime-мультиплеер по ссылке: Supabase Presence показывает онлайн, DB version защищает от race condition, reconnect подтягивает последнюю позицию."
+        title={`Комната ${room.id}`}
+        description="Партия по ссылке с сохранением последней позиции. Если связь оборвется, игроки вернутся в актуальное состояние комнаты."
         board={<ChessboardView fen={fen} theme={theme} orientation={orientation} onMove={onMove} allowDragging={canMove} />}
         side={
           <>
@@ -123,14 +123,14 @@ function RoomInner() {
             <GameStatus status={status} />
             <Surface>
               <div className="flex flex-wrap items-center gap-2">
-                <Badge><Radio className="size-3" /> {online} online</Badge>
+                <Badge><Radio className="size-3" /> онлайн: {online}</Badge>
                 <Badge>Вы: {color}</Badge>
-                <Badge>version {room.version}</Badge>
+                <Badge>ходов: {room.moves.length}</Badge>
               </div>
               {error ? <p className="mt-3 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{error}</p> : null}
               <div className="mt-5"><BoardThemePicker value={theme} onChange={setTheme} isPro={profile?.is_pro} /></div>
-              <Button className="mt-5 w-full" variant="secondary" onClick={copyLink} type="button"><Copy className="size-4" /> {copied ? "Ссылка скопирована" : "Invite link"}</Button>
-              {reviewing ? <p className="mt-3 text-sm text-primary">AI Coach анализирует финальную позицию...</p> : null}
+              <Button className="mt-5 w-full" variant="secondary" onClick={copyLink} type="button"><Copy className="size-4" /> {copied ? "Ссылка скопирована" : "Копировать ссылку"}</Button>
+              {reviewing ? <p className="mt-3 text-sm text-primary">Разбор анализирует финальную позицию...</p> : null}
             </Surface>
             <MoveList moves={moves} />
           </>

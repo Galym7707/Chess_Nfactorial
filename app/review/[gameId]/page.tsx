@@ -45,7 +45,7 @@ function ReviewInner() {
     }
   }
 
-  if (loading) return <section className="mx-auto max-w-5xl px-4 py-16 text-center text-muted-foreground">Загрузка review...</section>;
+  if (loading) return <section className="mx-auto max-w-5xl px-4 py-16 text-center text-muted-foreground">Загрузка разбора...</section>;
 
   if (!game) {
     return (
@@ -64,11 +64,11 @@ function ReviewInner() {
           <p className="mt-3 text-sm text-muted-foreground">{game.result} · {formatDate(game.completed_at)}</p>
           <p className="mt-4 text-sm leading-6 text-muted-foreground">{game.summary}</p>
           <div className="mt-5 rounded-2xl bg-muted/50 p-3 text-xs text-muted-foreground break-all">FEN: {game.fen}</div>
-          {!report ? <Button className="mt-5 w-full" onClick={startReview} disabled={!ready || reviewing} type="button">{reviewing ? "Анализ..." : ready ? "Запустить AI Coach" : "Stockfish warming up"}</Button> : null}
+          {!report ? <Button className="mt-5 w-full" onClick={startReview} disabled={!ready || reviewing} type="button">{reviewing ? "Анализ..." : ready ? "Запустить разбор" : "Движок запускается"}</Button> : null}
         </Surface>
         <MoveList moves={game.moves} />
       </div>
-      {report ? <CoachReportView report={report} /> : <Surface><h2 className="font-display text-3xl font-semibold">Review еще не создан</h2><p className="mt-3 text-sm text-muted-foreground">Нажмите кнопку слева. Free анализирует меньше полуходов; Pro включает расширенный review.</p></Surface>}
+      {report ? <CoachReportView report={report} /> : <Surface><h2 className="font-display text-3xl font-semibold">Разбор еще не создан</h2><p className="mt-3 text-sm text-muted-foreground">Нажмите кнопку слева. Бесплатный режим анализирует меньше полуходов; Pro включает расширенный разбор.</p></Surface>}
     </section>
   );
 }

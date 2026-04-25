@@ -126,7 +126,7 @@ function AiArenaInner() {
     <>
       <GameShell
         title="AI Arena"
-        description="Игра против Stockfish в Web Worker: UI не зависает, сложность управляется depth, movetime и Skill Level. После партии запускается AI Coach в стиле code review."
+        description="Игра против компьютера с несколькими уровнями сложности. После партии сервис покажет ключевые ошибки и предложит более надежные продолжения."
         board={<ChessboardView fen={chess.fen()} theme={theme} onMove={onMove} allowDragging={!thinking && chess.turn() === "w" && !status.gameOver} />}
         side={
           <>
@@ -134,9 +134,9 @@ function AiArenaInner() {
             <Surface>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge><Bot className="size-3" /> Stockfish</Badge>
-                <Badge className={ready ? "border-primary/40 text-primary" : ""}>{ready ? "engine ready" : "warming up"}</Badge>
+                <Badge className={ready ? "border-primary/40 text-primary" : ""}>{ready ? "готов" : "запуск"}</Badge>
               </div>
-              {engineError ? <p className="mt-3 text-sm text-destructive">{engineError}. Включен fallback-ход без внешнего сервера.</p> : null}
+              {engineError ? <p className="mt-3 text-sm text-destructive">{engineError}. Включен запасной ход без внешнего сервера.</p> : null}
               <label className="mt-5 grid gap-2 text-sm font-semibold">
                 Сложность
                 <Select value={difficulty} onChange={(event) => setDifficulty(event.target.value as Difficulty)} disabled={moves.length > 0}>
@@ -147,9 +147,9 @@ function AiArenaInner() {
                 <BoardThemePicker value={theme} onChange={setTheme} isPro={profile?.is_pro} />
               </div>
               <Button className="mt-5 w-full" variant="secondary" onClick={reset} type="button"><RotateCcw className="size-4" /> Новая партия</Button>
-              {thinking ? <p className="mt-3 text-sm text-primary">Stockfish считает лучший ход...</p> : null}
-              {reviewing ? <p className="mt-3 text-sm text-primary">AI Coach анализирует партию...</p> : null}
-              {savedGameId ? <Link className="mt-4 inline-flex text-sm font-semibold text-primary" href={`/review/${savedGameId}`}>Открыть детальный review</Link> : null}
+              {thinking ? <p className="mt-3 text-sm text-primary">Компьютер выбирает ход...</p> : null}
+              {reviewing ? <p className="mt-3 text-sm text-primary">Разбор анализирует партию...</p> : null}
+              {savedGameId ? <Link className="mt-4 inline-flex text-sm font-semibold text-primary" href={`/review/${savedGameId}`}>Открыть детальный разбор</Link> : null}
             </Surface>
             <MoveList moves={moves} />
           </>

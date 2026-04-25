@@ -29,7 +29,7 @@ export function AuthGate({ children, allowDemo = true }: { children: React.React
         </div>
         <h1 className="mt-5 font-display text-3xl font-semibold md:text-5xl">Нужен аккаунт Code Gambit</h1>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
-          Этот режим сохраняет прогресс, партии, review и профиль. Войдите через Supabase Auth или запустите локальную демо-сессию, если секреты еще не настроены.
+          Этот режим сохраняет прогресс, партии, разборы и профиль. Войдите в аккаунт или запустите локальную демо-сессию, если секреты еще не настроены.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-glow" href="/login">
@@ -43,7 +43,7 @@ export function AuthGate({ children, allowDemo = true }: { children: React.React
         </div>
         {!configured ? (
           <p className="mt-5 text-xs text-muted-foreground">
-            Supabase env vars не заданы. Это контролируемый fallback для локального демо, не замена production auth.
+            Переменные Supabase не заданы. Это контролируемый запасной режим для локального демо, не замена рабочей авторизации.
           </p>
         ) : null}
       </Surface>

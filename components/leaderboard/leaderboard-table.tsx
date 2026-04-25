@@ -24,9 +24,9 @@ export function LeaderboardTable() {
     <Surface>
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <Badge><Trophy className="size-3" /> Leaderboard</Badge>
+          <Badge><Trophy className="size-3" /> Лидерборд</Badge>
           <h1 className="mt-5 font-display text-4xl font-semibold md:text-6xl">Игроки и города</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">Глобальный рейтинг использует профильный город пользователя, wins, losses, draws, win rate и rating.</p>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">Глобальный рейтинг использует город из профиля, победы, поражения, ничьи, процент побед и очки рейтинга.</p>
         </div>
         <div className="grid grid-cols-2 rounded-full bg-muted p-1 text-sm font-semibold">
           <button className={`rounded-full px-4 py-2 ${tab === "players" ? "bg-card shadow-soft" : "text-muted-foreground"}`} onClick={() => setTab("players")} type="button">Игроки</button>
@@ -35,7 +35,7 @@ export function LeaderboardTable() {
       </div>
       <div className="mt-8 overflow-hidden rounded-[1.5rem] border border-border">
         <div className="grid grid-cols-5 bg-muted/70 px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-          <span>#</span><span>{tab === "players" ? "Игрок" : "Город"}</span><span>Рейтинг</span><span>W/L</span><span>Win rate</span>
+          <span>#</span><span>{tab === "players" ? "Игрок" : "Город"}</span><span>Рейтинг</span><span>П/П</span><span>Победы</span>
         </div>
         {(tab === "players" ? players : cities).map((item, index) => {
           const isPlayer = "display_name" in item;

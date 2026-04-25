@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import { publicEnv } from "@/lib/env";
 
-const free = ["Sandbox", "Local Duel", "Базовые темы", "Локальная история партии"];
-const pro = ["Premium board skins", "Advanced AI Coach", "Расширенный review", "Выделение профиля", "Future tactical drills"];
+const free = ["Свободная доска", "Игра вдвоем", "Базовые темы", "Локальная история партии"];
+const pro = ["Премиальные темы доски", "Расширенный разбор партии", "Подробные рекомендации", "Выделение профиля", "Будущие тактические тренировки"];
 
 export function PricingPageClient() {
   const { user, startDemoSession } = useAuth();
@@ -33,8 +33,8 @@ export function PricingPageClient() {
   }, [canRenderPricingTable]);
 
   useEffect(() => {
-    if (search.get("success")) setMessage("Оплата принята. Pro активируется после webhook-события Stripe.");
-    if (search.get("canceled")) setMessage("Checkout отменен. Можно вернуться к оплате позже.");
+    if (search.get("success")) setMessage("Оплата принята. Pro активируется после подтверждения платежа.");
+    if (search.get("canceled")) setMessage("Оплата отменена. Можно вернуться к ней позже.");
   }, [search]);
 
   async function createCheckout() {
@@ -51,10 +51,10 @@ export function PricingPageClient() {
         body: JSON.stringify({ userId: user.id, email: user.email }),
       });
       const data = await response.json() as { url?: string; error?: string };
-      if (!response.ok || !data.url) throw new Error(data.error ?? "Stripe checkout unavailable");
+      if (!response.ok || !data.url) throw new Error(data.error ?? "Платежная страница недоступна");
       window.location.href = data.url;
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Stripe checkout unavailable");
+      setMessage(error instanceof Error ? error.message : "Платежная страница недоступна");
     } finally {
       setBusy(false);
     }
@@ -63,10 +63,10 @@ export function PricingPageClient() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
       <div className="mx-auto max-w-3xl text-center">
-        <Badge><Crown className="size-3" /> Pricing</Badge>
+        <Badge><Crown className="size-3" /> Тарифы</Badge>
         <h1 className="mt-5 font-display text-5xl font-semibold md:text-7xl">Upgrade to Pro</h1>
         <p className="mt-5 text-sm leading-6 text-muted-foreground md:text-base">
-          Pro-модель добавляет premium skins и расширенный AI Coach. Stripe интеграция готова к production env vars и безопасно отключается без секретов.
+          Pro добавляет премиальные темы доски, расширенный разбор партии и выделение профиля. Платежная интеграция готова к рабочим ключам и безопасно отключается без секретов.
         </p>
       </div>
       {message ? <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-primary/30 bg-primary/10 p-4 text-sm text-primary">{message}</div> : null}
@@ -79,16 +79,16 @@ export function PricingPageClient() {
           items={pro}
           cta={
             hasPaymentLink ? (
-              user ? <a className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href={paymentLink} target="_blank" rel="noreferrer">Upgrade to Pro</a> : <Link className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href="/login">Войти для Upgrade</Link>
+              user ? <a className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href={paymentLink} target="_blank" rel="noreferrer">Upgrade to Pro</a> : <Link className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href="/login">Войти для Pro</Link>
             ) : (
-              <Button className="w-full" onClick={createCheckout} disabled={busy || !user} type="button">{busy ? "Checkout..." : user ? "Upgrade to Pro" : "Войдите для оплаты"}</Button>
+              <Button className="w-full" onClick={createCheckout} disabled={busy || !user} type="button">{busy ? "Открываю оплату..." : user ? "Upgrade to Pro" : "Войдите для оплаты"}</Button>
             )
           }
         />
       </div>
       {canRenderPricingTable && user ? (
         <Surface className="mt-8">
-          <div className="mb-5 flex items-center gap-2"><Sparkles className="size-5 text-primary" /><h2 className="font-display text-2xl font-semibold">Stripe Pricing Table</h2></div>
+          <div className="mb-5 flex items-center gap-2"><Sparkles className="size-5 text-primary" /><h2 className="font-display text-2xl font-semibold">Таблица оплаты Stripe</h2></div>
           {createElement("stripe-pricing-table", { "pricing-table-id": pricingTableId, "publishable-key": publishableKey, "client-reference-id": user.id, "customer-email": user.email })}
         </Surface>
       ) : null}
@@ -96,7 +96,7 @@ export function PricingPageClient() {
         <Surface className="mt-8 border-dashed text-center">
           <h2 className="font-display text-2xl font-semibold">Stripe еще не активирован</h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Добавьте `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID` для Pricing Table, `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` для Payment Link или `STRIPE_SECRET_KEY` + `STRIPE_PRO_PRICE_ID` для Checkout Session. Без них сайт работает без runtime errors.
+            Добавьте `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID` для таблицы оплаты, `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` для платежной ссылки или `STRIPE_SECRET_KEY` + `STRIPE_PRO_PRICE_ID` для платежной сессии. Без них сайт работает без ошибок запуска.
           </p>
           {!user ? <Button className="mt-5" variant="secondary" onClick={startDemoSession} type="button">Демо-сессия</Button> : null}
         </Surface>

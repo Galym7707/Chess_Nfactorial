@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 const links = [
-  ["Sandbox", "/play/sandbox"],
-  ["Local Duel", "/play/local"],
-  ["AI Arena", "/play/ai"],
-  ["Play with Friend", "/play/friend"],
-  ["Leaderboard", "/leaderboard"],
-  ["Pricing", "/pricing"],
+  ["Свободная доска", "/play/sandbox"],
+  ["Игра вдвоем", "/play/local"],
+  ["Против ИИ", "/play/ai"],
+  ["С другом", "/play/friend"],
+  ["Лидерборд", "/leaderboard"],
+  ["Тарифы", "/pricing"],
 ];
 
 export function Footer() {
@@ -16,7 +16,7 @@ export function Footer() {
         <div>
           <p className="font-display text-2xl font-semibold">Code <span className="text-primary">Gambit</span></p>
           <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-            Шахматы для разработчиков и студентов: правила, AI Coach в стиле code review, realtime-комнаты и growth-oriented профиль.
+            Шахматы для разработчиков и студентов: честные правила, понятный разбор ошибок, комнаты по ссылке и аккуратный профиль.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">

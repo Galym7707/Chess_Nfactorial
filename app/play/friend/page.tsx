@@ -32,10 +32,10 @@ function CreateFriendRoom() {
   return (
     <section className="mx-auto grid min-h-[78svh] max-w-7xl items-center gap-8 px-4 py-10 md:px-6 lg:grid-cols-[1.1fr_0.9fr]">
       <div>
-        <Badge><Users className="size-3" /> Great Level</Badge>
-        <h1 className="mt-6 font-display text-5xl font-semibold leading-tight md:text-7xl">Play with Friend по одной ссылке</h1>
+        <Badge><Users className="size-3" /> Великий уровень</Badge>
+        <h1 className="mt-6 font-display text-5xl font-semibold leading-tight md:text-7xl">Игра с другом по одной ссылке</h1>
         <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
-          Комната хранит FEN, PGN, список ходов и version в Supabase. Realtime Postgres Changes синхронизируют состояние, Broadcast отправляет сигнал хода, Presence показывает онлайн второго игрока.
+          Создайте комнату, отправьте ссылку другу и играйте на одной позиции. Статус второго игрока виден сразу, а партия восстанавливается после переподключения.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button size="lg" onClick={createRoom} disabled={busy} type="button"><Link2 className="size-5" /> {busy ? "Создаю..." : "Создать комнату"}</Button>
@@ -44,18 +44,18 @@ function CreateFriendRoom() {
       </div>
       <Surface className="overflow-hidden">
         <div className="rounded-[1.6rem] bg-brand-radial p-6 text-white">
-          <p className="text-sm uppercase tracking-[0.3em] text-emerald-200">Lobby preview</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-emerald-200">Перед партией</p>
           <div className="mt-10 grid grid-cols-2 gap-3">
             <div className="rounded-3xl bg-white/12 p-4 backdrop-blur">
-              <p className="text-sm text-white/60">White</p>
-              <p className="mt-1 font-display text-2xl">Host</p>
+              <p className="text-sm text-white/60">Белые</p>
+              <p className="mt-1 font-display text-2xl">Хозяин</p>
             </div>
             <div className="rounded-3xl border border-dashed border-white/30 p-4">
-              <p className="text-sm text-white/60">Black</p>
-              <p className="mt-1 font-display text-2xl">Waiting</p>
+              <p className="text-sm text-white/60">Черные</p>
+              <p className="mt-1 font-display text-2xl">Ожидание</p>
             </div>
           </div>
-          <div className="mt-20 rounded-full bg-white/10 px-4 py-3 text-sm">Защита от рассинхронизации: update только при совпадении version.</div>
+          <div className="mt-20 rounded-full bg-white/10 px-4 py-3 text-sm">Комната проверяет порядок ходов и не принимает запоздавшие действия.</div>
         </div>
       </Surface>
     </section>
