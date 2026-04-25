@@ -1,48 +1,48 @@
 ---
 title: Code Gambit
-emoji: ♟️
-colorFrom: emerald
-colorTo: amber
+emoji: в™џпёЏ
+colorFrom: green
+colorTo: yellow
 sdk: docker
 app_port: 7860
 fullWidth: true
 header: default
-short_description: Chess for builders with AI Coach code-review style, realtime rooms, leaderboard and Pro layer.
+short_description: Chess for builders with AI Coach.
 ---
 
 # Code Gambit
 
-**Шахматы для тех, кто любит умные цифровые продукты.**
+**РЁР°С…РјР°С‚С‹ РґР»СЏ С‚РµС…, РєС‚Рѕ Р»СЋР±РёС‚ СѓРјРЅС‹Рµ С†РёС„СЂРѕРІС‹Рµ РїСЂРѕРґСѓРєС‚С‹.**
 
-Code Gambit — цельный Next.js startup-прототип: Sandbox, Local Duel, AI Arena и Play with Friend собраны в один продукт с общим брендом, навигацией, Supabase Auth/Realtime/Postgres, Stripe-ready Pro моделью и AI Coach, который объясняет партию в стиле code review.
+Code Gambit вЂ” С†РµР»СЊРЅС‹Р№ Next.js startup-РїСЂРѕС‚РѕС‚РёРї: Sandbox, Local Duel, AI Arena Рё Play with Friend СЃРѕР±СЂР°РЅС‹ РІ РѕРґРёРЅ РїСЂРѕРґСѓРєС‚ СЃ РѕР±С‰РёРј Р±СЂРµРЅРґРѕРј, РЅР°РІРёРіР°С†РёРµР№, Supabase Auth/Realtime/Postgres, Stripe-ready Pro РјРѕРґРµР»СЊСЋ Рё AI Coach, РєРѕС‚РѕСЂС‹Р№ РѕР±СЉСЏСЃРЅСЏРµС‚ РїР°СЂС‚РёСЋ РІ СЃС‚РёР»Рµ code review.
 
 Live demo: `https://galym7707-chess-nfactorial.hf.space`  
 GitHub repo: `https://github.com/<your-org>/<your-repo>`
 
-## Для кого
+## Р”Р»СЏ РєРѕРіРѕ
 
-- Разработчики, которым близок стиль code review и понятные объяснения ошибок.
-- Студенты и игроки, которым нужен growth-oriented интерфейс без шума.
-- Конкурсная демонстрация, где важно показать не только доску, но и продуктовую архитектуру.
+- Р Р°Р·СЂР°Р±РѕС‚С‡РёРєРё, РєРѕС‚РѕСЂС‹Рј Р±Р»РёР·РѕРє СЃС‚РёР»СЊ code review Рё РїРѕРЅСЏС‚РЅС‹Рµ РѕР±СЉСЏСЃРЅРµРЅРёСЏ РѕС€РёР±РѕРє.
+- РЎС‚СѓРґРµРЅС‚С‹ Рё РёРіСЂРѕРєРё, РєРѕС‚РѕСЂС‹Рј РЅСѓР¶РµРЅ growth-oriented РёРЅС‚РµСЂС„РµР№СЃ Р±РµР· С€СѓРјР°.
+- РљРѕРЅРєСѓСЂСЃРЅР°СЏ РґРµРјРѕРЅСЃС‚СЂР°С†РёСЏ, РіРґРµ РІР°Р¶РЅРѕ РїРѕРєР°Р·Р°С‚СЊ РЅРµ С‚РѕР»СЊРєРѕ РґРѕСЃРєСѓ, РЅРѕ Рё РїСЂРѕРґСѓРєС‚РѕРІСѓСЋ Р°СЂС…РёС‚РµРєС‚СѓСЂСѓ.
 
-## Почему это не обычный chessboard demo
+## РџРѕС‡РµРјСѓ СЌС‚Рѕ РЅРµ РѕР±С‹С‡РЅС‹Р№ chessboard demo
 
-- AI Coach классифицирует ходы: `best`, `excellent`, `good`, `inaccuracy`, `mistake`, `blunder`.
-- Review использует Stockfish browser-side через Web Worker и русские шаблоны объяснений.
-- Multiplayer сделан через Supabase rooms, Presence, Realtime и DB `version` для защиты от рассинхронизации.
-- Есть SaaS-слой: профиль, история, лидерборд по городам, Pro skins и Stripe-ready checkout.
-- Mobile-first: квадратная доска, крупные touch controls, панели уходят вниз.
+- AI Coach РєР»Р°СЃСЃРёС„РёС†РёСЂСѓРµС‚ С…РѕРґС‹: `best`, `excellent`, `good`, `inaccuracy`, `mistake`, `blunder`.
+- Review РёСЃРїРѕР»СЊР·СѓРµС‚ Stockfish browser-side С‡РµСЂРµР· Web Worker Рё СЂСѓСЃСЃРєРёРµ С€Р°Р±Р»РѕРЅС‹ РѕР±СЉСЏСЃРЅРµРЅРёР№.
+- Multiplayer СЃРґРµР»Р°РЅ С‡РµСЂРµР· Supabase rooms, Presence, Realtime Рё DB `version` РґР»СЏ Р·Р°С‰РёС‚С‹ РѕС‚ СЂР°СЃСЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё.
+- Р•СЃС‚СЊ SaaS-СЃР»РѕР№: РїСЂРѕС„РёР»СЊ, РёСЃС‚РѕСЂРёСЏ, Р»РёРґРµСЂР±РѕСЂРґ РїРѕ РіРѕСЂРѕРґР°Рј, Pro skins Рё Stripe-ready checkout.
+- Mobile-first: РєРІР°РґСЂР°С‚РЅР°СЏ РґРѕСЃРєР°, РєСЂСѓРїРЅС‹Рµ touch controls, РїР°РЅРµР»Рё СѓС…РѕРґСЏС‚ РІРЅРёР·.
 
-## Маппинг на 4 уровня задания
+## РњР°РїРїРёРЅРі РЅР° 4 СѓСЂРѕРІРЅСЏ Р·Р°РґР°РЅРёСЏ
 
-| Уровень | Режим | Что реализовано |
+| РЈСЂРѕРІРµРЅСЊ | Р РµР¶РёРј | Р§С‚Рѕ СЂРµР°Р»РёР·РѕРІР°РЅРѕ |
 |---|---|---|
-| Слабый | `/play/sandbox` | Static 8x8 board, свободный drag/click move без проверки правил, `Rules Off`, reset. |
-| Средний | `/play/local` | Два игрока на одном экране, chess.js validation, рокировка, en passant, promotion, шах/мат/пат/ничьи, history, undo, FEN/PGN, localStorage restore. |
-| Сильный | `/play/ai` | Stockfish AI в Web Worker, 4 сложности, auth gate, сохранение партии, история, темы, mobile UX. |
-| Великий | `/play/friend` и `/play/friend/[roomId]` | Создание комнаты, invite link, Supabase Realtime sync, Presence online, reconnect restore, DB version guard. |
+| РЎР»Р°Р±С‹Р№ | `/play/sandbox` | Static 8x8 board, СЃРІРѕР±РѕРґРЅС‹Р№ drag/click move Р±РµР· РїСЂРѕРІРµСЂРєРё РїСЂР°РІРёР», `Rules Off`, reset. |
+| РЎСЂРµРґРЅРёР№ | `/play/local` | Р”РІР° РёРіСЂРѕРєР° РЅР° РѕРґРЅРѕРј СЌРєСЂР°РЅРµ, chess.js validation, СЂРѕРєРёСЂРѕРІРєР°, en passant, promotion, С€Р°С…/РјР°С‚/РїР°С‚/РЅРёС‡СЊРё, history, undo, FEN/PGN, localStorage restore. |
+| РЎРёР»СЊРЅС‹Р№ | `/play/ai` | Stockfish AI РІ Web Worker, 4 СЃР»РѕР¶РЅРѕСЃС‚Рё, auth gate, СЃРѕС…СЂР°РЅРµРЅРёРµ РїР°СЂС‚РёРё, РёСЃС‚РѕСЂРёСЏ, С‚РµРјС‹, mobile UX. |
+| Р’РµР»РёРєРёР№ | `/play/friend` Рё `/play/friend/[roomId]` | РЎРѕР·РґР°РЅРёРµ РєРѕРјРЅР°С‚С‹, invite link, Supabase Realtime sync, Presence online, reconnect restore, DB version guard. |
 
-## Стек
+## РЎС‚РµРє
 
 - Next.js App Router + TypeScript strict
 - Tailwind CSS + custom design system
@@ -52,9 +52,9 @@ GitHub repo: `https://github.com/<your-org>/<your-repo>`
 - Stripe Billing/Checkout-ready integration
 - zod, lucide-react, framer-motion
 - Vitest + Testing Library
-- Docker Space для Hugging Face
+- Docker Space РґР»СЏ Hugging Face
 
-## Архитектура
+## РђСЂС…РёС‚РµРєС‚СѓСЂР°
 
 ```text
 app/                 App Router pages and route handlers
@@ -71,7 +71,7 @@ workers/             Stockfish worker marker; runtime asset copied to public/sto
 public/              static runtime assets
 ```
 
-## Локальный запуск
+## Р›РѕРєР°Р»СЊРЅС‹Р№ Р·Р°РїСѓСЃРє
 
 ```bash
 npm install
@@ -79,11 +79,11 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Откройте `http://localhost:7860`.
+РћС‚РєСЂРѕР№С‚Рµ `http://localhost:7860`.
 
-Без Supabase/Stripe env vars сайт запускается в controlled demo mode. Auth-gated режимы предлагают локальную демо-сессию, платежи показывают disabled-state.
+Р‘РµР· Supabase/Stripe env vars СЃР°Р№С‚ Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РІ controlled demo mode. Auth-gated СЂРµР¶РёРјС‹ РїСЂРµРґР»Р°РіР°СЋС‚ Р»РѕРєР°Р»СЊРЅСѓСЋ РґРµРјРѕ-СЃРµСЃСЃРёСЋ, РїР»Р°С‚РµР¶Рё РїРѕРєР°Р·С‹РІР°СЋС‚ disabled-state.
 
-## Проверки
+## РџСЂРѕРІРµСЂРєРё
 
 ```bash
 npm run typecheck
@@ -93,7 +93,7 @@ npm run build
 
 ## Hugging Face Space deploy
 
-Space должен быть Docker Space. Для уже созданного Gradio Space достаточно сохранить YAML metadata в начале README с `sdk: docker` и `app_port: 7860`, затем запушить репозиторий.
+Space РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Docker Space. Р”Р»СЏ СѓР¶Рµ СЃРѕР·РґР°РЅРЅРѕРіРѕ Gradio Space РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃРѕС…СЂР°РЅРёС‚СЊ YAML metadata РІ РЅР°С‡Р°Р»Рµ README СЃ `sdk: docker` Рё `app_port: 7860`, Р·Р°С‚РµРј Р·Р°РїСѓС€РёС‚СЊ СЂРµРїРѕР·РёС‚РѕСЂРёР№.
 
 ```bash
 git init
@@ -103,14 +103,14 @@ git remote add space https://huggingface.co/spaces/Galym7707/Chess_Nfactorial
 git push -u space main
 ```
 
-Next.js production server внутри Docker слушает `0.0.0.0:7860` через `PORT=7860` и `HOSTNAME=0.0.0.0`.
+Next.js production server РІРЅСѓС‚СЂРё Docker СЃР»СѓС€Р°РµС‚ `0.0.0.0:7860` С‡РµСЂРµР· `PORT=7860` Рё `HOSTNAME=0.0.0.0`.
 
 ## Supabase setup
 
-1. Создайте Supabase project.
-2. Выполните SQL из `supabase/migrations/001_initial_schema.sql` в SQL Editor или через Supabase CLI.
-3. Включите Email/password provider в Supabase Auth.
-4. Добавьте env vars:
+1. РЎРѕР·РґР°Р№С‚Рµ Supabase project.
+2. Р’С‹РїРѕР»РЅРёС‚Рµ SQL РёР· `supabase/migrations/001_initial_schema.sql` РІ SQL Editor РёР»Рё С‡РµСЂРµР· Supabase CLI.
+3. Р’РєР»СЋС‡РёС‚Рµ Email/password provider РІ Supabase Auth.
+4. Р”РѕР±Р°РІСЊС‚Рµ env vars:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
@@ -118,11 +118,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-RLS включен для всех пользовательских таблиц. Клиент использует только anon key; service role key используется только server-side webhook route.
+RLS РІРєР»СЋС‡РµРЅ РґР»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… С‚Р°Р±Р»РёС†. РљР»РёРµРЅС‚ РёСЃРїРѕР»СЊР·СѓРµС‚ С‚РѕР»СЊРєРѕ anon key; service role key РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ С‚РѕР»СЊРєРѕ server-side webhook route.
 
 ## Stripe setup
 
-Есть три поддержанных пути:
+Р•СЃС‚СЊ С‚СЂРё РїРѕРґРґРµСЂР¶Р°РЅРЅС‹С… РїСѓС‚Рё:
 
 1. Pricing Table: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID`.
 2. Payment Link: `NEXT_PUBLIC_STRIPE_PAYMENT_LINK`.
@@ -134,7 +134,7 @@ Webhook endpoint:
 POST /api/stripe/webhook
 ```
 
-При `checkout.session.completed` серверная route через Supabase service role записывает `purchases`, включает `profiles.is_pro` и выдает premium skins в `user_inventory`.
+РџСЂРё `checkout.session.completed` СЃРµСЂРІРµСЂРЅР°СЏ route С‡РµСЂРµР· Supabase service role Р·Р°РїРёСЃС‹РІР°РµС‚ `purchases`, РІРєР»СЋС‡Р°РµС‚ `profiles.is_pro` Рё РІС‹РґР°РµС‚ premium skins РІ `user_inventory`.
 
 ## Environment variables
 
@@ -161,7 +161,7 @@ STRIPE_PRO_PRICE_ID=
 - Stripe: Billing/Checkout payment infrastructure.
 - Next.js, React, Tailwind CSS and supporting OSS packages.
 
-## Документированные основания
+## Р”РѕРєСѓРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹Рµ РѕСЃРЅРѕРІР°РЅРёСЏ
 
 - Hugging Face Docker Spaces support `sdk: docker` and `app_port` in README metadata: https://huggingface.co/docs/hub/en/spaces-sdks-docker
 - Next.js standalone output creates `.next/standalone` for production Docker deployments: https://nextjs.org/docs/app/api-reference/config/next-config-js/output
@@ -170,7 +170,7 @@ STRIPE_PRO_PRICE_ID=
 - Supabase RLS policies commonly use `auth.uid()` for row ownership checks: https://supabase.com/docs/guides/auth/auth-deep-dive/auth-row-level-security
 - Stripe Checkout Sessions support subscription mode with Prices: https://docs.stripe.com/payments/subscriptions
 
-## Что улучшить дальше
+## Р§С‚Рѕ СѓР»СѓС‡С€РёС‚СЊ РґР°Р»СЊС€Рµ
 
 - Add server-side authoritative chess validation for multiplayer moves with Supabase Edge Functions.
 - Add tactical drills generated from user blunders.
