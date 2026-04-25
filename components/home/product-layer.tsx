@@ -1,10 +1,10 @@
 import { BrainCircuit, Crosshair, LineChart, ShieldCheck } from "lucide-react";
 
 const features = [
-  [BrainCircuit, "AI Coach как code review", "Ошибки классифицируются как best, good, mistake или blunder, с объяснением и альтернативной линией."],
-  [Crosshair, "Режим концентрации", "В игровых режимах можно убрать боковую панель и оставить только доску и критичный статус."],
-  [LineChart, "Growth-oriented профиль", "Профиль показывает город, рейтинг, win rate, историю и прогресс без лишнего шума."],
-  [ShieldCheck, "Realtime без хаоса", "Комнаты держат version в базе, чтобы не принимать устаревшие ходы при reconnect."],
+  [BrainCircuit, "Разбор ошибок", "После партии сервис показывает главные неточности, объясняет причину и предлагает более сильный ход."],
+  [Crosshair, "Режим концентрации", "Во время игры можно убрать лишние панели и оставить только доску, статус партии и нужные действия."],
+  [LineChart, "Понятный профиль", "Профиль показывает город, рейтинг, процент побед, историю партий и общий прогресс."],
+  [ShieldCheck, "Стабильная игра по ссылке", "Комната сохраняет последнюю позицию и не принимает запоздавшие ходы после обрыва связи."],
 ] as const;
 
 export function ProductLayer() {
@@ -12,10 +12,10 @@ export function ProductLayer() {
     <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
       <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <div className="sticky top-24">
-          <p className="text-sm uppercase tracking-[0.32em] text-primary">Why different</p>
-          <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Не клон обычного шахматного сайта</h2>
+          <p className="text-sm uppercase tracking-[0.32em] text-primary">Особенности</p>
+          <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Шахматы с понятным разбором</h2>
           <p className="mt-4 text-sm leading-6 text-muted-foreground md:text-base">
-            Code Gambit соединяет шахматы, инженерное мышление и SaaS UX: не просто “ходи фигурами”, а понимай качество решений.
+            Сервис помогает не просто сыграть партию, а понять, где был потерян темп, почему позиция ухудшилась и какой ход был надежнее.
           </p>
         </div>
         <div className="grid gap-3">

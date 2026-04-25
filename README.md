@@ -1,6 +1,6 @@
 ---
 title: Code Gambit
-emoji: в™џпёЏ
+emoji: ♟️
 colorFrom: green
 colorTo: yellow
 sdk: docker
@@ -12,66 +12,67 @@ short_description: Chess for builders with AI Coach.
 
 # Code Gambit
 
-**РЁР°С…РјР°С‚С‹ РґР»СЏ С‚РµС…, РєС‚Рѕ Р»СЋР±РёС‚ СѓРјРЅС‹Рµ С†РёС„СЂРѕРІС‹Рµ РїСЂРѕРґСѓРєС‚С‹.**
+Code Gambit is a production-ready Next.js chess platform for Hugging Face Docker Spaces. It combines four assignment levels in one product: free sandbox play, local two-player chess, Stockfish-powered AI play, and Supabase Realtime rooms by invite link.
 
-Code Gambit вЂ” С†РµР»СЊРЅС‹Р№ Next.js startup-РїСЂРѕС‚РѕС‚РёРї: Sandbox, Local Duel, AI Arena Рё Play with Friend СЃРѕР±СЂР°РЅС‹ РІ РѕРґРёРЅ РїСЂРѕРґСѓРєС‚ СЃ РѕР±С‰РёРј Р±СЂРµРЅРґРѕРј, РЅР°РІРёРіР°С†РёРµР№, Supabase Auth/Realtime/Postgres, Stripe-ready Pro РјРѕРґРµР»СЊСЋ Рё AI Coach, РєРѕС‚РѕСЂС‹Р№ РѕР±СЉСЏСЃРЅСЏРµС‚ РїР°СЂС‚РёСЋ РІ СЃС‚РёР»Рµ code review.
+Live demo: https://galym7707-chess-nfactorial.hf.space
 
-Live demo: `https://galym7707-chess-nfactorial.hf.space`  
-GitHub repo: `https://github.com/<your-org>/<your-repo>`
+GitHub repo: https://github.com/Galym7707/Chess_Nfactorial
 
-## Р”Р»СЏ РєРѕРіРѕ
+## What is included
 
-- Р Р°Р·СЂР°Р±РѕС‚С‡РёРєРё, РєРѕС‚РѕСЂС‹Рј Р±Р»РёР·РѕРє СЃС‚РёР»СЊ code review Рё РїРѕРЅСЏС‚РЅС‹Рµ РѕР±СЉСЏСЃРЅРµРЅРёСЏ РѕС€РёР±РѕРє.
-- РЎС‚СѓРґРµРЅС‚С‹ Рё РёРіСЂРѕРєРё, РєРѕС‚РѕСЂС‹Рј РЅСѓР¶РµРЅ growth-oriented РёРЅС‚РµСЂС„РµР№СЃ Р±РµР· С€СѓРјР°.
-- РљРѕРЅРєСѓСЂСЃРЅР°СЏ РґРµРјРѕРЅСЃС‚СЂР°С†РёСЏ, РіРґРµ РІР°Р¶РЅРѕ РїРѕРєР°Р·Р°С‚СЊ РЅРµ С‚РѕР»СЊРєРѕ РґРѕСЃРєСѓ, РЅРѕ Рё РїСЂРѕРґСѓРєС‚РѕРІСѓСЋ Р°СЂС…РёС‚РµРєС‚СѓСЂСѓ.
+- Marketing homepage with Russian UI, responsive navigation, light/dark theme support, pricing and profile routes.
+- Sandbox mode with an 8x8 board where pieces can be moved freely without rule validation.
+- Local Duel mode with chess.js validation, castling, en passant, promotion, check, mate, stalemate, draw state, undo, FEN/PGN export and localStorage restore.
+- AI Arena mode with browser-side Stockfish assets, difficulty presets and post-game review flow.
+- Play with Friend mode with Supabase room persistence, invite links, Realtime broadcast and presence handling.
+- History, review, leaderboard, profile, login and pricing pages.
+- Supabase SQL migration with tables and RLS policies for profiles, games, moves, rooms, coach reports, purchases and inventory.
+- Stripe-ready pricing architecture with graceful fallback when payment environment variables are not configured.
+- Dockerfile configured for Hugging Face Spaces on port 7860.
 
-## РџРѕС‡РµРјСѓ СЌС‚Рѕ РЅРµ РѕР±С‹С‡РЅС‹Р№ chessboard demo
+## Why it is different
 
-- AI Coach РєР»Р°СЃСЃРёС„РёС†РёСЂСѓРµС‚ С…РѕРґС‹: `best`, `excellent`, `good`, `inaccuracy`, `mistake`, `blunder`.
-- Review РёСЃРїРѕР»СЊР·СѓРµС‚ Stockfish browser-side С‡РµСЂРµР· Web Worker Рё СЂСѓСЃСЃРєРёРµ С€Р°Р±Р»РѕРЅС‹ РѕР±СЉСЏСЃРЅРµРЅРёР№.
-- Multiplayer СЃРґРµР»Р°РЅ С‡РµСЂРµР· Supabase rooms, Presence, Realtime Рё DB `version` РґР»СЏ Р·Р°С‰РёС‚С‹ РѕС‚ СЂР°СЃСЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё.
-- Р•СЃС‚СЊ SaaS-СЃР»РѕР№: РїСЂРѕС„РёР»СЊ, РёСЃС‚РѕСЂРёСЏ, Р»РёРґРµСЂР±РѕСЂРґ РїРѕ РіРѕСЂРѕРґР°Рј, Pro skins Рё Stripe-ready checkout.
-- Mobile-first: РєРІР°РґСЂР°С‚РЅР°СЏ РґРѕСЃРєР°, РєСЂСѓРїРЅС‹Рµ touch controls, РїР°РЅРµР»Рё СѓС…РѕРґСЏС‚ РІРЅРёР·.
+Code Gambit is not a plain chessboard demo. The product direction is chess training for developers, students and ambitious players who want clear analysis, saved progress, multiplayer rooms and a monetizable Pro layer in one coherent web app.
 
-## РњР°РїРїРёРЅРі РЅР° 4 СѓСЂРѕРІРЅСЏ Р·Р°РґР°РЅРёСЏ
+## Assignment Mapping
 
-| РЈСЂРѕРІРµРЅСЊ | Р РµР¶РёРј | Р§С‚Рѕ СЂРµР°Р»РёР·РѕРІР°РЅРѕ |
+| Level | Route | Implementation |
 |---|---|---|
-| РЎР»Р°Р±С‹Р№ | `/play/sandbox` | Static 8x8 board, СЃРІРѕР±РѕРґРЅС‹Р№ drag/click move Р±РµР· РїСЂРѕРІРµСЂРєРё РїСЂР°РІРёР», `Rules Off`, reset. |
-| РЎСЂРµРґРЅРёР№ | `/play/local` | Р”РІР° РёРіСЂРѕРєР° РЅР° РѕРґРЅРѕРј СЌРєСЂР°РЅРµ, chess.js validation, СЂРѕРєРёСЂРѕРІРєР°, en passant, promotion, С€Р°С…/РјР°С‚/РїР°С‚/РЅРёС‡СЊРё, history, undo, FEN/PGN, localStorage restore. |
-| РЎРёР»СЊРЅС‹Р№ | `/play/ai` | Stockfish AI РІ Web Worker, 4 СЃР»РѕР¶РЅРѕСЃС‚Рё, auth gate, СЃРѕС…СЂР°РЅРµРЅРёРµ РїР°СЂС‚РёРё, РёСЃС‚РѕСЂРёСЏ, С‚РµРјС‹, mobile UX. |
-| Р’РµР»РёРєРёР№ | `/play/friend` Рё `/play/friend/[roomId]` | РЎРѕР·РґР°РЅРёРµ РєРѕРјРЅР°С‚С‹, invite link, Supabase Realtime sync, Presence online, reconnect restore, DB version guard. |
+| Weak | `/play/sandbox` | Static board, free movement, Rules Off state and reset. |
+| Medium | `/play/local` | Full local game using chess.js with legal moves, special moves, game state, history, undo, FEN/PGN and local restore. |
+| Strong | `/play/ai` | Auth-gated AI mode, Stockfish worker integration, difficulty presets, saved games and review flow. |
+| Great | `/play/friend` and `/play/friend/[roomId]` | Invite rooms, Supabase persistence, realtime move sync, presence and reconnect restore. |
 
-## РЎС‚РµРє
+## Stack
 
-- Next.js App Router + TypeScript strict
-- Tailwind CSS + custom design system
-- react-chessboard + chess.js
-- stockfish.js browser worker
-- Supabase Auth, Postgres, Realtime, RLS
-- Stripe Billing/Checkout-ready integration
+- Next.js App Router, TypeScript strict, React
+- Tailwind CSS and custom UI components
+- chess.js and react-chessboard
+- stockfish.js copied into public runtime assets during install/build
+- Supabase Auth, Postgres, Realtime and RLS
+- Stripe Checkout/Billing-ready routes
 - zod, lucide-react, framer-motion
-- Vitest + Testing Library
-- Docker Space РґР»СЏ Hugging Face
+- Vitest and Testing Library
+- Docker deployment for Hugging Face Spaces
 
-## РђСЂС…РёС‚РµРєС‚СѓСЂР°
+## Architecture
 
 ```text
 app/                 App Router pages and route handlers
-components/          UI, layout, auth, chess, pricing, leaderboard components
+components/          UI, layout, auth, chess, pricing and leaderboard components
 hooks/               Stockfish and multiplayer hooks
-lib/chess/           chess.js core helpers and board themes
+lib/chess/           chess.js helpers and board themes
 lib/engine/          Stockfish worker client
 lib/coach/           post-game review analysis
 lib/db/              Supabase/local fallback data access
-lib/multiplayer/     room creation, join, move persistence
+lib/multiplayer/     room creation, join and move persistence
 lib/supabase/        browser/server Supabase clients
 supabase/migrations/ SQL schema and RLS policies
-workers/             Stockfish worker marker; runtime asset copied to public/stockfish
+workers/             Stockfish worker marker
 public/              static runtime assets
 ```
 
-## Р›РѕРєР°Р»СЊРЅС‹Р№ Р·Р°РїСѓСЃРє
+## Local Setup
 
 ```bash
 npm install
@@ -79,64 +80,11 @@ cp .env.example .env.local
 npm run dev
 ```
 
-РћС‚РєСЂРѕР№С‚Рµ `http://localhost:7860`.
+Open `http://localhost:7860`.
 
-Р‘РµР· Supabase/Stripe env vars СЃР°Р№С‚ Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РІ controlled demo mode. Auth-gated СЂРµР¶РёРјС‹ РїСЂРµРґР»Р°РіР°СЋС‚ Р»РѕРєР°Р»СЊРЅСѓСЋ РґРµРјРѕ-СЃРµСЃСЃРёСЋ, РїР»Р°С‚РµР¶Рё РїРѕРєР°Р·С‹РІР°СЋС‚ disabled-state.
+Local secrets go into `.env.local` at the repository root, next to `package.json`. Do not commit `.env.local`.
 
-## РџСЂРѕРІРµСЂРєРё
-
-```bash
-npm run typecheck
-npm test
-npm run build
-```
-
-## Hugging Face Space deploy
-
-Space РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Docker Space. Р”Р»СЏ СѓР¶Рµ СЃРѕР·РґР°РЅРЅРѕРіРѕ Gradio Space РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃРѕС…СЂР°РЅРёС‚СЊ YAML metadata РІ РЅР°С‡Р°Р»Рµ README СЃ `sdk: docker` Рё `app_port: 7860`, Р·Р°С‚РµРј Р·Р°РїСѓС€РёС‚СЊ СЂРµРїРѕР·РёС‚РѕСЂРёР№.
-
-```bash
-git init
-git add .
-git commit -m "Build Code Gambit Next.js Docker Space"
-git remote add space https://huggingface.co/spaces/Galym7707/Chess_Nfactorial
-git push -u space main
-```
-
-Next.js production server РІРЅСѓС‚СЂРё Docker СЃР»СѓС€Р°РµС‚ `0.0.0.0:7860` С‡РµСЂРµР· `PORT=7860` Рё `HOSTNAME=0.0.0.0`.
-
-## Supabase setup
-
-1. РЎРѕР·РґР°Р№С‚Рµ Supabase project.
-2. Р’С‹РїРѕР»РЅРёС‚Рµ SQL РёР· `supabase/migrations/001_initial_schema.sql` РІ SQL Editor РёР»Рё С‡РµСЂРµР· Supabase CLI.
-3. Р’РєР»СЋС‡РёС‚Рµ Email/password provider РІ Supabase Auth.
-4. Р”РѕР±Р°РІСЊС‚Рµ env vars:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-```
-
-RLS РІРєР»СЋС‡РµРЅ РґР»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… С‚Р°Р±Р»РёС†. РљР»РёРµРЅС‚ РёСЃРїРѕР»СЊР·СѓРµС‚ С‚РѕР»СЊРєРѕ anon key; service role key РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ С‚РѕР»СЊРєРѕ server-side webhook route.
-
-## Stripe setup
-
-Р•СЃС‚СЊ С‚СЂРё РїРѕРґРґРµСЂР¶Р°РЅРЅС‹С… РїСѓС‚Рё:
-
-1. Pricing Table: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID`.
-2. Payment Link: `NEXT_PUBLIC_STRIPE_PAYMENT_LINK`.
-3. Checkout Session: `STRIPE_SECRET_KEY` + `STRIPE_PRO_PRICE_ID` + webhook `STRIPE_WEBHOOK_SECRET`.
-
-Webhook endpoint:
-
-```text
-POST /api/stripe/webhook
-```
-
-РџСЂРё `checkout.session.completed` СЃРµСЂРІРµСЂРЅР°СЏ route С‡РµСЂРµР· Supabase service role Р·Р°РїРёСЃС‹РІР°РµС‚ `purchases`, РІРєР»СЋС‡Р°РµС‚ `profiles.is_pro` Рё РІС‹РґР°РµС‚ premium skins РІ `user_inventory`.
-
-## Environment variables
+## Environment Variables
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
@@ -152,28 +100,73 @@ NEXT_PUBLIC_DEFAULT_LOCALE=ru
 STRIPE_PRO_PRICE_ID=
 ```
 
+For Hugging Face Spaces, add these in Space settings under Variables and secrets. Use secrets for private keys such as `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and any Hugging Face access token.
+
+## Supabase Setup
+
+1. Create a Supabase project.
+2. Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor or through Supabase CLI.
+3. Enable the chosen email/password auth provider.
+4. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` to the runtime environment.
+
+The browser client only uses the anon key. The service role key is reserved for server-side routes such as Stripe webhook handling.
+
+## Stripe Setup
+
+Supported payment paths:
+
+1. Pricing Table: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID`.
+2. Payment Link: `NEXT_PUBLIC_STRIPE_PAYMENT_LINK`.
+3. Checkout Session: `STRIPE_SECRET_KEY` + `STRIPE_PRO_PRICE_ID` with webhook secret `STRIPE_WEBHOOK_SECRET`.
+
+Webhook endpoint:
+
+```text
+POST /api/stripe/webhook
+```
+
+If Stripe variables are missing, the pricing page renders a safe disabled/demo state instead of crashing.
+
+## Commands
+
+```bash
+npm run typecheck
+npm test
+npm run build
+npm run start
+```
+
+## Hugging Face Deploy
+
+The Space uses Docker SDK through README metadata:
+
+```yaml
+sdk: docker
+app_port: 7860
+```
+
+The Docker image starts the Next.js standalone server on `0.0.0.0:7860`.
+
 ## Third-Party / Attribution
 
-- Stockfish / stockfish.js: GPL-3.0 chess engine distribution. This repository uses GPL-3.0-only for compatibility.
+- Stockfish / stockfish.js: chess engine distribution. This repository uses GPL-3.0-only for compatibility.
 - chess.js: legal move validation and PGN/FEN utilities.
 - react-chessboard: chessboard UI.
-- Supabase: Auth, Postgres, Realtime.
-- Stripe: Billing/Checkout payment infrastructure.
-- Next.js, React, Tailwind CSS and supporting OSS packages.
+- Supabase: Auth, Postgres and Realtime.
+- Stripe: checkout and billing infrastructure.
+- Next.js, React, Tailwind CSS and supporting open-source packages.
 
-## Р”РѕРєСѓРјРµРЅС‚РёСЂРѕРІР°РЅРЅС‹Рµ РѕСЃРЅРѕРІР°РЅРёСЏ
+## Sources
 
-- Hugging Face Docker Spaces support `sdk: docker` and `app_port` in README metadata: https://huggingface.co/docs/hub/en/spaces-sdks-docker
-- Next.js standalone output creates `.next/standalone` for production Docker deployments: https://nextjs.org/docs/app/api-reference/config/next-config-js/output
-- Supabase Auth supports email/password sign-in via JavaScript SDK: https://supabase.com/docs/reference/javascript/auth-signinwithpassword
-- Supabase Realtime supports Postgres Changes channel subscriptions: https://supabase.com/docs/guides/realtime/postgres-changes
-- Supabase RLS policies commonly use `auth.uid()` for row ownership checks: https://supabase.com/docs/guides/auth/auth-deep-dive/auth-row-level-security
-- Stripe Checkout Sessions support subscription mode with Prices: https://docs.stripe.com/payments/subscriptions
+- Hugging Face Docker Spaces metadata and `app_port`: https://huggingface.co/docs/hub/en/spaces-sdks-docker
+- Next.js standalone output: https://nextjs.org/docs/app/api-reference/config/next-config-js/output
+- Supabase row level security and `auth.uid()`: https://supabase.com/docs/guides/database/postgres/row-level-security
+- Supabase Realtime: https://supabase.com/docs/guides/realtime
+- Stripe Checkout Sessions: https://docs.stripe.com/payments/checkout
 
-## Р§С‚Рѕ СѓР»СѓС‡С€РёС‚СЊ РґР°Р»СЊС€Рµ
+## Future Improvements
 
-- Add server-side authoritative chess validation for multiplayer moves with Supabase Edge Functions.
-- Add tactical drills generated from user blunders.
-- Add Stripe Customer Portal for self-service subscription management.
-- Add Redis-like ephemeral clock sync if timed games are added.
-- Add Playwright E2E tests for full game flows.
+- Server-side authoritative validation for multiplayer moves through Supabase Edge Functions.
+- Tactical drills generated from saved mistakes.
+- Stripe Customer Portal for subscription management.
+- End-to-end tests for full game flows.
