@@ -79,7 +79,7 @@ body {
   margin-inline: auto;
 }
 
-.board-wrap > div {
+.board-wrap > div[id$="-board"] {
   width: 100% !important;
   height: 100% !important;
 }

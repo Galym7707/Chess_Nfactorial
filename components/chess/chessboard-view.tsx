@@ -35,6 +35,11 @@ export function ChessboardView({
             overflow: "hidden",
             boxShadow: "inset 0 0 0 1px rgba(255,255,255,.08)",
           },
+          draggingPieceStyle: {
+            transform: "scale(1.08)",
+            maxWidth: "min(80px, 10.75vmin)",
+            maxHeight: "min(80px, 10.75vmin)",
+          },
           lightSquareStyle: { backgroundColor: colors.light },
           darkSquareStyle: { backgroundColor: colors.dark },
           onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
