@@ -96,7 +96,7 @@ export default function LocalDuelPage() {
     <>
       <GameShell
         title="Local Duel"
-        description="Полная шахматная партия на одном экране: legal moves, рокировка, en passant, promotion, мат, пат, ничьи, undo, FEN/PGN и восстановление из localStorage."
+        description="Полная шахматная партия на одном экране: проверка правил, рокировка, взятие на проходе, превращение пешки, мат, пат, ничьи, отмена хода, FEN/PGN и восстановление после перезагрузки."
         board={<ChessboardView fen={chess.fen()} theme={theme} onMove={onMove} />}
         side={
           <>
@@ -104,8 +104,8 @@ export default function LocalDuelPage() {
             <Surface>
               <BoardThemePicker value={theme} onChange={setTheme} isPro={profile?.is_pro} />
               <div className="mt-4 grid grid-cols-2 gap-2">
-                <Button variant="secondary" onClick={() => setPgn(undoFromPgn(pgn).pgn)} disabled={!moves.length} type="button"><StepBack className="size-4" /> Undo</Button>
-                <Button variant="secondary" onClick={reset} type="button"><RotateCcw className="size-4" /> Restart</Button>
+                <Button variant="secondary" onClick={() => setPgn(undoFromPgn(pgn).pgn)} disabled={!moves.length} type="button"><StepBack className="size-4" /> Отменить</Button>
+                <Button variant="secondary" onClick={reset} type="button"><RotateCcw className="size-4" /> Заново</Button>
                 <Button variant="secondary" onClick={() => copy(chess.fen(), "FEN")} type="button"><Copy className="size-4" /> FEN</Button>
                 <Button variant="secondary" onClick={() => copy(pgn, "PGN")} type="button"><Copy className="size-4" /> PGN</Button>
               </div>
