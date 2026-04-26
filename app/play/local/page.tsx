@@ -59,8 +59,8 @@ export default function LocalDuelPage() {
       pgn,
       fen: chess.fen(),
       moves,
-      opponent: "Local Duel",
-      summary: buildFastSummary(status.result, "Local Duel"),
+      opponent: "Партия за доской",
+      summary: buildFastSummary(status.result, "Партия за доской"),
       durationSeconds: Math.round((Date.now() - startedAt) / 1000),
     });
   }, [chess, moves, pgn, startedAt, status.gameOver, status.result, user]);
@@ -95,8 +95,8 @@ export default function LocalDuelPage() {
   return (
     <>
       <GameShell
-        title="Local Duel"
-        description="Полная шахматная партия на одном экране: проверка правил, рокировка, взятие на проходе, превращение пешки, мат, пат, ничьи, отмена хода, FEN/PGN и восстановление после перезагрузки."
+        title="Партия за доской"
+        description="Полная шахматная партия на одном экране: проверка правил, рокировка, взятие на проходе, превращение пешки, мат, пат, ничьи, отмена хода, экспорт FEN/PGN и восстановление после перезагрузки."
         board={<ChessboardView fen={chess.fen()} theme={theme} onMove={onMove} />}
         side={
           <>

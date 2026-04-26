@@ -1,36 +1,36 @@
 "use client";
 
-import { Bot, FlaskConical, Swords, Users } from "lucide-react";
+import { Bot, Edit3, Swords, Users } from "lucide-react";
 import { ModeCard } from "./mode-card";
 
-const modes = [
+const tools = [
   {
-    level: "Слабый",
-    title: "Sandbox",
+    eyebrow: "Позиции",
+    title: "Редактор позиции",
     href: "/play/sandbox",
-    icon: FlaskConical,
-    description: "Свободная доска без проверки ходов. Подходит для быстрых набросков позиции и объяснений.",
+    icon: Edit3,
+    description: "Расставляйте фигуры, меняйте сторону хода, копируйте FEN и запускайте быстрый анализ Stockfish.",
   },
   {
-    level: "Средний",
-    title: "Local Duel",
+    eyebrow: "За доской",
+    title: "Партия вдвоем",
     href: "/play/local",
     icon: Swords,
-    description: "Партия для двух игроков на одном экране: правила, рокировка, взятие на проходе, превращение пешки и история ходов.",
+    description: "Полная шахматная партия на одном экране: правила, рокировка, взятие на проходе, превращение, мат и ничьи.",
   },
   {
-    level: "Сильный",
-    title: "AI Arena",
+    eyebrow: "Тренировка",
+    title: "Игра против движка",
     href: "/play/ai",
     icon: Bot,
-    description: "Игра против компьютера с уровнями сложности, сохранением партий и разбором после завершения.",
+    description: "Партия против Stockfish с настройкой силы, сохранением результата и разбором после завершения.",
   },
   {
-    level: "Великий",
-    title: "Play with Friend",
+    eyebrow: "Онлайн",
+    title: "Игра с другом",
     href: "/play/friend",
     icon: Users,
-    description: "Комната по ссылке для игры с другом: ходы синхронизируются, статус игроков виден сразу.",
+    description: "Создайте комнату, отправьте ссылку и играйте на одной позиции с восстановлением партии после переподключения.",
   },
 ];
 
@@ -38,14 +38,14 @@ export function ModeGrid() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
       <div className="max-w-3xl">
-        <p className="text-sm uppercase tracking-[0.32em] text-primary">Режимы</p>
-        <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Выберите формат игры</h2>
+        <p className="text-sm uppercase tracking-[0.32em] text-primary">Инструменты</p>
+        <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Все для партии и анализа</h2>
         <p className="mt-4 text-sm leading-6 text-muted-foreground md:text-base">
-          В одном сайте есть свободная доска, партия вдвоем, игра против компьютера и комната для друга по ссылке.
+          На одной площадке есть редактор позиций, анализ движком, игра за одной доской, тренировка против Stockfish и онлайн-партия по ссылке.
         </p>
       </div>
       <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {modes.map((mode) => <ModeCard key={mode.href} {...mode} />)}
+        {tools.map((tool) => <ModeCard key={tool.href} {...tool} />)}
       </div>
     </section>
   );

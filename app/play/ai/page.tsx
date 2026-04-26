@@ -125,8 +125,8 @@ function AiArenaInner() {
   return (
     <>
       <GameShell
-        title="AI Arena"
-        description="Игра против компьютера с несколькими уровнями сложности. После партии сервис покажет ключевые ошибки и предложит более надежные продолжения."
+        title="Игра против движка"
+        description="Игра против Stockfish с настройкой силы. После партии сервис покажет ключевые ошибки, оценит решения и предложит более надежные продолжения."
         board={<ChessboardView fen={chess.fen()} theme={theme} onMove={onMove} allowDragging={!thinking && chess.turn() === "w" && !status.gameOver} />}
         side={
           <>
@@ -147,7 +147,7 @@ function AiArenaInner() {
                 <BoardThemePicker value={theme} onChange={setTheme} isPro={profile?.is_pro} />
               </div>
               <Button className="mt-5 w-full" variant="secondary" onClick={reset} type="button"><RotateCcw className="size-4" /> Новая партия</Button>
-              {thinking ? <p className="mt-3 text-sm text-primary">Компьютер выбирает ход...</p> : null}
+              {thinking ? <p className="mt-3 text-sm text-primary">Stockfish выбирает ход...</p> : null}
               {reviewing ? <p className="mt-3 text-sm text-primary">Разбор анализирует партию...</p> : null}
               {savedGameId ? <Link className="mt-4 inline-flex text-sm font-semibold text-primary" href={`/review/${savedGameId}`}>Открыть детальный разбор</Link> : null}
             </Surface>

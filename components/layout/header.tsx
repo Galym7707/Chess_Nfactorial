@@ -11,10 +11,11 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/", label: "Главная" },
+  { href: "/play/sandbox", label: "Анализ" },
   { href: "/play/local", label: "Играть" },
   { href: "/history", label: "История" },
   { href: "/leaderboard", label: "Лидерборд" },
-  { href: "/pricing", label: "Прайсинг" },
+  { href: "/pricing", label: "Тарифы" },
   { href: "/profile", label: "Профиль" },
 ];
 
@@ -50,7 +51,7 @@ export function Header() {
             {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
           <Link className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition hover:brightness-110" href="/pricing">
-            Upgrade to Pro
+            Перейти на Pro
           </Link>
           {user ? (
             <Button variant="secondary" size="sm" onClick={() => void signOut()} type="button">
@@ -80,7 +81,7 @@ export function Header() {
               {isDark ? "Светлая тема" : "Темная тема"}
             </Button>
             <Link onClick={() => setOpen(false)} className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-4 text-sm font-semibold text-accent-foreground" href="/pricing">
-              Upgrade to Pro
+              Перейти на Pro
             </Link>
           </div>
         </div>

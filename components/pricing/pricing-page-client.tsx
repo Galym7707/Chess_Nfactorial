@@ -64,7 +64,7 @@ export function PricingPageClient() {
     <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
       <div className="mx-auto max-w-3xl text-center">
         <Badge><Crown className="size-3" /> Тарифы</Badge>
-        <h1 className="mt-5 font-display text-5xl font-semibold md:text-7xl">Upgrade to Pro</h1>
+        <h1 className="mt-5 font-display text-5xl font-semibold md:text-7xl">Перейти на Pro</h1>
         <p className="mt-5 text-sm leading-6 text-muted-foreground md:text-base">
           Pro добавляет премиальные темы доски, расширенный разбор партии и выделение профиля. Платежная интеграция готова к рабочим ключам и безопасно отключается без секретов.
         </p>
@@ -79,9 +79,9 @@ export function PricingPageClient() {
           items={pro}
           cta={
             hasPaymentLink ? (
-              user ? <a className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href={paymentLink} target="_blank" rel="noreferrer">Upgrade to Pro</a> : <Link className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href="/login">Войти для Pro</Link>
+              user ? <a className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href={paymentLink} target="_blank" rel="noreferrer">Перейти на Pro</a> : <Link className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground" href="/login">Войти для Pro</Link>
             ) : (
-              <Button className="w-full" onClick={createCheckout} disabled={busy || !user} type="button">{busy ? "Открываю оплату..." : user ? "Upgrade to Pro" : "Войдите для оплаты"}</Button>
+              <Button className="w-full" onClick={createCheckout} disabled={busy || !user} type="button">{busy ? "Открываю оплату..." : user ? "Перейти на Pro" : "Войдите для оплаты"}</Button>
             )
           }
         />

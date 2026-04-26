@@ -1,10 +1,10 @@
-import { BrainCircuit, Crosshair, LineChart, ShieldCheck } from "lucide-react";
+import { BarChart3, BrainCircuit, Edit3, ShieldCheck } from "lucide-react";
 
 const features = [
-  [BrainCircuit, "Разбор ошибок", "После партии сервис показывает главные неточности, объясняет причину и предлагает более сильный ход."],
-  [Crosshair, "Режим концентрации", "Во время игры можно убрать лишние панели и оставить только доску, статус партии и нужные действия."],
-  [LineChart, "Понятный профиль", "Профиль показывает город, рейтинг, процент побед, историю партий и общий прогресс."],
-  [ShieldCheck, "Стабильная игра по ссылке", "Комната сохраняет последнюю позицию и не принимает запоздавшие ходы после обрыва связи."],
+  [BarChart3, "Анализ позиции", "Stockfish показывает оценку, лучший ход и короткую линию продолжения прямо в браузере."],
+  [Edit3, "Редактор доски", "Можно быстро собрать учебную позицию, сменить сторону хода, очистить доску или скопировать FEN."],
+  [BrainCircuit, "Разбор партии", "После игры сервис выделяет ключевые ошибки, объясняет, где позиция ухудшилась, и предлагает более сильный план."],
+  [ShieldCheck, "Онлайн-партия", "Комната сохраняет последнюю позицию и восстанавливает игру, если один из игроков переподключился."],
 ] as const;
 
 export function ProductLayer() {
@@ -12,10 +12,10 @@ export function ProductLayer() {
     <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
       <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <div className="sticky top-24">
-          <p className="text-sm uppercase tracking-[0.32em] text-primary">Особенности</p>
-          <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Шахматы с понятным разбором</h2>
+          <p className="text-sm uppercase tracking-[0.32em] text-primary">Возможности</p>
+          <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Рабочее место шахматиста</h2>
           <p className="mt-4 text-sm leading-6 text-muted-foreground md:text-base">
-            Сервис помогает не просто сыграть партию, а понять, где был потерян темп, почему позиция ухудшилась и какой ход был надежнее.
+            Code Gambit помогает не только сыграть партию, но и разобрать позицию, проверить варианты и сохранить прогресс.
           </p>
         </div>
         <div className="grid gap-3">

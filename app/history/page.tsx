@@ -26,15 +26,15 @@ function HistoryInner() {
       <Surface>
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <Badge>History</Badge>
+            <Badge>История</Badge>
             <h1 className="mt-5 font-display text-4xl font-semibold md:text-6xl">История партий</h1>
-            <p className="mt-3 text-sm text-muted-foreground">AI, Local и Friend партии сохраняются в аккаунте или в локальной демо-сессии.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Партии против движка, за доской и с другом сохраняются в аккаунте или в локальной демо-сессии.</p>
           </div>
           <Select className="md:max-w-xs" value={filter} onChange={(event) => setFilter(event.target.value as GameMode | "all")}>
             <option value="all">Все режимы</option>
-            <option value="ai">AI</option>
-            <option value="local">Local</option>
-            <option value="friend">Friend</option>
+            <option value="ai">Против движка</option>
+            <option value="local">За доской</option>
+            <option value="friend">С другом</option>
           </Select>
         </div>
         <div className="mt-8 grid gap-3">

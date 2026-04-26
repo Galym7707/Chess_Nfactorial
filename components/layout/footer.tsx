@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const links = [
-  ["Свободная доска", "/play/sandbox"],
-  ["Игра вдвоем", "/play/local"],
-  ["Против ИИ", "/play/ai"],
-  ["С другом", "/play/friend"],
+  ["Редактор позиции", "/play/sandbox"],
+  ["Партия за доской", "/play/local"],
+  ["Против движка", "/play/ai"],
+  ["Игра с другом", "/play/friend"],
   ["Лидерборд", "/leaderboard"],
   ["Тарифы", "/pricing"],
 ];
@@ -16,7 +16,7 @@ export function Footer() {
         <div>
           <p className="font-display text-2xl font-semibold">Code <span className="text-primary">Gambit</span></p>
           <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-            Шахматы для разработчиков и студентов: честные правила, понятный разбор ошибок, комнаты по ссылке и аккуратный профиль.
+            Шахматная платформа для анализа позиций, тренировочных партий, онлайн-игры и сохранения прогресса.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">

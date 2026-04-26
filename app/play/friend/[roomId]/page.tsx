@@ -47,6 +47,7 @@ function RoomInner() {
   const orientation = color === "black" ? "black" : "white";
   const turnColor = fen.split(" ")[1] === "w" ? "white" : "black";
   const canMove = room?.status === "active" && color === turnColor && !status.gameOver;
+  const colorLabel = color === "black" ? "черные" : "белые";
 
   async function copyLink() {
     await navigator.clipboard.writeText(window.location.href);
@@ -75,8 +76,8 @@ function RoomInner() {
       pgn: room.pgn,
       fen: room.current_fen,
       moves: room.moves,
-      opponent: "Friend Room",
-      summary: buildFastSummary(room.result, "Friend Room"),
+      opponent: "Игра с другом",
+      summary: buildFastSummary(room.result, "Игра с другом"),
       durationSeconds: Math.round((Date.now() - startedAt.current) / 1000),
     }).then(async (game) => {
       const coach = await runCoachReview({ pgn: room.pgn, userId: user.id, gameId: game.id, analyzeFen, maxPlies: profile?.is_pro ? 40 : 24 });
@@ -124,7 +125,7 @@ function RoomInner() {
             <Surface>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge><Radio className="size-3" /> онлайн: {online}</Badge>
-                <Badge>Вы: {color}</Badge>
+                <Badge>Вы: {colorLabel}</Badge>
                 <Badge>ходов: {room.moves.length}</Badge>
               </div>
               {error ? <p className="mt-3 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{error}</p> : null}

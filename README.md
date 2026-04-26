@@ -7,41 +7,45 @@ sdk: docker
 app_port: 7860
 fullWidth: true
 header: default
-short_description: Chess for builders with AI Coach.
+short_description: Chess platform with Stockfish analysis, games and online rooms.
 ---
 
 # Code Gambit
 
-Code Gambit is a production-ready Next.js chess platform for Hugging Face Docker Spaces. It combines four assignment levels in one product: free sandbox play, local two-player chess, Stockfish-powered AI play, and Supabase Realtime rooms by invite link.
+Современная шахматная платформа для игры, анализа позиций и прогресса. В одном сайте есть редактор доски, анализ Stockfish, партия за одной доской, игра против движка, онлайн-комнаты по ссылке, история партий, профиль и тариф Pro.
 
 Live demo: https://galym7707-chess-nfactorial.hf.space
 
 GitHub repo: https://github.com/Galym7707/Chess_Nfactorial
 
-## What is included
+## Что сделано
 
-- Marketing homepage with Russian UI, responsive navigation, light/dark theme support, pricing and profile routes.
-- Sandbox mode with an 8x8 board where pieces can be moved freely without rule validation.
-- Local Duel mode with chess.js validation, castling, en passant, promotion, check, mate, stalemate, draw state, undo, FEN/PGN export and localStorage restore.
-- AI Arena mode with browser-side Stockfish assets, difficulty presets and post-game review flow.
-- Play with Friend mode with Supabase room persistence, invite links, Realtime broadcast and presence handling.
-- History, review, leaderboard, profile, login and pricing pages.
-- Supabase SQL migration with tables and RLS policies for profiles, games, moves, rooms, coach reports, purchases and inventory.
-- Stripe-ready pricing architecture with graceful fallback when payment environment variables are not configured.
-- Dockerfile configured for Hugging Face Spaces on port 7860.
+- Главная страница с русским интерфейсом, адаптивной навигацией, светлой и темной темой.
+- Редактор позиции: свободная расстановка фигур, выбор стороны хода, очистка доски, начальная позиция, FEN и анализ Stockfish.
+- Партия за доской: легальные ходы, рокировка, взятие на проходе, превращение пешки, мат, пат, ничьи, история ходов, отмена, FEN/PGN и восстановление после перезагрузки.
+- Игра против движка: Stockfish в браузере, уровни силы, сохранение партии и разбор после завершения.
+- Игра с другом: комната по ссылке, сохранение позиции, синхронизация ходов, статус игроков и восстановление после переподключения.
+- История, детальный разбор партии, лидерборд, профиль, вход и тарифы.
+- Supabase SQL migration с таблицами и RLS policies для профилей, партий, ходов, комнат, разборов, покупок и инвентаря.
+- Stripe-ready тариф Pro с безопасным fallback, если платежные ключи еще не добавлены.
+- Dockerfile для Hugging Face Spaces на порту 7860.
 
-## Why it is different
+## Для кого
 
-Code Gambit is not a plain chessboard demo. The product direction is chess training for developers, students and ambitious players who want clear analysis, saved progress, multiplayer rooms and a monetizable Pro layer in one coherent web app.
+Code Gambit рассчитан на шахматистов, которым нужен аккуратный веб-инструмент: быстро собрать позицию, проверить вариант движком, сыграть партию, пригласить друга и вернуться к истории своих игр.
 
-## Assignment Mapping
+## Почему это не просто доска
 
-| Level | Route | Implementation |
+Обычная доска показывает фигуры. Code Gambit добавляет рабочий слой вокруг партии: редактор позиций, анализ Stockfish, сохранение истории, онлайн-комнаты и понятный разбор ключевых ошибок после игры.
+
+## Основные сценарии
+
+| Сценарий | Route | Что внутри |
 |---|---|---|
-| Weak | `/play/sandbox` | Static board, free movement, Rules Off state and reset. |
-| Medium | `/play/local` | Full local game using chess.js with legal moves, special moves, game state, history, undo, FEN/PGN and local restore. |
-| Strong | `/play/ai` | Auth-gated AI mode, Stockfish worker integration, difficulty presets, saved games and review flow. |
-| Great | `/play/friend` and `/play/friend/[roomId]` | Invite rooms, Supabase persistence, realtime move sync, presence and reconnect restore. |
+| Редактор позиции | `/play/sandbox` | Свободная расстановка, FEN, выбор стороны хода, анализ Stockfish. |
+| Партия за доской | `/play/local` | Полные правила шахмат, специальные ходы, история, undo, FEN/PGN, localStorage restore. |
+| Против движка | `/play/ai` | Stockfish worker, уровни силы, сохранение игры, post-game review. |
+| Онлайн с другом | `/play/friend` и `/play/friend/[roomId]` | Ссылка-приглашение, сохранение комнаты, синхронизация ходов, статус игроков и восстановление после переподключения. |
 
 ## Stack
 
@@ -110,7 +114,7 @@ For Hugging Face Spaces, add these in Space settings under Variables and secrets
 3. Enable the chosen email/password auth provider.
 4. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` to the runtime environment.
 
-The browser client only uses the anon key. The service role key is reserved for server-side routes such as Stripe webhook handling.
+The browser client only uses the anon/publishable key. The service role key is reserved for server-side routes such as Stripe webhook handling.
 
 ## Stripe Setup
 

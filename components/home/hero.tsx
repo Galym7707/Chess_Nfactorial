@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BrainCircuit, Code2 } from "lucide-react";
+import { ArrowRight, BarChart3, BrainCircuit } from "lucide-react";
 
 export function Hero() {
   return (
@@ -13,17 +13,17 @@ export function Hero() {
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
           <p className="font-display text-2xl font-semibold tracking-tight text-emerald-200">Code Gambit</p>
           <h1 className="mt-5 max-w-4xl font-display text-6xl font-semibold leading-[0.95] text-balance md:text-8xl">
-            Шахматы с умным разбором.
+            Шахматы для игры, анализа и роста.
           </h1>
           <p className="mt-6 max-w-xl text-base leading-7 text-white/72 md:text-lg">
-            Для студентов, разработчиков и всех, кто хочет играть сильнее: сервис объясняет ошибки простым языком и помогает видеть план на доске.
+            Редактор позиций, анализ Stockfish, партии за одной доской и онлайн-игра по ссылке в одном аккуратном сервисе.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="/play/ai" className="inline-flex h-13 items-center justify-center rounded-full bg-emerald-300 px-7 text-base font-semibold text-emerald-950 shadow-glow transition hover:brightness-110">
-              Играть с ИИ <ArrowRight className="ml-2 size-5" />
+            <Link href="/play/sandbox" className="inline-flex h-13 items-center justify-center rounded-full bg-emerald-300 px-7 text-base font-semibold text-emerald-950 shadow-glow transition hover:brightness-110">
+              Анализ позиции <ArrowRight className="ml-2 size-5" />
             </Link>
-            <Link href="/play/friend" className="inline-flex h-13 items-center justify-center rounded-full border border-white/18 bg-white/10 px-7 text-base font-semibold backdrop-blur transition hover:bg-white/16">
-              Создать комнату
+            <Link href="/play/local" className="inline-flex h-13 items-center justify-center rounded-full border border-white/18 bg-white/10 px-7 text-base font-semibold backdrop-blur transition hover:bg-white/16">
+              Начать партию
             </Link>
           </div>
         </motion.div>
@@ -38,13 +38,13 @@ export function Hero() {
             <div className="absolute -bottom-5 left-6 right-6 rounded-[2rem] border border-white/12 bg-slate-950/80 p-4 text-white shadow-soft backdrop-blur">
               <div className="flex items-center gap-3">
                 <BrainCircuit className="size-6 text-emerald-300" />
-                <p className="text-sm text-white/78">“Король открыт, а компенсации за риск нет. Надежнее было сначала укрепить позицию.”</p>
+                <p className="text-sm text-white/78">“Король раскрыт, компенсации нет. Надежнее было сначала укрепить позицию.”</p>
               </div>
             </div>
           </div>
           <div className="absolute -left-4 bottom-28 hidden rounded-3xl border border-white/12 bg-white/10 p-4 text-sm backdrop-blur md:block">
-            <Code2 className="mb-2 size-5 text-emerald-300" />
-            Разбор после партии
+            <BarChart3 className="mb-2 size-5 text-emerald-300" />
+            Оценка Stockfish: +0.72
           </div>
         </motion.div>
       </div>

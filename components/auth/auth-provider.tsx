@@ -31,8 +31,8 @@ type AuthContextValue = {
 };
 
 const authSchema = z.object({
-  email: z.string().email("??????? ?????????? email"),
-  password: z.string().min(6, "??????? 6 ????????"),
+  email: z.string().email("Введите корректный email"),
+  password: z.string().min(6, "Минимум 6 символов"),
 });
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -44,8 +44,8 @@ function toAppUser(user: User): AppUser {
 function demoProfile(userId: string): Profile {
   return {
     id: userId,
-    display_name: "Demo Player",
-    city: "??????",
+    display_name: "Демо игрок",
+    city: "Алматы",
     preferred_theme: "system",
     board_theme: "midnight",
     is_pro: false,
@@ -74,7 +74,7 @@ async function ensureProfile(user: AppUser) {
   const fallback = demoProfile(user.id);
   const { data: inserted } = await supabase
     .from("profiles")
-    .insert({ id: user.id, display_name: user.email.split("@")[0], city: "??????" })
+    .insert({ id: user.id, display_name: user.email.split("@")[0], city: "Алматы" })
     .select("*")
     .single();
   return (inserted as Profile | null) ?? fallback;
@@ -137,18 +137,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = useCallback(async (email: string, password: string) => {
     const parsed = authSchema.safeParse({ email, password });
-    if (!parsed.success) return parsed.error.issues[0]?.message ?? "????????? ?????";
+    if (!parsed.success) return parsed.error.issues[0]?.message ?? "Проверьте поля";
     const supabase = getSupabaseBrowserClient();
-    if (!supabase) return "Supabase ?? ?????????. ??????????? ????-?????? ??? ???????? ?????????? ? ?????????.";
+    if (!supabase) return "Supabase не настроен. Запустите демо-сессию или добавьте переменные окружения.";
     const { error } = await supabase.auth.signInWithPassword(parsed.data);
     return error?.message ?? null;
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, displayName: string) => {
     const parsed = authSchema.safeParse({ email, password });
-    if (!parsed.success) return parsed.error.issues[0]?.message ?? "????????? ?????";
+    if (!parsed.success) return parsed.error.issues[0]?.message ?? "Проверьте поля";
     const supabase = getSupabaseBrowserClient();
-    if (!supabase) return "Supabase ?? ?????????. ??????????? ????-?????? ??? ???????? ?????????? ? ?????????.";
+    if (!supabase) return "Supabase не настроен. Запустите демо-сессию или добавьте переменные окружения.";
     const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
@@ -156,7 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     if (error) return error.message;
     if (data.user) {
-      await supabase.from("profiles").upsert({ id: data.user.id, display_name: displayName || email.split("@")[0], city: "??????" });
+      await supabase.from("profiles").upsert({ id: data.user.id, display_name: displayName || email.split("@")[0], city: "Алматы" });
     }
     return null;
   }, []);
@@ -181,7 +181,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [loadProfile, user]);
 
   const updateProfile = useCallback(async (patch: Partial<Profile>) => {
-    if (!user) return "????? ???? ? ???????";
+    if (!user) return "Сначала войдите в аккаунт";
     const nextProfile = { ...(profile ?? demoProfile(user.id)), ...patch, id: user.id };
     if (user.isDemo) {
       localStorage.setItem(DEMO_PROFILE_KEY, JSON.stringify(nextProfile));
@@ -189,7 +189,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return null;
     }
     const supabase = getSupabaseBrowserClient();
-    if (!supabase) return "Supabase ?? ?????????";
+    if (!supabase) return "Supabase не настроен";
     const { data, error } = await supabase.from("profiles").upsert(nextProfile).select("*").single();
     if (error) return error.message;
     setProfile(data as Profile);

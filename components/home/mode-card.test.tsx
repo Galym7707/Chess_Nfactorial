@@ -5,7 +5,7 @@ import { ModeCard } from "./mode-card";
 
 describe("ModeCard", () => {
   it("renders a playable mode link", () => {
-    render(<ModeCard title="AI Arena" level="Сильный" description="Stockfish mode" href="/play/ai" icon={Bot} />);
-    expect(screen.getByRole("link", { name: /AI Arena/i })).toHaveAttribute("href", "/play/ai");
+    render(<ModeCard title="Игра против движка" eyebrow="Тренировка" description="Партия против Stockfish" href="/play/ai" icon={Bot} />);
+    expect(screen.getByRole("link", { name: /Игра против движка/i })).toHaveAttribute("href", "/play/ai");
   });
 });

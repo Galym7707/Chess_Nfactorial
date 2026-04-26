@@ -9,9 +9,9 @@ const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" }
 const sans = Manrope({ subsets: ["latin", "cyrillic"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Code Gambit — шахматы с умным разбором",
+  title: "Code Gambit — шахматы с анализом Stockfish",
   description:
-    "Современная шахматная платформа для разработчиков, студентов и амбициозных игроков: свободная доска, партия вдвоем, игра против компьютера и комнаты по ссылке.",
+    "Современная шахматная платформа для анализа позиций, игры против движка, партий за одной доской и онлайн-игры по ссылке.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:7860"),
 };
 
