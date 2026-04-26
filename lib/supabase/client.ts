@@ -1,15 +1,21 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { isSupabaseConfigured, publicEnv, supabaseBrowserKey } from "@/lib/env";
+import { getPublicEnv, isSupabaseConfigured, supabaseBrowserKey } from "@/lib/env";
 import type { Database } from "@/types/database";
 
 let client: SupabaseClient<Database> | null = null;
+let clientSignature = "";
 
 export function getSupabaseBrowserClient() {
   if (!isSupabaseConfigured()) return null;
-  if (!client) {
+
+  const env = getPublicEnv();
+  const browserKey = supabaseBrowserKey();
+  const signature = `${env.NEXT_PUBLIC_SUPABASE_URL}|${browserKey}`;
+
+  if (!client || clientSignature !== signature) {
     client = createClient<Database>(
-      publicEnv.NEXT_PUBLIC_SUPABASE_URL as string,
-      supabaseBrowserKey(),
+      env.NEXT_PUBLIC_SUPABASE_URL as string,
+      browserKey,
       {
         auth: {
           persistSession: true,
@@ -21,6 +27,8 @@ export function getSupabaseBrowserClient() {
         },
       },
     );
+    clientSignature = signature;
   }
+
   return client;
 }

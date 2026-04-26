@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { z } from "zod";
-import { isSupabaseConfigured } from "@/lib/env";
+import { isSupabaseConfigured, loadRuntimePublicEnv } from "@/lib/env";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { safeJsonParse } from "@/lib/utils";
 import type { Profile } from "@/types/app";
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const configured = isSupabaseConfigured();
+  const [configured, setConfigured] = useState(() => isSupabaseConfigured());
 
   const loadProfile = useCallback(async (nextUser: AppUser | null) => {
     if (!nextUser) {
@@ -97,45 +97,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
-    const supabase = getSupabaseBrowserClient();
+    let unsubscribe: (() => void) | null = null;
 
     async function restore() {
-      if (!configured || !supabase) {
+      await loadRuntimePublicEnv();
+      const nextConfigured = isSupabaseConfigured();
+      const supabase = getSupabaseBrowserClient();
+      if (!mounted) return;
+
+      setConfigured(nextConfigured);
+
+      if (!nextConfigured || !supabase) {
         const demoUser = safeJsonParse<AppUser | null>(localStorage.getItem(DEMO_USER_KEY), null);
-        if (mounted) {
-          setUser(demoUser);
-          if (demoUser) await loadProfile(demoUser);
-          setLoading(false);
-        }
+        setUser(demoUser);
+        if (demoUser) await loadProfile(demoUser);
+        if (mounted) setLoading(false);
         return;
       }
 
       const { data } = await supabase.auth.getSession();
       const currentUser = data.session?.user ? toAppUser(data.session.user) : null;
-      if (mounted) {
-        setUser(currentUser);
-        if (currentUser) await loadProfile(currentUser);
-        setLoading(false);
-      }
+      if (!mounted) return;
+
+      setUser(currentUser);
+      if (currentUser) await loadProfile(currentUser);
+      if (mounted) setLoading(false);
+
+      const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+        const nextUser = session?.user ? toAppUser(session.user) : null;
+        setUser(nextUser);
+        void loadProfile(nextUser);
+      });
+      unsubscribe = () => subscription.subscription.unsubscribe();
     }
 
     void restore();
 
-    if (!supabase) return () => { mounted = false; };
-
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
-      const nextUser = session?.user ? toAppUser(session.user) : null;
-      setUser(nextUser);
-      void loadProfile(nextUser);
-    });
-
     return () => {
       mounted = false;
-      subscription.subscription.unsubscribe();
+      unsubscribe?.();
     };
-  }, [configured, loadProfile]);
+  }, [loadProfile]);
 
   const signIn = useCallback(async (email: string, password: string) => {
+    await loadRuntimePublicEnv();
     const parsed = authSchema.safeParse({ email, password });
     if (!parsed.success) return parsed.error.issues[0]?.message ?? "Проверьте поля";
     const supabase = getSupabaseBrowserClient();
@@ -145,6 +150,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, displayName: string) => {
+    await loadRuntimePublicEnv();
     const parsed = authSchema.safeParse({ email, password });
     if (!parsed.success) return parsed.error.issues[0]?.message ?? "Проверьте поля";
     const supabase = getSupabaseBrowserClient();
@@ -188,6 +194,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setProfile(nextProfile);
       return null;
     }
+    await loadRuntimePublicEnv();
     const supabase = getSupabaseBrowserClient();
     if (!supabase) return "Supabase не настроен";
     const { data, error } = await supabase.from("profiles").upsert(nextProfile).select("*").single();

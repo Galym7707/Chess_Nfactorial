@@ -8,9 +8,9 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
-import { publicEnv } from "@/lib/env";
+import { getPublicEnv, loadRuntimePublicEnv } from "@/lib/env";
 
-const free = ["Свободная доска", "Игра вдвоем", "Базовые темы", "Локальная история партии"];
+const free = ["Редактор позиции", "Партия за доской", "Базовые темы доски", "Локальная история партии"];
 const pro = ["Премиальные темы доски", "Расширенный разбор партии", "Подробные рекомендации", "Выделение профиля", "Будущие тактические тренировки"];
 
 export function PricingPageClient() {
@@ -18,11 +18,20 @@ export function PricingPageClient() {
   const search = useSearchParams();
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const publishableKey = publicEnv.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-  const pricingTableId = publicEnv.NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID;
-  const paymentLink = publicEnv.NEXT_PUBLIC_STRIPE_PAYMENT_LINK;
+  const [env, setEnv] = useState(() => getPublicEnv());
+  const publishableKey = env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const pricingTableId = env.NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID;
+  const paymentLink = env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK;
   const canRenderPricingTable = Boolean(publishableKey && pricingTableId);
   const hasPaymentLink = Boolean(paymentLink);
+
+  useEffect(() => {
+    let mounted = true;
+    void loadRuntimePublicEnv().then((nextEnv) => {
+      if (mounted) setEnv(nextEnv);
+    });
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     if (!canRenderPricingTable || document.querySelector("script[src='https://js.stripe.com/v3/pricing-table.js']")) return;

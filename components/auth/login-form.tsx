@@ -9,7 +9,7 @@ import { useAuth } from "./auth-provider";
 
 export function LoginForm() {
   const router = useRouter();
-  const { signIn, signUp, startDemoSession, configured } = useAuth();
+  const { signIn, signUp, startDemoSession, configured, loading } = useAuth();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,11 +50,11 @@ export function LoginForm() {
         <Input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" type="email" required />
         <Input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Пароль" type="password" required minLength={6} />
         {message ? <p className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">{message}</p> : null}
-        <Button className="w-full" disabled={busy} type="submit">
-          {busy ? "Проверяем..." : mode === "login" ? "Войти" : "Создать аккаунт"}
+        <Button className="w-full" disabled={busy || loading} type="submit">
+          {busy || loading ? "Проверяем..." : mode === "login" ? "Войти" : "Создать аккаунт"}
         </Button>
       </form>
-      {!configured ? (
+      {!loading && !configured ? (
         <div className="mt-6 rounded-3xl border border-border bg-muted/50 p-4 text-sm text-muted-foreground">
           Supabase не подключен в этой среде. Для просмотра можно запустить демо-сессию; для регистрации на Hugging Face добавьте переменные Supabase в настройки Space и перезапустите сборку.
           <Button className="mt-4 w-full" variant="secondary" onClick={() => { startDemoSession(); router.push("/profile"); }} type="button">
