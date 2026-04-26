@@ -7,7 +7,7 @@ sdk: docker
 app_port: 7860
 fullWidth: true
 header: default
-short_description: Chess platform with Stockfish analysis, games and online rooms.
+short_description: Chess with Stockfish and online rooms.
 ---
 
 # Code Gambit
