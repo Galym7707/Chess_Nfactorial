@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { isSupabaseConfigured, publicEnv } from "@/lib/env";
+import { isSupabaseConfigured, publicEnv, supabaseBrowserKey } from "@/lib/env";
 import type { Database } from "@/types/database";
 
 let client: SupabaseClient<Database> | null = null;
@@ -9,7 +9,7 @@ export function getSupabaseBrowserClient() {
   if (!client) {
     client = createClient<Database>(
       publicEnv.NEXT_PUBLIC_SUPABASE_URL as string,
-      publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+      supabaseBrowserKey(),
       {
         auth: {
           persistSession: true,

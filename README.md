@@ -89,6 +89,7 @@ Local secrets go into `.env.local` at the repository root, next to `package.json
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_APP_URL=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
@@ -100,14 +101,14 @@ NEXT_PUBLIC_DEFAULT_LOCALE=ru
 STRIPE_PRO_PRICE_ID=
 ```
 
-For Hugging Face Spaces, add these in Space settings under Variables and secrets. Use secrets for private keys such as `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and any Hugging Face access token.
+For Hugging Face Spaces, add these in Space settings under Variables and secrets, then restart or rebuild the Space. Use secrets for private keys such as `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and any Hugging Face access token. The browser client can use either `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 
 ## Supabase Setup
 
 1. Create a Supabase project.
 2. Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor or through Supabase CLI.
 3. Enable the chosen email/password auth provider.
-4. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` to the runtime environment.
+4. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` to the runtime environment.
 
 The browser client only uses the anon key. The service role key is reserved for server-side routes such as Stripe webhook handling.
 
