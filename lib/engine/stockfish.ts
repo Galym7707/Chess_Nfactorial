@@ -30,6 +30,7 @@ type PendingSearch = {
 type EngineScript = {
   url: string;
   type?: WorkerType;
+  initTimeoutMs?: number;
 };
 
 const fallbackAnalysis: EngineAnalysis = {
@@ -40,7 +41,7 @@ const fallbackAnalysis: EngineAnalysis = {
   raw: [],
 };
 
-const liteSingleEngineScript: EngineScript = { url: "/stockfish-nmr/stockfish-18-lite-single.js" };
+const liteSingleEngineScript: EngineScript = { url: "/stockfish-nmr/stockfish-18-lite-single.js", initTimeoutMs: 90000 };
 const legacyEngineScripts: EngineScript[] = [{ url: "/stockfish/stockfish.wasm.js" }, { url: "/stockfish/stockfish.js" }];
 
 export class StockfishClient {
@@ -85,7 +86,7 @@ export class StockfishClient {
         this.resetWorker();
         this.ensureWorker(script);
         this.post("uci");
-        await this.waitFor((line) => line === "uciok", 25000);
+        await this.waitFor((line) => line === "uciok", script.initTimeoutMs ?? 25000);
         this.post("setoption name Threads value 1");
         this.post("setoption name Hash value 32");
         this.post("isready");
