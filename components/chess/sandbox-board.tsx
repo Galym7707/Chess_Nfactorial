@@ -5,9 +5,9 @@ import { BarChart3, Copy, Eraser, RefreshCw, RotateCcw, Sparkles, Trash2 } from 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
-import { ChessboardView } from "@/components/chess/chessboard-view";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { useStockfish } from "@/hooks/use-stockfish";
+import { boardThemes } from "@/lib/chess/themes";
 import type { BoardTheme } from "@/types/app";
 import type { EngineAnalysis } from "@/lib/engine/stockfish";
 import { cn } from "@/lib/utils";
@@ -139,7 +139,9 @@ export function BoardEditor() {
   const [analyzing, setAnalyzing] = useState(false);
   const [copied, setCopied] = useState(false);
   const { ready, error: engineError, analyzeFen } = useStockfish();
+  const squares = useMemo(() => ranks.flatMap((rank) => files.map((file) => `${file}${rank}`)), []);
   const fen = useMemo(() => positionToFen(position, turn), [position, turn]);
+  const colors = boardThemes[theme];
 
   function placePiece(square: string, piece: PieceCode | null) {
     setPosition((current) => ({ ...current, [square]: piece }));
@@ -157,25 +159,20 @@ export function BoardEditor() {
     setAnalysis(null);
   }
 
-  function onMove(source: string, target: string) {
+  function clickSquare(square: string) {
     if (tool === "erase") {
-      placePiece(target, null);
-      return false;
+      placePiece(square, null);
+      return;
     }
     if (tool) {
-      placePiece(target, tool);
-      return false;
+      placePiece(square, tool);
+      return;
     }
     if (selectedSquare) {
-      movePiece(selectedSquare, target);
-      setSelectedSquare(null);
-      return true;
+      movePiece(selectedSquare, square);
+      return;
     }
-    if (position[source]) {
-      setSelectedSquare(source);
-      return false;
-    }
-    return false;
+    if (position[square]) setSelectedSquare(square);
   }
 
   function resetPosition() {
@@ -223,12 +220,39 @@ export function BoardEditor() {
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_390px]">
       <Surface className="p-3 md:p-5">
-        <ChessboardView
-          fen={fen}
-          theme={theme}
-          onMove={onMove}
-          allowDragging={true}
-        />
+        <div className="board-wrap rounded-[1.75rem] border bg-card p-2 shadow-soft" style={{ borderColor: colors.border }}>
+          <div className="grid h-full grid-cols-8 overflow-hidden rounded-[1.25rem]">
+            {squares.map((square, index) => {
+              const piece = position[square];
+              const light = (Math.floor(index / 8) + index) % 2 === 0;
+              return (
+                <button
+                  key={square}
+                  className={cn(
+                    "relative flex touch-none items-center justify-center font-display text-4xl transition md:text-6xl",
+                    selectedSquare === square && "ring-4 ring-inset ring-primary",
+                    tool && "cursor-crosshair",
+                  )}
+                  style={{ backgroundColor: light ? colors.light : colors.dark }}
+                  draggable={Boolean(piece)}
+                  onClick={() => clickSquare(square)}
+                  onDragStart={(event) => event.dataTransfer.setData("text/plain", square)}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    const from = event.dataTransfer.getData("text/plain");
+                    if (from) movePiece(from, square);
+                  }}
+                  type="button"
+                  aria-label={`Поле ${square}`}
+                >
+                  <span className={cn("select-none leading-none", piece?.startsWith("w") ? "text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.7)]" : "text-black drop-shadow-[0_1px_0_rgba(255,255,255,0.28)]")}>{piece ? unicodePieces[piece] : ""}</span>
+                  <span className={cn("absolute bottom-1 right-1 text-[10px] font-semibold", light ? "text-slate-900/45" : "text-white/50")}>{square}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </Surface>
 
       <div className="grid content-start gap-4">
