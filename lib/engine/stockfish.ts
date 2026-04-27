@@ -27,6 +27,11 @@ type PendingSearch = {
   latest: EngineAnalysis;
 };
 
+type EngineScript = {
+  url: string;
+  type?: WorkerType;
+};
+
 const fallbackAnalysis: EngineAnalysis = {
   bestMove: null,
   scoreCp: 0,
@@ -35,34 +40,25 @@ const fallbackAnalysis: EngineAnalysis = {
   raw: [],
 };
 
+const modernEngineScript: EngineScript = { url: "/stockfish-lichess/stockfish-proxy.js", type: "module" };
+const legacyEngineScripts: EngineScript[] = [{ url: "/stockfish/stockfish.wasm.js" }, { url: "/stockfish/stockfish.js" }];
+
 export class StockfishClient {
   private worker: Worker | null = null;
   private waiters: Waiter[] = [];
   private pending: PendingSearch | null = null;
   private initialized: Promise<void> | null = null;
   private queue: Promise<EngineAnalysis> = Promise.resolve(fallbackAnalysis);
+  private activeScript = "";
 
   init() {
     if (this.initialized) return this.initialized;
-    this.initialized = new Promise<void>(async (resolve, reject) => {
-      try {
-        this.ensureWorker();
-        this.post("uci");
-        await this.waitFor((line) => line === "uciok", 5000);
-        this.post("setoption name Threads value 1");
-        this.post("setoption name Hash value 32");
-        this.post("isready");
-        await this.waitFor((line) => line === "readyok", 5000);
-        resolve();
-      } catch (error) {
-        reject(error instanceof Error ? error : new Error("Stockfish init failed"));
-      }
-    });
+    this.initialized = this.initialize();
     return this.initialized;
   }
 
   analyzeFen(fen: string, limit: EngineLimit = {}) {
-    this.queue = this.queue.then(() => this.search(fen, limit));
+    this.queue = this.queue.catch(() => fallbackAnalysis).then(() => this.search(fen, limit));
     return this.queue;
   }
 
@@ -77,21 +73,52 @@ export class StockfishClient {
     this.worker?.terminate();
     this.worker = null;
     this.initialized = null;
+    this.activeScript = "";
   }
 
-  private ensureWorker() {
-    if (this.worker) return;
-    const wasmSupported = typeof WebAssembly === "object";
-    const script = wasmSupported ? "/stockfish/stockfish.wasm.js" : "/stockfish/stockfish.js";
-    this.worker = new Worker(script);
-    this.worker.addEventListener("message", (event: MessageEvent<string>) => this.handleLine(String(event.data)));
-    this.worker.addEventListener("error", () => {
-      if (this.pending) {
-        clearTimeout(this.pending.timer);
-        this.pending.resolve(this.pending.latest);
-        this.pending = null;
+  private async initialize() {
+    const scripts = this.getEngineScripts();
+    let lastError: Error | null = null;
+
+    for (const script of scripts) {
+      try {
+        this.resetWorker();
+        this.ensureWorker(script);
+        this.post("uci");
+        await this.waitFor((line) => line === "uciok", 25000);
+        this.post("setoption name Threads value 1");
+        this.post("setoption name Hash value 32");
+        this.post("isready");
+        await this.waitFor((line) => line === "readyok", 12000);
+        return;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error("Stockfish init failed");
+        this.resetWorker();
       }
-    });
+    }
+
+    this.initialized = null;
+    throw lastError ?? new Error("Stockfish init failed");
+  }
+
+  private getEngineScripts() {
+    const wasmSupported = typeof WebAssembly === "object";
+    const threadedWasmSupported =
+      wasmSupported &&
+      typeof SharedArrayBuffer === "function" &&
+      typeof globalThis.crossOriginIsolated === "boolean" &&
+      globalThis.crossOriginIsolated;
+
+    if (threadedWasmSupported) return [modernEngineScript, ...legacyEngineScripts];
+    return wasmSupported ? legacyEngineScripts : [{ url: "/stockfish/stockfish.js" }];
+  }
+
+  private ensureWorker(script: EngineScript) {
+    if (this.worker) return;
+    this.activeScript = script.url;
+    this.worker = new Worker(script.url, script.type ? { type: script.type } : undefined);
+    this.worker.addEventListener("message", (event: MessageEvent<string>) => this.handleLine(String(event.data)));
+    this.worker.addEventListener("error", () => this.rejectWaiters(new Error(`Stockfish worker failed: ${this.activeScript}`)));
   }
 
   private post(command: string) {
@@ -113,6 +140,33 @@ export class StockfishClient {
     });
   }
 
+  private rejectWaiters(error: Error) {
+    for (const waiter of this.waiters) {
+      clearTimeout(waiter.timer);
+      waiter.reject(error);
+    }
+    this.waiters = [];
+
+    if (this.pending) {
+      clearTimeout(this.pending.timer);
+      this.pending.resolve(this.pending.latest);
+      this.pending = null;
+    }
+  }
+
+  private resetWorker() {
+    this.waiters.forEach((waiter) => clearTimeout(waiter.timer));
+    this.waiters = [];
+    if (this.pending) {
+      clearTimeout(this.pending.timer);
+      this.pending.resolve(this.pending.latest);
+      this.pending = null;
+    }
+    this.worker?.terminate();
+    this.worker = null;
+    this.activeScript = "";
+  }
+
   private async search(fen: string, limit: EngineLimit) {
     await this.init();
     if (typeof limit.skill === "number") this.post(`setoption name Skill Level value ${limit.skill}`);
@@ -127,7 +181,7 @@ export class StockfishClient {
           this.pending = null;
           resolve(latest);
         }
-      }, Math.max((limit.movetime ?? 800) + 3000, 5000));
+      }, limit.depth ? Math.max(limit.depth * 1500, 12000) : Math.max((limit.movetime ?? 800) + 5000, 7000));
 
       this.pending = {
         resolve: (analysis) => {
@@ -144,6 +198,11 @@ export class StockfishClient {
   }
 
   private handleLine(line: string) {
+    if (line.startsWith("stockfish-error ")) {
+      this.rejectWaiters(new Error(line.replace("stockfish-error ", "")));
+      return;
+    }
+
     for (const waiter of [...this.waiters]) {
       if (waiter.match(line)) {
         clearTimeout(waiter.timer);

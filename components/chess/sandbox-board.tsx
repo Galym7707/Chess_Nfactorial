@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import { useStockfish } from "@/hooks/use-stockfish";
+import { boardThemes } from "@/lib/chess/themes";
 import type { EngineAnalysis } from "@/lib/engine/stockfish";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +49,7 @@ const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const ranks = ["8", "7", "6", "5", "4", "3", "2", "1"];
 const whitePieces: PieceCode[] = ["wK", "wQ", "wR", "wB", "wN", "wP"];
 const blackPieces: PieceCode[] = ["bK", "bQ", "bR", "bB", "bN", "bP"];
+const editorBoardTheme = boardThemes.midnight;
 
 function createEmptyPosition(): BoardPosition {
   const position: BoardPosition = {};
@@ -203,7 +205,7 @@ export function BoardEditor() {
     setAnalyzing(true);
     setAnalysisError(null);
     try {
-      const result = await analyzeFen(fen, { depth: 10, movetime: 900, skill: 16 });
+      const result = await analyzeFen(fen, { movetime: 1200, skill: 16 });
       setAnalysis(result);
     } catch (error) {
       setAnalysisError(error instanceof Error ? error.message : "Не удалось проанализировать позицию.");
@@ -215,36 +217,38 @@ export function BoardEditor() {
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_390px]">
       <Surface className="p-3 md:p-5">
-        <div className="mx-auto grid aspect-square w-full max-w-[700px] grid-cols-8 overflow-hidden rounded-[1.6rem] border border-border shadow-soft">
-          {squares.map((square, index) => {
-            const piece = position[square];
-            const light = (Math.floor(index / 8) + index) % 2 === 0;
-            return (
-              <button
-                key={square}
-                className={cn(
-                  "relative flex touch-none items-center justify-center text-4xl transition md:text-6xl",
-                  light ? "bg-[#f4dec0]" : "bg-[#7a4d34]",
-                  selectedSquare === square && "ring-4 ring-inset ring-primary",
-                  tool && "cursor-crosshair",
-                )}
-                draggable={Boolean(piece)}
-                onClick={() => clickSquare(square)}
-                onDragStart={(event) => event.dataTransfer.setData("text/plain", square)}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => {
-                  event.preventDefault();
-                  const from = event.dataTransfer.getData("text/plain");
-                  if (from) movePiece(from, square);
-                }}
-                type="button"
-                aria-label={`Поле ${square}`}
-              >
-                <span className={cn("select-none", piece?.startsWith("w") ? "text-stone-50 drop-shadow" : "text-stone-950")}>{piece ? unicodePieces[piece] : ""}</span>
-                <span className="absolute bottom-1 right-1 text-[10px] font-semibold text-black/45">{square}</span>
-              </button>
-            );
-          })}
+        <div className="board-wrap mx-auto aspect-square w-full max-w-[700px] rounded-[1.75rem] border bg-card p-2 shadow-soft" style={{ borderColor: editorBoardTheme.border }}>
+          <div className="grid h-full grid-cols-8 overflow-hidden rounded-[1.25rem]">
+            {squares.map((square, index) => {
+              const piece = position[square];
+              const light = (Math.floor(index / 8) + index) % 2 === 0;
+              return (
+                <button
+                  key={square}
+                  className={cn(
+                    "relative flex touch-none items-center justify-center font-display text-4xl transition md:text-6xl",
+                    light ? "bg-[#d8e4e8]" : "bg-[#253445]",
+                    selectedSquare === square && "ring-4 ring-inset ring-primary",
+                    tool && "cursor-crosshair",
+                  )}
+                  draggable={Boolean(piece)}
+                  onClick={() => clickSquare(square)}
+                  onDragStart={(event) => event.dataTransfer.setData("text/plain", square)}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    const from = event.dataTransfer.getData("text/plain");
+                    if (from) movePiece(from, square);
+                  }}
+                  type="button"
+                  aria-label={`Поле ${square}`}
+                >
+                  <span className={cn("select-none leading-none", piece?.startsWith("w") ? "text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.7)]" : "text-black drop-shadow-[0_1px_0_rgba(255,255,255,0.28)]")}>{piece ? unicodePieces[piece] : ""}</span>
+                  <span className={cn("absolute bottom-1 right-1 text-[10px] font-semibold", light ? "text-slate-900/45" : "text-white/50")}>{square}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </Surface>
 

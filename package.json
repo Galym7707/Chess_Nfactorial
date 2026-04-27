@@ -12,6 +12,7 @@
     "postinstall": "node scripts/copy-stockfish.mjs"
   },
   "dependencies": {
+    "@lichess-org/stockfish-web": "^0.3.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.104.1",
     "chess.js": "^1.4.0",
