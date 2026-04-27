@@ -3,12 +3,14 @@ import { Hero } from "@/components/home/hero";
 import { LeaderboardPreview } from "@/components/home/leaderboard-preview";
 import { ModeGrid } from "@/components/home/mode-grid";
 import { ProductLayer } from "@/components/home/product-layer";
+import { AICoachPreview } from "@/components/home/AICoachPreview";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
       <ModeGrid />
+      <AICoachPreview />
       <ProductLayer />
       <LeaderboardPreview />
       <section className="mx-auto max-w-7xl px-4 pb-20 md:px-6">
