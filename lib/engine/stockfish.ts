@@ -40,7 +40,7 @@ const fallbackAnalysis: EngineAnalysis = {
   raw: [],
 };
 
-const modernEngineScript: EngineScript = { url: "/stockfish-lichess/stockfish-proxy.js", type: "module" };
+const liteSingleEngineScript: EngineScript = { url: "/stockfish-nmr/stockfish-18-lite-single.js" };
 const legacyEngineScripts: EngineScript[] = [{ url: "/stockfish/stockfish.wasm.js" }, { url: "/stockfish/stockfish.js" }];
 
 export class StockfishClient {
@@ -102,15 +102,7 @@ export class StockfishClient {
   }
 
   private getEngineScripts() {
-    const wasmSupported = typeof WebAssembly === "object";
-    const threadedWasmSupported =
-      wasmSupported &&
-      typeof SharedArrayBuffer === "function" &&
-      typeof globalThis.crossOriginIsolated === "boolean" &&
-      globalThis.crossOriginIsolated;
-
-    if (threadedWasmSupported) return [modernEngineScript, ...legacyEngineScripts];
-    return wasmSupported ? legacyEngineScripts : [{ url: "/stockfish/stockfish.js" }];
+    return typeof WebAssembly === "object" ? [liteSingleEngineScript, ...legacyEngineScripts] : [{ url: "/stockfish/stockfish.js" }];
   }
 
   private ensureWorker(script: EngineScript) {

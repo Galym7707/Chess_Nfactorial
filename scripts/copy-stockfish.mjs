@@ -22,7 +22,6 @@ function copyEngineAssets(sourceRoot, target, pattern) {
 
 const legacyCandidates = [
   join(root, "node_modules", "stockfish.js"),
-  join(root, "node_modules", "stockfish"),
 ];
 
 const legacyRoot = legacyCandidates.find((candidate) => existsSync(candidate));
@@ -38,12 +37,12 @@ if (!legacyRoot) {
   console.log(`[stockfish] copied ${copied} legacy engine asset(s) to public/stockfish`);
 }
 
-const lichessRoot = join(root, "node_modules", "@lichess-org", "stockfish-web");
-if (existsSync(lichessRoot)) {
+const nmrRoot = join(root, "node_modules", "stockfish", "bin");
+if (existsSync(nmrRoot)) {
   const copied = copyEngineAssets(
-    lichessRoot,
-    join(root, "public", "stockfish-lichess"),
-    /^sf_18_smallnet\.(js|wasm)$/i,
+    nmrRoot,
+    join(root, "public", "stockfish-nmr"),
+    /^stockfish-18-lite-single\.(js|wasm)$/i,
   );
-  console.log(`[stockfish] copied ${copied} lichess engine asset(s) to public/stockfish-lichess`);
+  console.log(`[stockfish] copied ${copied} lite single-threaded engine asset(s) to public/stockfish-nmr`);
 }
