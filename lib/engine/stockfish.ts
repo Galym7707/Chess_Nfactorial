@@ -41,7 +41,7 @@ const fallbackAnalysis: EngineAnalysis = {
   raw: [],
 };
 
-const liteSingleEngineScript: EngineScript = { url: "/stockfish-nmr/stockfish-18-lite-single.js", initTimeoutMs: 90000 };
+const liteSingleEngineScript: EngineScript = { url: "/stockfish-nmr/stockfish-18-lite-single.js", initTimeoutMs: 180000 };
 const legacyEngineScripts: EngineScript[] = [{ url: "/stockfish/stockfish.wasm.js" }, { url: "/stockfish/stockfish.js" }];
 
 export class StockfishClient {
