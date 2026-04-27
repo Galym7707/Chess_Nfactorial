@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { BarChart3, Copy, Eraser, RefreshCw, RotateCcw, Sparkles, Trash2 } from "lucide-react";
+import { Chessboard } from "react-chessboard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
@@ -130,7 +131,6 @@ function analysisText(analysis: EngineAnalysis) {
 
 export function BoardEditor() {
   const [position, setPosition] = useState<BoardPosition>(() => initialPosition());
-  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [tool, setTool] = useState<EditorTool>(null);
   const [turn, setTurn] = useState<SideToMove>("w");
   const [theme, setTheme] = useState<BoardTheme>("classic");
@@ -139,27 +139,30 @@ export function BoardEditor() {
   const [analyzing, setAnalyzing] = useState(false);
   const [copied, setCopied] = useState(false);
   const { ready, error: engineError, analyzeFen } = useStockfish();
-  const squares = useMemo(() => ranks.flatMap((rank) => files.map((file) => `${file}${rank}`)), []);
   const fen = useMemo(() => positionToFen(position, turn), [position, turn]);
   const colors = boardThemes[theme];
 
   function placePiece(square: string, piece: PieceCode | null) {
     setPosition((current) => ({ ...current, [square]: piece }));
-    setSelectedSquare(null);
     setAnalysis(null);
   }
 
-  function movePiece(from: string, to: string) {
-    if (from === to) {
-      setSelectedSquare(null);
-      return;
+  function onPieceDrop(sourceSquare: string, targetSquare: string) {
+    if (tool === "erase") {
+      placePiece(targetSquare, null);
+      return true;
     }
-    setPosition((current) => ({ ...current, [to]: current[from] ?? null, [from]: null }));
-    setSelectedSquare(null);
+    if (tool) {
+      placePiece(targetSquare, tool);
+      return true;
+    }
+    // Перемещение фигуры
+    setPosition((current) => ({ ...current, [targetSquare]: current[sourceSquare] ?? null, [sourceSquare]: null }));
     setAnalysis(null);
+    return true;
   }
 
-  function clickSquare(square: string) {
+  function onSquareClick(square: string) {
     if (tool === "erase") {
       placePiece(square, null);
       return;
@@ -168,17 +171,11 @@ export function BoardEditor() {
       placePiece(square, tool);
       return;
     }
-    if (selectedSquare) {
-      movePiece(selectedSquare, square);
-      return;
-    }
-    if (position[square]) setSelectedSquare(square);
   }
 
   function resetPosition() {
     setPosition(initialPosition());
     setTurn("w");
-    setSelectedSquare(null);
     setTool(null);
     setAnalysis(null);
     setAnalysisError(null);
@@ -186,7 +183,6 @@ export function BoardEditor() {
 
   function clearBoard() {
     setPosition(createEmptyPosition());
-    setSelectedSquare(null);
     setTool(null);
     setAnalysis(null);
     setAnalysisError(null);
@@ -221,37 +217,32 @@ export function BoardEditor() {
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_390px]">
       <Surface className="p-3 md:p-5">
         <div className="board-wrap rounded-[1.75rem] border bg-card p-2 shadow-soft" style={{ borderColor: colors.border }}>
-          <div className="grid h-full grid-cols-8 overflow-hidden rounded-[1.25rem]">
-            {squares.map((square, index) => {
-              const piece = position[square];
-              const light = (Math.floor(index / 8) + index) % 2 === 0;
-              return (
-                <button
-                  key={square}
-                  className={cn(
-                    "relative flex touch-none items-center justify-center font-display text-4xl transition md:text-6xl",
-                    selectedSquare === square && "ring-4 ring-inset ring-primary",
-                    tool && "cursor-crosshair",
-                  )}
-                  style={{ backgroundColor: light ? colors.light : colors.dark }}
-                  draggable={Boolean(piece)}
-                  onClick={() => clickSquare(square)}
-                  onDragStart={(event) => event.dataTransfer.setData("text/plain", square)}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    const from = event.dataTransfer.getData("text/plain");
-                    if (from) movePiece(from, square);
-                  }}
-                  type="button"
-                  aria-label={`Поле ${square}`}
-                >
-                  <span className={cn("select-none leading-none", piece?.startsWith("w") ? "text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.7)]" : "text-black drop-shadow-[0_1px_0_rgba(255,255,255,0.28)]")}>{piece ? unicodePieces[piece] : ""}</span>
-                  <span className={cn("absolute bottom-1 right-1 text-[10px] font-semibold", light ? "text-slate-900/45" : "text-white/50")}>{square}</span>
-                </button>
-              );
-            })}
-          </div>
+          <Chessboard
+            options={{
+              position: fen,
+              allowDragging: true,
+              animationDurationInMs: 180,
+              showAnimations: true,
+              showNotation: true,
+              boardStyle: {
+                borderRadius: "1.25rem",
+                overflow: "hidden",
+                boxShadow: "inset 0 0 0 1px rgba(255,255,255,.08)",
+              },
+              draggingPieceStyle: {
+                transform: "scale(1.08)",
+                maxWidth: "min(80px, 10.75vmin)",
+                maxHeight: "min(80px, 10.75vmin)",
+              },
+              lightSquareStyle: { backgroundColor: colors.light },
+              darkSquareStyle: { backgroundColor: colors.dark },
+              onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
+                if (!targetSquare) return false;
+                return onPieceDrop(sourceSquare, targetSquare);
+              },
+              onSquareClick: (square: string) => onSquareClick(square),
+            }}
+          />
         </div>
       </Surface>
 
