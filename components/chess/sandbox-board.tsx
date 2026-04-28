@@ -284,7 +284,7 @@ export function BoardEditor() {
                     <button
                       key={piece}
                       className={cn(
-                        "h-11 rounded-2xl border border-border bg-card/70 text-2xl transition hover:border-primary",
+                        "h-16 rounded-2xl border border-border bg-card/70 text-4xl transition hover:border-primary",
                         tool === piece && "border-primary bg-primary/10",
                       )}
                       onClick={() => setTool((current) => current === piece ? null : piece)}

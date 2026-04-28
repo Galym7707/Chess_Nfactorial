@@ -22,12 +22,24 @@ export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = 
   const currentMove = selectedMoveIndex !== null ? moves[selectedMoveIndex] : null;
   const fen = currentMove?.fenAfter || moves[0]?.fenBefore || "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const { ready, analyzeFen } = useStockfish();
-  const [stockfishEnabled, setStockfishEnabled] = useState(false);
+
+  // Загружаем сохраненное состояние toggle из localStorage
+  const [stockfishEnabled, setStockfishEnabled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('slay-gambit:stockfish-enabled');
+    return saved === 'true';
+  });
+
   const [liveEval, setLiveEval] = useState<number | null>(null);
   const [bestMove, setBestMove] = useState<string | null>(null);
 
   const canGoPrevious = selectedMoveIndex !== null && selectedMoveIndex > 0;
   const canGoNext = selectedMoveIndex !== null && selectedMoveIndex < moves.length - 1;
+
+  // Сохраняем состояние toggle в localStorage при изменении
+  useEffect(() => {
+    localStorage.setItem('slay-gambit:stockfish-enabled', String(stockfishEnabled));
+  }, [stockfishEnabled]);
 
   // Анализ текущей позиции при включенном Stockfish
   useEffect(() => {
