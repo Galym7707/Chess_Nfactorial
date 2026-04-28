@@ -64,14 +64,20 @@ function PlayModeSelector() {
     : TIME_CONTROLS.find((tc) => tc.id === selectedTime) || TIME_CONTROLS[1];
 
   async function handleCreateRoom() {
-    if (!user) return;
+    if (!user) {
+      alert("Необходимо войти в систему");
+      return;
+    }
     setCreatingRoom(true);
     try {
       const timeControl = effectiveTime;
+      console.log("Creating room with:", { userId: user.id, timeControl, isRated });
       const room = await createFriendRoom(user.id, timeControl, isRated);
+      console.log("Room created:", room);
       router.push(`/play/friend/${room.id}`);
     } catch (err) {
-      console.error(err);
+      console.error("Error creating room:", err);
+      alert(`Ошибка создания комнаты: ${err instanceof Error ? err.message : String(err)}`);
       setCreatingRoom(false);
     }
   }
