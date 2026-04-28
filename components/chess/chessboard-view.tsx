@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { boardThemes } from "@/lib/chess/themes";
+import { playMoveSound, playCaptureSound, playCheckSound } from "@/lib/chess/sounds";
 import type { BoardTheme } from "@/types/app";
 
 export function ChessboardView({
@@ -96,7 +97,24 @@ export function ChessboardView({
       const isLegalMove = legalMoves.some((m) => m.to === square);
 
       if (isLegalMove) {
+        const move = legalMoves.find((m) => m.to === square);
         const success = onMove(selectedSquare, square);
+        if (success) {
+          if (move?.captured) {
+            playCaptureSound();
+          } else {
+            playMoveSound();
+          }
+
+          // Check if move results in check
+          const testChess = new Chess(fen);
+          try {
+            testChess.move({ from: selectedSquare, to: square });
+            if (testChess.inCheck()) {
+              setTimeout(() => playCheckSound(), 100);
+            }
+          } catch {}
+        }
         setSelectedSquare(null);
         return;
       }
@@ -140,8 +158,29 @@ export function ChessboardView({
           onSquareClick,
           onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
             if (!targetSquare || !onMove) return false;
+
+            const move = chess.moves({ square: sourceSquare as any, verbose: true }).find((m) => m.to === targetSquare);
+            const success = onMove(sourceSquare, targetSquare);
+
+            if (success) {
+              if (move?.captured) {
+                playCaptureSound();
+              } else {
+                playMoveSound();
+              }
+
+              // Check if move results in check
+              const testChess = new Chess(fen);
+              try {
+                testChess.move({ from: sourceSquare, to: targetSquare });
+                if (testChess.inCheck()) {
+                  setTimeout(() => playCheckSound(), 100);
+                }
+              } catch {}
+            }
+
             setSelectedSquare(null);
-            return onMove(sourceSquare, targetSquare);
+            return success;
           },
         }}
       />
