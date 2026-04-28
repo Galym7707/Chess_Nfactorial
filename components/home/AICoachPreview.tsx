@@ -92,7 +92,7 @@ export function AICoachPreview() {
           </div>
 
           {/* CTA */}
-          <Link href="/analysis/demo" className="mt-6">
+          <Link href="/play/sandbox" className="mt-6">
             <Button size="lg" className="w-full">
               <Sparkles className="mr-2 size-4" />
               Try AI Analysis
