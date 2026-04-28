@@ -4,35 +4,35 @@
 @tailwind utilities;
 
 :root {
-  --background: 42 38% 95%;
-  --foreground: 220 22% 10%;
-  --muted: 42 24% 90%;
-  --muted-foreground: 220 10% 38%;
-  --border: 42 22% 80%;
-  --input: 42 22% 86%;
-  --card: 44 42% 97%;
-  --primary: 166 85% 34%;
-  --primary-foreground: 160 44% 96%;
-  --accent: 38 92% 54%;
-  --accent-foreground: 28 40% 12%;
-  --destructive: 2 70% 48%;
-  --ring: 166 85% 34%;
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --card: 0 0% 100%;
+  --primary: 166 76% 46%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --ring: 166 76% 46%;
 }
 
 .dark {
-  --background: 220 30% 6%;
-  --foreground: 42 35% 94%;
-  --muted: 220 21% 13%;
-  --muted-foreground: 218 12% 68%;
-  --border: 220 18% 19%;
-  --input: 220 18% 17%;
-  --card: 220 25% 9%;
-  --primary: 166 83% 52%;
-  --primary-foreground: 168 70% 6%;
-  --accent: 39 96% 58%;
-  --accent-foreground: 30 35% 9%;
-  --destructive: 2 84% 62%;
-  --ring: 166 83% 52%;
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --card: 222 47% 11%;
+  --primary: 166 76% 46%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 217 33% 17%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 63% 31%;
+  --ring: 166 76% 46%;
 }
 
 * {
@@ -56,10 +56,7 @@ body {
 
 .cg-shell {
   min-height: 100svh;
-  background:
-    radial-gradient(circle at 8% 4%, hsl(var(--primary) / 0.18), transparent 28rem),
-    radial-gradient(circle at 86% 18%, hsl(var(--accent) / 0.11), transparent 32rem),
-    hsl(var(--background));
+  background: hsl(var(--background));
 }
 
 .glass-panel {
