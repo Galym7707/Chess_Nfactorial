@@ -1,3 +1,15 @@
+---
+title: Slay Gambit
+emoji: ♟️
+colorFrom: green
+colorTo: yellow
+sdk: docker
+app_port: 7860
+fullWidth: true
+header: default
+short_description: Шахматная платформа с анализом Stockfish и онлайн-игрой
+---
+
 # ♟️ Slay Gambit — Шахматы для игры, анализа и роста
 
 Когда я получил ТЗ от **Nfactorial Incubator** на создание шахматного веб-сайта, я был невероятно рад! Как профессиональный шахматист с **1 разрядом** и представитель сборной **НИШ Медеу Алматы**, шахматы — это не просто хобби, а часть моей жизни. 
