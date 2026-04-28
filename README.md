@@ -7,171 +7,174 @@ sdk: docker
 app_port: 7860
 fullWidth: true
 header: default
-short_description: Chess with Stockfish and online rooms.
+short_description: Шахматная платформа с анализом Stockfish и онлайн-игрой
 ---
 
-# Slay Gambit
+# ♟️ Slay Gambit — Шахматы для игры, анализа и роста
 
-Современная шахматная платформа для игры, анализа позиций и прогресса. В одном сайте есть редактор доски, анализ Stockfish, партия за одной доской, игра против движка, онлайн-комнаты по ссылке, история партий, профиль и тариф Pro.
+## О проекте
 
-Live demo: https://galym7707-chess-nfactorial.hf.space
+Когда я получил ТЗ от **Nfactorial Incubator** на создание шахматного веб-сайта, я был невероятно рад! Как профессиональный шахматист с **1 разрядом** и представитель сборной **НИШ Медеу Алматы**, шахматы — это не просто хобби, а часть моей жизни. 
 
-GitHub repo: https://github.com/Galym7707/Chess_Nfactorial
+Я всегда мечтал о платформе, где можно не только играть, но и анализировать партии с помощью движка, делиться ссылками с друзьями для онлайн-игры и отслеживать свой прогресс. И знаете что? **Slay Gambit** получился настолько хорошим, что я сам использую его для игры с друзьями онлайн! 🎉
 
-## Что сделано
+Это не просто учебный проект — это полноценная шахматная платформа, которой я горжусь.
 
-- Главная страница с русским интерфейсом, адаптивной навигацией, светлой и темной темой.
-- Редактор позиции: свободная расстановка фигур, выбор стороны хода, очистка доски, начальная позиция, FEN и анализ Stockfish.
-- Партия за доской: легальные ходы, рокировка, взятие на проходе, превращение пешки, мат, пат, ничьи, история ходов, отмена, FEN/PGN и восстановление после перезагрузки.
-- Игра против движка: Stockfish в браузере, уровни силы, сохранение партии и разбор после завершения.
-- Игра с другом: комната по ссылке, сохранение позиции, синхронизация ходов, статус игроков и восстановление после переподключения.
-- История, детальный разбор партии, лидерборд, профиль, вход и тарифы.
-- Supabase SQL migration с таблицами и RLS policies для профилей, партий, ходов, комнат, разборов, покупок и инвентаря.
-- Stripe-ready тариф Pro с безопасным fallback, если платежные ключи еще не добавлены.
-- Dockerfile для Hugging Face Spaces на порту 7860.
+## 🚀 Что умеет Slay Gambit?
 
-## Для кого
+### 🎮 Игра
+- **Против друга онлайн** — создай комнату, скинь ссылку другу и играйте откуда угодно
+- **За одной доской** — классическая игра вдвоем на одном устройстве
+- **Против AI** — тренируйся с движком Stockfish разных уровней сложности
+- **Таймеры с инкрементом** — bullet, blitz, rapid — выбирай свой темп
 
-Slay Gambit рассчитан на шахматистов, которым нужен аккуратный веб-инструмент: быстро собрать позицию, проверить вариант движком, сыграть партию, пригласить друга и вернуться к истории своих игр.
+### 🧠 Анализ
+- **Stockfish прямо в браузере** — мощный движок анализирует позиции без сервера
+- **Разбор партий от Coach Tokayev** — AI-тренер находит ошибки и объясняет, что пошло не так
+- **Редактор позиций** — собери любую позицию и проверь варианты
+- **Оценка в реальном времени** — включи toggle и смотри оценку каждого хода
+- **Стрелки лучших ходов** — движок показывает, куда надо было ходить
 
-## Почему это не просто доска
+### 📊 Прогресс
+- **История партий** — все твои игры сохраняются
+- **Рейтинг и статистика** — отслеживай свой рост
+- **Лидерборд** — соревнуйся с другими игроками
+- **Достижения** — получай награды за успехи
 
-Обычная доска показывает фигуры. Slay Gambit добавляет рабочий слой вокруг партии: редактор позиций, анализ Stockfish, сохранение истории, онлайн-комнаты и понятный разбор ключевых ошибок после игры.
+### 🎨 Удобство
+- **Адаптивный дизайн** — отлично работает на телефоне, планшете и компьютере
+- **Темная и светлая тема** — выбирай, что удобнее
+- **4 темы доски** — classic, midnight, neon, paper
+- **Режим концентрации** — убирает всё лишнее, оставляя только доску
 
-## Основные сценарии
+## 🎯 Почему Slay Gambit?
 
-| Сценарий | Route | Что внутри |
-|---|---|---|
-| Редактор позиции | `/play/sandbox` | Свободная расстановка, FEN, выбор стороны хода, анализ Stockfish. |
-| Партия за доской | `/play/local` | Полные правила шахмат, специальные ходы, история, undo, FEN/PGN, localStorage restore. |
-| Против движка | `/play/ai` | Stockfish worker, уровни силы, сохранение игры, post-game review. |
-| Онлайн с другом | `/play/friend` и `/play/friend/[roomId]` | Ссылка-приглашение, сохранение комнаты, синхронизация ходов, статус игроков и восстановление после переподключения. |
+Большинство шахматных сайтов либо слишком сложные, либо слишком простые. Я хотел создать что-то **среднее** — достаточно мощное для серьезной игры и анализа, но при этом простое и приятное в использовании.
 
-## Stack
+**Slay Gambit** — это:
+- ✅ Быстрый старт — создал комнату, скинул ссылку, играешь
+- ✅ Мощный анализ — Stockfish 18 работает прямо в браузере
+- ✅ Понятный интерфейс — всё на русском, всё интуитивно
+- ✅ Бесплатный — основные функции доступны всем
 
-- Next.js App Router, TypeScript strict, React
-- Tailwind CSS and custom UI components
-- chess.js and react-chessboard
-- stockfish lite single-threaded engine and stockfish.js fallback copied into public runtime assets during install/build
-- Supabase Auth, Postgres, Realtime and RLS
-- Stripe Checkout/Billing-ready routes
-- zod, lucide-react, framer-motion
-- Vitest and Testing Library
-- Docker deployment for Hugging Face Spaces
+## 🛠️ Технологии
 
-## Architecture
+Проект построен на современном стеке:
 
-```text
-app/                 App Router pages and route handlers
-components/          UI, layout, auth, chess, pricing and leaderboard components
-hooks/               Stockfish and multiplayer hooks
-lib/chess/           chess.js helpers and board themes
-lib/engine/          Stockfish worker client
-lib/coach/           post-game review analysis
-lib/db/              Supabase/local fallback data access
-lib/multiplayer/     room creation, join and move persistence
-lib/supabase/        browser/server Supabase clients
-supabase/migrations/ SQL schema and RLS policies
-workers/             Stockfish worker marker
-public/              static runtime assets
-```
+- **Next.js 16** — React-фреймворк с App Router
+- **TypeScript** — типизация для надежности
+- **Tailwind CSS** — быстрая стилизация
+- **Supabase** — база данных, авторизация и realtime
+- **Stockfish 18** — шахматный движок в браузере
+- **chess.js** — валидация ходов и правила
+- **react-chessboard** — красивая доска
+- **Stripe** — платежи для Pro-тарифа
 
-## Local Setup
+## 🚀 Быстрый старт
 
 ```bash
+# Клонируй репозиторий
+git clone https://github.com/Galym7707/Chess_Nfactorial.git
+cd Chess_Nfactorial
+
+# Установи зависимости
 npm install
+
+# Создай .env.local и добавь переменные окружения
 cp .env.example .env.local
+
+# Запусти в режиме разработки
 npm run dev
 ```
 
-Open `http://localhost:7860`.
+Открой http://localhost:7860 и начинай играть!
 
-Local secrets go into `.env.local` at the repository root, next to `package.json`. Do not commit `.env.local`.
+## 🌐 Деплой
 
-## Environment Variables
+Проект задеплоен на **Hugging Face Spaces**:
+👉 https://galym7707-chess-nfactorial.hf.space
 
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-NEXT_PUBLIC_APP_URL=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID=
-NEXT_PUBLIC_STRIPE_PAYMENT_LINK=
-NEXT_PUBLIC_DEFAULT_LOCALE=ru
-STRIPE_PRO_PRICE_ID=
-```
+Используется Docker для стабильной работы на любой платформе.
 
-For Hugging Face Spaces, add these in Space settings under Variables and secrets, then restart or rebuild the Space. Use secrets for private keys such as `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and any Hugging Face access token. The browser client can use either `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+## 📝 Переменные окружения
 
-## Supabase Setup
-
-1. Create a Supabase project.
-2. Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor or through Supabase CLI.
-3. Enable the chosen email/password auth provider.
-4. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` to the runtime environment.
-
-The browser client only uses the anon/publishable key. The service role key is reserved for server-side routes such as Stripe webhook handling.
-
-## Stripe Setup
-
-Supported payment paths:
-
-1. Pricing Table: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID`.
-2. Payment Link: `NEXT_PUBLIC_STRIPE_PAYMENT_LINK`.
-3. Checkout Session: `STRIPE_SECRET_KEY` + `STRIPE_PRO_PRICE_ID` with webhook secret `STRIPE_WEBHOOK_SECRET`.
-
-Webhook endpoint:
-
-```text
-POST /api/stripe/webhook
-```
-
-If Stripe variables are missing, the pricing page renders a safe disabled/demo state instead of crashing.
-
-## Commands
+Для полной функциональности нужны:
 
 ```bash
-npm run typecheck
-npm test
-npm run build
-npm run start
+# Supabase (база данных и авторизация)
+NEXT_PUBLIC_SUPABASE_URL=твой_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=твой_ключ
+SUPABASE_SERVICE_ROLE_KEY=сервисный_ключ
+
+# Stripe (платежи для Pro)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=публичный_ключ
+STRIPE_SECRET_KEY=секретный_ключ
+STRIPE_WEBHOOK_SECRET=webhook_секрет
+
+# Приложение
+NEXT_PUBLIC_APP_URL=https://твой-домен.com
 ```
 
-## Hugging Face Deploy
+Без Supabase работает демо-режим с localStorage.
 
-The Space uses Docker SDK through README metadata:
+## 🎓 Что я узнал
 
-```yaml
-sdk: docker
-app_port: 7860
-```
+Создавая Slay Gambit, я прокачал:
 
-The Docker image starts the Next.js standalone server on `0.0.0.0:7860`.
+- **Next.js App Router** — серверные и клиентские компоненты
+- **Realtime** — синхронизация ходов между игроками через Supabase
+- **Web Workers** — Stockfish работает в отдельном потоке
+- **Chess.js** — все правила шахмат, включая рокировку и взятие на проходе
+- **TypeScript** — строгая типизация для больших проектов
+- **Responsive Design** — адаптивность для всех устройств
+- **Docker** — контейнеризация для деплоя
 
-## Third-Party / Attribution
+## 🏆 Особенности
 
-- Stockfish / stockfish / stockfish.js: browser chess engine distributions. This repository uses GPL-3.0-only for compatibility.
-- chess.js: legal move validation and PGN/FEN utilities.
-- react-chessboard: chessboard UI.
-- Supabase: Auth, Postgres and Realtime.
-- Stripe: checkout and billing infrastructure.
-- Next.js, React, Tailwind CSS and supporting open-source packages.
+### Coach Tokayev
+AI-тренер анализирует твои партии и объясняет ошибки понятным языком. Не просто "это зевок", а "король раскрыт, компенсации нет".
 
-## Sources
+### Stockfish Toggle
+Как в Lichess — включил один раз, и движок постоянно показывает оценку и лучший ход. Состояние сохраняется между сессиями.
 
-- Hugging Face Docker Spaces metadata and `app_port`: https://huggingface.co/docs/hub/en/spaces-sdks-docker
-- Next.js standalone output: https://nextjs.org/docs/app/api-reference/config/next-config-js/output
-- Supabase row level security and `auth.uid()`: https://supabase.com/docs/guides/database/postgres/row-level-security
-- Supabase Realtime: https://supabase.com/docs/guides/realtime
-- Stripe Checkout Sessions: https://docs.stripe.com/payments/checkout
+### Онлайн-комнаты
+Создай комнату, скинь ссылку другу — и играйте. Если кто-то отключился, позиция сохраняется и восстанавливается при переподключении.
 
-## Future Improvements
+### Экспорт позиций
+Любую позицию можно экспортировать как картинку и поделиться в соцсетях.
 
-- Server-side authoritative validation for multiplayer moves through Supabase Edge Functions.
-- Tactical drills generated from saved mistakes.
-- Stripe Customer Portal for subscription management.
-- End-to-end tests for full game flows.
+## 📱 Мобильная версия
+
+Всё работает на смартфонах:
+- Адаптивная доска
+- Удобные кнопки
+- Мобильное меню
+- Оптимизированные размеры
+
+## 🎯 Планы на будущее
+
+- [ ] Тактические задачи
+- [ ] Турниры
+- [ ] Голосовой чат в комнатах
+- [ ] Анализ дебютов
+- [ ] Мобильное приложение
+
+## 🙏 Благодарности
+
+Огромное спасибо **Nfactorial Incubator** за возможность создать этот проект! Это был невероятный опыт — совместить любовь к шахматам с программированием.
+
+Спасибо моей школе **НИШ Медеу Алматы** за поддержку в шахматах и IT.
+
+## 📄 Лицензия
+
+GPL-3.0 — проект открыт для всех, кто хочет учиться и улучшать его.
+
+## 🔗 Ссылки
+
+- 🌐 **Live Demo**: https://galym7707-chess-nfactorial.hf.space
+- 💻 **GitHub**: https://github.com/Galym7707/Chess_Nfactorial
+- 🏢 **Nfactorial**: https://nfactorial.school
+
+---
+
+Сделано с ♟️ и ❤️ шахматистом для шахматистов
