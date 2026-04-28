@@ -8,6 +8,7 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { ChessboardView } from "@/components/chess/chessboard-view";
 import { CoachReportView } from "@/components/chess/coach-report-view";
+import { GameResultModal } from "@/components/chess/game-result-modal";
 import { GameShell } from "@/components/chess/game-shell";
 import { GameStatus } from "@/components/chess/game-status";
 import { MoveList } from "@/components/chess/move-list";
@@ -52,6 +53,7 @@ function AiArenaInner() {
   const [report, setReport] = useState<CoachReport | null>(null);
   const [reviewing, setReviewing] = useState(false);
   const [savedGameId, setSavedGameId] = useState<string | null>(null);
+  const [showResultModal, setShowResultModal] = useState(false);
   const startedAt = useRef(Date.now());
   const savedPgn = useRef<string | null>(null);
 
@@ -111,6 +113,7 @@ function AiArenaInner() {
       const coach = await runCoachReview({ pgn, userId: user.id, gameId: game.id, analyzeFen, maxPlies: profile?.is_pro ? 40 : 24 });
       await saveCoachReport(coach);
       setReport(coach);
+      setShowResultModal(true);
     }).finally(() => setReviewing(false));
   }, [analyzeFen, chess, difficulty, moves, pgn, profile?.is_pro, status.gameOver, status.result, user]);
 
@@ -164,6 +167,14 @@ function AiArenaInner() {
           setPending(null);
         }}
       />
+      {report?.move_stats && (
+        <GameResultModal
+          open={showResultModal}
+          result={status.result === "1-0" ? "win" : status.result === "0-1" ? "loss" : "draw"}
+          stats={report.move_stats}
+          onClose={() => setShowResultModal(false)}
+        />
+      )}
     </>
   );
 }
