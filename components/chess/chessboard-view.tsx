@@ -37,7 +37,7 @@ export function ChessboardView({
     return chess.moves({ square: selectedSquare as any, verbose: true });
   }, [chess, selectedSquare]);
 
-  const customSquareStyles = useMemo(() => {
+  const squareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {};
 
     // Highlight king in check
@@ -136,7 +136,7 @@ export function ChessboardView({
           },
           lightSquareStyle: { backgroundColor: colors.light },
           darkSquareStyle: { backgroundColor: colors.dark },
-          customSquareStyles,
+          squareStyles,
           onSquareClick,
           onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
             if (!targetSquare || !onMove) return false;
