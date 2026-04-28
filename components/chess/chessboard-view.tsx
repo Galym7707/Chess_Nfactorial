@@ -13,12 +13,14 @@ export function ChessboardView({
   orientation = "white",
   onMove,
   allowDragging = true,
+  lastMove,
 }: {
   fen: string;
   theme: BoardTheme;
   orientation?: "white" | "black";
   onMove?: (source: string, target: string) => boolean;
   allowDragging?: boolean;
+  lastMove?: { from: string; to: string } | null;
 }) {
   const colors = boardThemes[theme];
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
@@ -40,6 +42,16 @@ export function ChessboardView({
 
   const squareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {};
+
+    // Highlight last move
+    if (lastMove) {
+      styles[lastMove.from] = {
+        backgroundColor: "rgba(155, 199, 0, 0.41)",
+      };
+      styles[lastMove.to] = {
+        backgroundColor: "rgba(155, 199, 0, 0.41)",
+      };
+    }
 
     // Highlight king in check
     if (chess.inCheck()) {
@@ -86,7 +98,7 @@ export function ChessboardView({
     }
 
     return styles;
-  }, [selectedSquare, legalMoves, chess]);
+  }, [selectedSquare, legalMoves, chess, lastMove]);
 
   function onSquareClick({ square }: { square: string }) {
     if (!allowDragging || !onMove) return;
