@@ -53,6 +53,14 @@ export async function runCoachReview({
   const cursor = new Chess();
   const issues: CoachIssue[] = [];
   const losses: number[] = [];
+  const moveStats = {
+    best: 0,
+    excellent: 0,
+    good: 0,
+    inaccuracy: 0,
+    mistake: 0,
+    blunder: 0,
+  };
 
   for (const [index, move] of moves.slice(0, maxPlies).entries()) {
     const beforeFen = cursor.fen();
@@ -63,6 +71,9 @@ export async function runCoachReview({
     const lossCp = Math.max(0, normalizeScoreForMover(before, after));
     losses.push(lossCp);
     const classification = classifyLoss(lossCp, before.bestMove, actualUci);
+
+    // Count move classifications
+    moveStats[classification]++;
 
     if (["inaccuracy", "mistake", "blunder"].includes(classification)) {
       const best = before.bestMove ?? "улучшить развитие";
@@ -82,10 +93,37 @@ export async function runCoachReview({
 
   const averageLoss = losses.length ? losses.reduce((sum, loss) => sum + Math.min(loss, 320), 0) / losses.length : 0;
   const qualityScore = Math.max(1, Math.min(100, Math.round(100 - averageLoss / 3.2)));
+
+  // Estimate FIDE rating based on quality
+  const estimatedRating = Math.round(800 + (qualityScore * 20));
+
+  // Analyze weaknesses
+  const weaknesses: string[] = [];
+  const blunderCount = moveStats.blunder;
+  const mistakeCount = moveStats.mistake;
+  const inaccuracyCount = moveStats.inaccuracy;
+
+  if (blunderCount >= 2) {
+    weaknesses.push("Тактическая внимательность: проверяйте угрозы соперника перед каждым ходом");
+  }
+  if (mistakeCount >= 3) {
+    weaknesses.push("Позиционное понимание: работайте над оценкой долгосрочных планов");
+  }
+  if (inaccuracyCount >= 4) {
+    weaknesses.push("Точность расчета: уделяйте больше времени на критических позициях");
+  }
+  if (moveStats.best + moveStats.excellent < moves.length * 0.3) {
+    weaknesses.push("Поиск лучших ходов: решайте тактические задачи для улучшения расчета");
+  }
+
+  if (weaknesses.length === 0) {
+    weaknesses.push("Продолжайте в том же духе! Работайте над углублением расчета вариантов");
+  }
+
   const keyIssues = issues.sort((a, b) => b.lossCp - a.lossCp).slice(0, 5);
   const summary = keyIssues.length
-    ? `Review: качество партии ${qualityScore}/100. Главная зона роста — ${keyIssues[0]?.classification === "blunder" ? "тактическая безопасность" : "точность плана"}. Перед резкими ходами проверяй короля, темп и лучший ответ соперника.`
-    : `Review: качество партии ${qualityScore}/100. Критических просадок в первых ${Math.min(maxPlies, moves.length)} полуходах не найдено; партия держалась как аккуратный production merge.`;
+    ? `Качество партии: ${qualityScore}/100. Примерный уровень игры: ${estimatedRating} FIDE. Главная зона роста — ${keyIssues[0]?.classification === "blunder" ? "тактическая безопасность" : "точность плана"}. Перед резкими ходами проверяйте короля, темп и лучший ответ соперника.`
+    : `Качество партии: ${qualityScore}/100. Примерный уровень игры: ${estimatedRating} FIDE. Критических просадок в первых ${Math.min(maxPlies, moves.length)} полуходах не найдено.`;
 
   return {
     id: crypto.randomUUID(),
@@ -95,6 +133,9 @@ export async function runCoachReview({
     summary,
     issues: keyIssues,
     created_at: new Date().toISOString(),
+    estimated_rating: estimatedRating,
+    weaknesses,
+    move_stats: moveStats,
   };
 }
 

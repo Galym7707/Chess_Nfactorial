@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Surface } from "@/components/ui/surface";
+import { AlertCircle, TrendingUp } from "lucide-react";
 import type { CoachReport } from "@/types/app";
 
 const labels = {
@@ -48,12 +49,38 @@ export function CoachReportView({ report }: { report: CoachReport }) {
           </div>
         </div>
 
-        <div className="rounded-3xl bg-primary/15 px-5 py-3 text-center">
-          <p className="text-xs text-muted-foreground">качество</p>
-          <p className="font-display text-3xl font-semibold text-primary">{report.quality_score}</p>
+        <div className="flex gap-3">
+          <div className="rounded-3xl bg-primary/15 px-5 py-3 text-center">
+            <p className="text-xs text-muted-foreground">качество</p>
+            <p className="font-display text-3xl font-semibold text-primary">{report.quality_score}</p>
+          </div>
+          {report.estimated_rating && (
+            <div className="rounded-3xl bg-accent px-5 py-3 text-center">
+              <p className="text-xs text-muted-foreground">рейтинг</p>
+              <p className="font-display text-3xl font-semibold">{report.estimated_rating}</p>
+            </div>
+          )}
         </div>
       </div>
+
       <p className="mt-5 text-sm leading-6 text-muted-foreground">{report.summary}</p>
+
+      {report.weaknesses && report.weaknesses.length > 0 && (
+        <div className="mt-6 rounded-2xl border border-orange-500/30 bg-orange-500/10 p-4">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="mt-0.5 size-5 flex-shrink-0 text-orange-600 dark:text-orange-400" />
+            <div>
+              <p className="font-semibold text-orange-700 dark:text-orange-300">Зоны для улучшения:</p>
+              <ul className="mt-2 space-y-1 text-sm text-orange-700 dark:text-orange-300">
+                {report.weaknesses.map((weakness, index) => (
+                  <li key={index}>• {weakness}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mt-6 grid gap-3">
         {report.issues.length === 0 ? (
           <div className="rounded-3xl border border-border bg-muted/50 p-4 text-sm text-muted-foreground">Ключевых ошибок не найдено.</div>

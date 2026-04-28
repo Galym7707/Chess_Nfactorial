@@ -70,6 +70,16 @@ export interface CoachReport {
   summary: string;
   issues: CoachIssue[];
   created_at: string;
+  estimated_rating?: number;
+  weaknesses?: string[];
+  move_stats?: {
+    best: number;
+    excellent: number;
+    good: number;
+    inaccuracy: number;
+    mistake: number;
+    blunder: number;
+  };
 }
 
 export interface RoomState {
