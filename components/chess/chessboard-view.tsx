@@ -87,7 +87,7 @@ export function ChessboardView({
     return styles;
   }, [selectedSquare, legalMoves, chess]);
 
-  function onSquareClick(square: string) {
+  function onSquareClick({ square }: { square: string }) {
     if (!allowDragging || !onMove) return;
 
     const piece = chess.get(square as any);
