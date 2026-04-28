@@ -9,6 +9,7 @@ import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { ChessboardView } from "@/components/chess/chessboard-view";
 import { ChessTimer } from "@/components/chess/chess-timer";
 import { CoachReportView } from "@/components/chess/coach-report-view";
+import { GameResultModal } from "@/components/chess/game-result-modal";
 import { GameShell } from "@/components/chess/game-shell";
 import { GameStatus } from "@/components/chess/game-status";
 import { MoveList } from "@/components/chess/move-list";
@@ -36,6 +37,7 @@ function RoomInner() {
   const [copied, setCopied] = useState(false);
   const [report, setReport] = useState<CoachReport | null>(null);
   const [reviewing, setReviewing] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
   const savedVersion = useRef<number | null>(null);
   const startedAt = useRef(Date.now());
 
@@ -90,6 +92,7 @@ function RoomInner() {
       const coach = await runCoachReview({ pgn: room.pgn, userId: user.id, gameId: game.id, analyzeFen, maxPlies: profile?.is_pro ? 40 : 24 });
       await saveCoachReport(coach);
       setReport(coach);
+      setShowResultModal(true);
     }).finally(() => setReviewing(false));
   }, [analyzeFen, profile?.is_pro, room, user]);
 
@@ -170,6 +173,20 @@ function RoomInner() {
           setPending(null);
         }}
       />
+      {report?.move_stats && room && (
+        <GameResultModal
+          open={showResultModal}
+          result={
+            room.result === "1-0" && color === "white" ? "win" :
+            room.result === "0-1" && color === "black" ? "win" :
+            room.result === "1-0" && color === "black" ? "loss" :
+            room.result === "0-1" && color === "white" ? "loss" :
+            "draw"
+          }
+          stats={report.move_stats}
+          onClose={() => setShowResultModal(false)}
+        />
+      )}
     </>
   );
 }
