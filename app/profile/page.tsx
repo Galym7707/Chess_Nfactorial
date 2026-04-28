@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { AuthGate } from "@/components/auth/auth-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
+import { ProgressStats } from "@/components/profile/progress-stats";
+import { RatingChart } from "@/components/profile/rating-chart";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import { getProfileStats, listGames } from "@/lib/db/games";
-import { formatPercent } from "@/lib/utils";
 import type { AppGame, BoardTheme, Profile } from "@/types/app";
 
 function ProfileInner() {
@@ -54,48 +55,11 @@ function ProfileInner() {
         </div>
       </Surface>
       <div className="grid gap-5">
-        <Surface>
-          <h2 className="font-display text-3xl font-semibold">Статистика</h2>
-          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-5">
-            <Stat label="Рейтинг" value={profile?.rating ?? 1200} />
-            <Stat label="Игр" value={stats.total} />
-            <Stat label="Побед" value={stats.wins} />
-            <Stat label="Поражений" value={stats.losses} />
-            <Stat label="Win rate" value={formatPercent(stats.winRate)} />
-          </div>
-        </Surface>
-        <Surface>
-          <h2 className="font-display text-3xl font-semibold">Последние партии</h2>
-          <div className="mt-5 grid gap-3">
-            {games.length === 0 ? <p className="text-sm text-muted-foreground">Нет партий.</p> : games.map((game) => (
-              <div key={game.id} className="rounded-3xl border border-border bg-muted/40 p-4 text-sm">
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold">{game.opponent}</p>
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    game.result === "1-0" ? "bg-green-500/20 text-green-700 dark:text-green-300" :
-                    game.result === "0-1" ? "bg-red-500/20 text-red-700 dark:text-red-300" :
-                    "bg-blue-500/20 text-blue-700 dark:text-blue-300"
-                  }`}>
-                    {game.result === "1-0" ? "Победа" : game.result === "0-1" ? "Поражение" : "Ничья"}
-                  </span>
-                </div>
-                <p className="mt-1 text-muted-foreground">{game.summary}</p>
-                {game.rating_change && (
-                  <p className={`mt-2 text-xs font-semibold ${game.rating_change > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-                    {game.rating_change > 0 ? "+" : ""}{game.rating_change} рейтинг
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </Surface>
+        <ProgressStats stats={stats} rating={profile?.rating ?? 1200} games={games} />
+        <RatingChart games={games} currentRating={profile?.rating ?? 1200} />
       </div>
     </section>
   );
-}
-
-function Stat({ label, value }: { label: string; value: string | number }) {
-  return <div className="rounded-3xl border border-border bg-muted/40 p-4"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-2 font-display text-3xl font-semibold">{value}</p></div>;
 }
 
 export default function ProfilePage() {
