@@ -9,7 +9,7 @@ export function Hero() {
     <section className="relative -mt-16 min-h-[calc(100svh)] overflow-hidden px-4 pt-28 md:px-6">
       <div className="relative mx-auto grid min-h-[calc(100svh-7rem)] max-w-7xl items-center gap-10 lg:grid-cols-[0.98fr_1.02fr]">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
-          <p className="font-display text-2xl font-semibold tracking-tight text-primary">Code Gambit</p>
+          <p className="font-display text-2xl font-semibold tracking-tight text-primary">Slay Gambit</p>
           <h1 className="mt-5 max-w-4xl font-display text-6xl font-semibold leading-[0.95] text-balance md:text-8xl">
             Шахматы для игры, анализа и роста.
           </h1>

@@ -33,7 +33,7 @@ export function LoginForm() {
   return (
     <Surface className="mx-auto w-full max-w-xl">
       <p className="text-sm uppercase tracking-[0.3em] text-primary">Аккаунт</p>
-      <h1 className="mt-4 font-display text-4xl font-semibold">Вход в Code Gambit</h1>
+      <h1 className="mt-4 font-display text-4xl font-semibold">Вход в Slay Gambit</h1>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">
         Войдите, чтобы сохранять партии, профиль, город, рейтинг и разборы. Регистрация работает через Supabase Auth.
       </p>

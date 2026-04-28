@@ -27,7 +27,7 @@ export function AuthGate({ children, allowDemo = true }: { children: React.React
         <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary/15 text-primary">
           <LockKeyhole className="size-7" />
         </div>
-        <h1 className="mt-5 font-display text-3xl font-semibold md:text-5xl">Нужен аккаунт Code Gambit</h1>
+        <h1 className="mt-5 font-display text-3xl font-semibold md:text-5xl">Нужен аккаунт Slay Gambit</h1>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
           Этот режим сохраняет прогресс, партии, разборы и профиль. Войдите в аккаунт или запустите локальную демо-сессию, если секреты еще не настроены.
         </p>

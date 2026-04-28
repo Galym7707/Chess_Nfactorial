@@ -15,7 +15,7 @@ export function ProductLayer() {
           <p className="text-sm uppercase tracking-[0.32em] text-primary">Возможности</p>
           <h2 className="mt-4 font-display text-4xl font-semibold md:text-6xl">Рабочее место шахматиста</h2>
           <p className="mt-4 text-sm leading-6 text-muted-foreground md:text-base">
-            Code Gambit помогает не только сыграть партию, но и разобрать позицию, проверить варианты и сохранить прогресс.
+            Slay Gambit помогает не только сыграть партию, но и разобрать позицию, проверить варианты и сохранить прогресс.
           </p>
         </div>
         <div className="grid gap-3">

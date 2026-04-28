@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 
 export const metadata: Metadata = {
-  title: "Code Gambit — шахматы с анализом Stockfish",
+  title: "Slay Gambit — шахматы с анализом Stockfish",
   description:
     "Современная шахматная платформа для анализа позиций, игры против движка, партий за одной доской и онлайн-игры по ссылке.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:7860"),

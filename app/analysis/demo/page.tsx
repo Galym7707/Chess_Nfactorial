@@ -16,7 +16,7 @@ import type { AnalysisProgress } from "@/lib/coach/analyzer";
 
 // Демо-партия с brilliant move
 const DEMO_PGN = `[Event "Demo Game"]
-[Site "Code Gambit"]
+[Site "Slay Gambit"]
 [Date "2026.04.27"]
 [White "Player"]
 [Black "Opponent"]
