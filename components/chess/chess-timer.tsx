@@ -49,25 +49,38 @@ export function ChessTimer({ whiteTimeMs, blackTimeMs, activeColor, onTimeExpire
 
   const whiteIsLow = whiteTime < 30000;
   const blackIsLow = blackTime < 30000;
+  const whiteIsVeryLow = whiteTime < 10000;
+  const blackIsVeryLow = blackTime < 10000;
 
   return (
     <div className="grid gap-3">
       <div
         className={cn(
           "rounded-2xl border-2 p-4 transition-all",
-          activeColor === "black" ? "border-primary bg-primary/5" : "border-border bg-card",
-          blackIsLow && "border-destructive bg-destructive/5"
+          activeColor === "black"
+            ? "border-green-500 bg-green-500/10 shadow-lg"
+            : "border-border bg-card",
+          blackIsVeryLow && "animate-pulse border-red-600 bg-red-600/20",
+          blackIsLow && !blackIsVeryLow && "border-orange-500 bg-orange-500/10"
         )}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="size-4 text-muted-foreground" />
-            <span className="text-sm font-semibold text-muted-foreground">Чёрные</span>
+            <Clock className={cn(
+              "size-4",
+              activeColor === "black" ? "text-green-600 dark:text-green-400" : "text-muted-foreground"
+            )} />
+            <span className={cn(
+              "text-sm font-semibold",
+              activeColor === "black" ? "text-green-700 dark:text-green-300" : "text-muted-foreground"
+            )}>Чёрные</span>
           </div>
           <div
             className={cn(
               "font-mono text-2xl font-bold tabular-nums",
-              blackIsLow && "text-destructive"
+              blackIsVeryLow && "text-red-600 dark:text-red-400",
+              blackIsLow && !blackIsVeryLow && "text-orange-600 dark:text-orange-400",
+              !blackIsLow && activeColor === "black" && "text-green-600 dark:text-green-400"
             )}
           >
             {formatTime(blackTime)}
@@ -78,19 +91,30 @@ export function ChessTimer({ whiteTimeMs, blackTimeMs, activeColor, onTimeExpire
       <div
         className={cn(
           "rounded-2xl border-2 p-4 transition-all",
-          activeColor === "white" ? "border-primary bg-primary/5" : "border-border bg-card",
-          whiteIsLow && "border-destructive bg-destructive/5"
+          activeColor === "white"
+            ? "border-green-500 bg-green-500/10 shadow-lg"
+            : "border-border bg-card",
+          whiteIsVeryLow && "animate-pulse border-red-600 bg-red-600/20",
+          whiteIsLow && !whiteIsVeryLow && "border-orange-500 bg-orange-500/10"
         )}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="size-4 text-muted-foreground" />
-            <span className="text-sm font-semibold text-muted-foreground">Белые</span>
+            <Clock className={cn(
+              "size-4",
+              activeColor === "white" ? "text-green-600 dark:text-green-400" : "text-muted-foreground"
+            )} />
+            <span className={cn(
+              "text-sm font-semibold",
+              activeColor === "white" ? "text-green-700 dark:text-green-300" : "text-muted-foreground"
+            )}>Белые</span>
           </div>
           <div
             className={cn(
               "font-mono text-2xl font-bold tabular-nums",
-              whiteIsLow && "text-destructive"
+              whiteIsVeryLow && "text-red-600 dark:text-red-400",
+              whiteIsLow && !whiteIsVeryLow && "text-orange-600 dark:text-orange-400",
+              !whiteIsLow && activeColor === "white" && "text-green-600 dark:text-green-400"
             )}
           >
             {formatTime(whiteTime)}

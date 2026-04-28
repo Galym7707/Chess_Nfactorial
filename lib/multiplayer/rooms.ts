@@ -189,6 +189,23 @@ export async function applyRoomMove({
   const result = moveFromPgn(room.pgn, from, to, promotion);
   if (!result.ok) throw new Error("Нелегальный ход или устаревшая позиция");
   const status = result.status.gameOver ? "finished" : "active";
+
+  // Calculate time with increment
+  const now = Date.now();
+  const lastMoveTime = room.last_move_at ? new Date(room.last_move_at).getTime() : now;
+  const elapsed = now - lastMoveTime;
+  const incrementMs = (room.increment_seconds ?? 0) * 1000;
+
+  let whiteTimeMs = room.white_time_remaining_ms ?? 0;
+  let blackTimeMs = room.black_time_remaining_ms ?? 0;
+
+  // Subtract elapsed time from active player and add increment
+  if (color === "white" && room.white_time_remaining_ms !== undefined) {
+    whiteTimeMs = Math.max(0, room.white_time_remaining_ms - elapsed) + incrementMs;
+  } else if (color === "black" && room.black_time_remaining_ms !== undefined) {
+    blackTimeMs = Math.max(0, room.black_time_remaining_ms - elapsed) + incrementMs;
+  }
+
   const next: RoomState = {
     ...room,
     status,
@@ -198,6 +215,9 @@ export async function applyRoomMove({
     result: result.status.result as GameResult,
     version: room.version + 1,
     updated_at: new Date().toISOString(),
+    white_time_remaining_ms: whiteTimeMs,
+    black_time_remaining_ms: blackTimeMs,
+    last_move_at: new Date().toISOString(),
   };
 
   const client = getSupabaseBrowserClient();
@@ -217,6 +237,9 @@ export async function applyRoomMove({
       moves: next.moves,
       result: next.result,
       version: next.version,
+      white_time_remaining_ms: next.white_time_remaining_ms,
+      black_time_remaining_ms: next.black_time_remaining_ms,
+      last_move_at: next.last_move_at,
     })
     .eq("id", room.id)
     .eq("version", room.version)
