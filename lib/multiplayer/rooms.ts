@@ -64,7 +64,8 @@ export async function createFriendRoom(userId: string, timeControl?: TimeControl
   const initialTimeMs = timeControl && timeControl.initialSeconds > 0 ? timeControl.initialSeconds * 1000 : undefined;
   const roomName = generateRoomName();
 
-  if (!client || userId.startsWith("demo") || userId.startsWith("anon")) {
+  // Only use localStorage for demo users, not anonymous users
+  if (!client || userId.startsWith("demo")) {
     const room: RoomState = {
       id: crypto.randomUUID().slice(0, 8),
       name: roomName,
@@ -89,6 +90,8 @@ export async function createFriendRoom(userId: string, timeControl?: TimeControl
     upsertLocalRoom(room);
     return room;
   }
+
+  // Anonymous users also use Supabase, just don't save game history
   const { data, error } = await client
     .from("rooms")
     .insert({
@@ -134,7 +137,8 @@ export async function joinRoom(roomId: string, userId: string) {
   console.log('[joinRoom] Current room:', current);
   if (!current) throw new Error("Комната не найдена");
 
-  if (!client || userId.startsWith("demo") || userId.startsWith("anon")) {
+  // Only use localStorage for demo users
+  if (!client || userId.startsWith("demo")) {
     let next = current;
     if (!current.black_player_id && current.white_player_id !== userId) {
       next = { ...current, black_player_id: userId, status: "active", updated_at: new Date().toISOString() };
@@ -143,6 +147,7 @@ export async function joinRoom(roomId: string, userId: string) {
     return { room: next, color: next.white_player_id === userId ? "white" : next.black_player_id === userId ? "black" : "spectator" as const };
   }
 
+  // Anonymous users also use Supabase
   let color: "white" | "black" | "spectator" = "spectator";
   let patch: Partial<RoomRow> = {};
   if (current.white_player_id === userId) color = "white";
@@ -196,11 +201,13 @@ export async function applyRoomMove({
   };
 
   const client = getSupabaseBrowserClient();
-  if (!client || userId.startsWith("demo") || userId.startsWith("anon")) {
+  // Only use localStorage for demo users
+  if (!client || userId.startsWith("demo")) {
     upsertLocalRoom(next);
     return next;
   }
 
+  // Anonymous users also use Supabase
   const { data, error } = await client
     .from("rooms")
     .update({
