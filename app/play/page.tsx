@@ -209,8 +209,7 @@ function PlayModeSelector() {
           return (
             <Surface
               key={mode.id}
-              className="group cursor-pointer transition-all hover:scale-[1.02]"
-              onClick={() => !isCreatingThisMode && handleModeClick(mode)}
+              className="group transition-all"
             >
               <div className="flex items-start gap-4">
                 <div className={cn("rounded-2xl border-2 p-4", mode.color)}>
@@ -226,6 +225,7 @@ function PlayModeSelector() {
                     variant="secondary"
                     size="sm"
                     disabled={isCreatingThisMode}
+                    onClick={() => handleModeClick(mode)}
                     type="button"
                   >
                     {isCreatingThisMode ? "Создаю комнату..." : "Начать игру"}
