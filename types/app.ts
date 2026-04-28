@@ -45,6 +45,9 @@ export interface AppGame {
   time_control?: string;
   initial_time_seconds?: number;
   increment_seconds?: number;
+  is_rated?: boolean;
+  rating_change?: number;
+  opponent_rating?: number;
 }
 
 export interface CoachIssue {
@@ -88,6 +91,9 @@ export interface RoomState {
   white_time_remaining_ms?: number;
   black_time_remaining_ms?: number;
   last_move_at?: string;
+  is_rated?: boolean;
+  white_rating?: number;
+  black_rating?: number;
 }
 
 export interface LeaderboardPlayer {

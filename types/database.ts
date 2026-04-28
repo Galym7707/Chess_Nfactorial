@@ -33,6 +33,9 @@ type GameRow = {
   time_control: string | null;
   initial_time_seconds: number | null;
   increment_seconds: number | null;
+  is_rated: boolean | null;
+  rating_change: number | null;
+  opponent_rating: number | null;
 };
 
 type GameMoveRow = { id: string; game_id: string; ply: number; san: string; fen_after: string; created_at: string };
@@ -56,6 +59,9 @@ type RoomRow = {
   white_time_remaining_ms: number | null;
   black_time_remaining_ms: number | null;
   last_move_at: string | null;
+  is_rated: boolean | null;
+  white_rating: number | null;
+  black_rating: number | null;
 };
 
 type RoomPlayerRow = { room_id: string; user_id: string; color: "white" | "black" | "spectator"; online_at: string; joined_at: string };

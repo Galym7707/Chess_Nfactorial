@@ -30,6 +30,9 @@ function mapRoom(row: RoomRow): RoomState {
     white_time_remaining_ms: row.white_time_remaining_ms ?? undefined,
     black_time_remaining_ms: row.black_time_remaining_ms ?? undefined,
     last_move_at: row.last_move_at ?? undefined,
+    is_rated: row.is_rated ?? undefined,
+    white_rating: row.white_rating ?? undefined,
+    black_rating: row.black_rating ?? undefined,
   };
 }
 
@@ -46,7 +49,7 @@ function upsertLocalRoom(room: RoomState) {
   writeLocalRooms([room, ...rooms].slice(0, 20));
 }
 
-export async function createFriendRoom(userId: string, timeControl?: TimeControlConfig) {
+export async function createFriendRoom(userId: string, timeControl?: TimeControlConfig, isRated: boolean = false) {
   const client = getSupabaseBrowserClient();
   const initialTimeMs = timeControl && timeControl.initialSeconds > 0 ? timeControl.initialSeconds * 1000 : undefined;
 
@@ -69,6 +72,7 @@ export async function createFriendRoom(userId: string, timeControl?: TimeControl
       increment_seconds: timeControl?.incrementSeconds,
       white_time_remaining_ms: initialTimeMs,
       black_time_remaining_ms: initialTimeMs,
+      is_rated: isRated,
     };
     upsertLocalRoom(room);
     return room;
@@ -87,6 +91,7 @@ export async function createFriendRoom(userId: string, timeControl?: TimeControl
       increment_seconds: timeControl?.incrementSeconds,
       white_time_remaining_ms: initialTimeMs,
       black_time_remaining_ms: initialTimeMs,
+      is_rated: isRated,
     })
     .select("*")
     .single();
