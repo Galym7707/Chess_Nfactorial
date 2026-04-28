@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/", label: "Главная" },
+  { href: "/play", label: "Играть" },
   { href: "/play/sandbox", label: "Анализ" },
-  { href: "/play/local", label: "Играть" },
   { href: "/history", label: "История" },
   { href: "/leaderboard", label: "Лидерборд" },
   { href: "/pricing", label: "Тарифы" },

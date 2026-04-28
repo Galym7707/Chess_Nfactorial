@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart3, BrainCircuit } from "lucide-react";
+import { ArrowRight, BarChart3, BrainCircuit, Link2 } from "lucide-react";
 
 export function Hero() {
   return (
@@ -19,11 +19,11 @@ export function Hero() {
             Редактор позиций, анализ Stockfish, партии за одной доской и онлайн-игра по ссылке в одном аккуратном сервисе.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="/play/sandbox" className="inline-flex h-13 items-center justify-center rounded-full bg-emerald-300 px-7 text-base font-semibold text-emerald-950 shadow-glow transition hover:brightness-110">
-              Анализ позиции <ArrowRight className="ml-2 size-5" />
+            <Link href="/play" className="inline-flex h-13 items-center justify-center rounded-full bg-emerald-300 px-7 text-base font-semibold text-emerald-950 shadow-glow transition hover:brightness-110">
+              Играть <ArrowRight className="ml-2 size-5" />
             </Link>
-            <Link href="/play/local" className="inline-flex h-13 items-center justify-center rounded-full border border-white/18 bg-white/10 px-7 text-base font-semibold backdrop-blur transition hover:bg-white/16">
-              Начать партию
+            <Link href="/play/friend" className="inline-flex h-13 items-center justify-center rounded-full border border-white/18 bg-white/10 px-7 text-base font-semibold backdrop-blur transition hover:bg-white/16">
+              <Link2 className="mr-2 size-5" /> Играть с другом
             </Link>
           </div>
         </motion.div>
