@@ -217,12 +217,12 @@ export function BoardEditor() {
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_390px]">
       <Surface className="p-3 md:p-5">
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           {/* Evaluation Bar */}
           {analysis && (
             <EvaluationBar
               evaluation={analysis.scoreCp / 100}
-              className="flex-shrink-0"
+              className="flex-shrink-0 sm:w-8 w-full h-8 sm:h-auto"
             />
           )}
 
@@ -284,7 +284,7 @@ export function BoardEditor() {
                     <button
                       key={piece}
                       className={cn(
-                        "h-16 rounded-2xl border border-border bg-card/70 text-4xl transition hover:border-primary",
+                        "h-14 sm:h-16 rounded-2xl border border-border bg-card/70 text-3xl sm:text-4xl transition hover:border-primary",
                         tool === piece && "border-primary bg-primary/10",
                       )}
                       onClick={() => setTool((current) => current === piece ? null : piece)}

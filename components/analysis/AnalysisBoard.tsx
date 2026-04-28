@@ -102,17 +102,19 @@ export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = 
   return (
     <Surface className="p-3 md:p-5">
       {/* Coach Header */}
-      <div className="mb-4 flex items-center gap-3">
-        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
-          <img
-            src="/tokayev.jpg"
-            alt="Coach Tokayev"
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <div className="flex-1">
-          <p className="text-xs uppercase tracking-wider text-primary">Анализ позиции</p>
-          <p className="text-sm text-muted-foreground">Coach Tokayev</p>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex items-center gap-3 flex-1">
+          <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
+            <img
+              src="/tokayev.jpg"
+              alt="Coach Tokayev"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs uppercase tracking-wider text-primary">Анализ позиции</p>
+            <p className="text-sm text-muted-foreground truncate">Coach Tokayev</p>
+          </div>
         </div>
         <Button
           variant={stockfishEnabled ? "primary" : "secondary"}
@@ -120,7 +122,7 @@ export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = 
           onClick={() => setStockfishEnabled(!stockfishEnabled)}
           disabled={!ready}
           type="button"
-          className="gap-2"
+          className="gap-2 w-full sm:w-auto"
         >
           <Brain className="size-4" />
           {stockfishEnabled ? "Stockfish ON" : "Stockfish OFF"}

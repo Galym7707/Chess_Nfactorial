@@ -23,13 +23,13 @@ export function GameShell({
     <section className={cn("mx-auto max-w-7xl px-4 py-6 md:px-6 lg:py-10", focus && "focus-mode")}>
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.32em] text-primary">Slay Gambit</p>
-          <h1 className="mt-2 font-display text-4xl font-semibold md:text-6xl">{title}</h1>
+          <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-primary">Slay Gambit</p>
+          <h1 className="mt-2 font-display text-3xl sm:text-4xl font-semibold md:text-6xl">{title}</h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">{description}</p>
         </div>
-        <Button variant="secondary" onClick={() => setFocus((value) => !value)} type="button">
+        <Button variant="secondary" onClick={() => setFocus((value) => !value)} type="button" className="w-full md:w-auto">
           {focus ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
-          {focus ? "Обычный режим" : "Режим концентрации"}
+          <span className="ml-2">{focus ? "Обычный режим" : "Режим концентрации"}</span>
         </Button>
       </div>
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
