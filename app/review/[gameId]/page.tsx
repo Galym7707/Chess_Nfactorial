@@ -59,6 +59,19 @@ function ReviewInner() {
     <section className="mx-auto grid max-w-7xl gap-5 px-4 py-10 md:px-6 lg:grid-cols-[0.82fr_1.18fr]">
       <div className="grid content-start gap-5">
         <Surface>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
+              <img
+                src="/tokayev.jpg"
+                alt="Coach Tokayev"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-wider text-primary">Обзор партии</p>
+              <p className="text-sm font-semibold">Coach Tokayev</p>
+            </div>
+          </div>
           <Badge>{game.mode}</Badge>
           <h1 className="mt-5 font-display text-4xl font-semibold">{game.opponent}</h1>
           <p className="mt-3 text-sm text-muted-foreground">{game.result} · {formatDate(game.completed_at)}</p>

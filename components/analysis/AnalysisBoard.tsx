@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Chess } from "chess.js";
-import { ChevronLeft, ChevronRight, SkipBack, SkipForward } from "lucide-react";
+import { ChevronLeft, ChevronRight, SkipBack, SkipForward, Brain } from "lucide-react";
 import { ChessboardView } from "@/components/chess/chessboard-view";
-import { EvaluationBar } from "@/components/chess/evaluation-bar";
+import { AdvantageBar } from "@/components/chess/advantage-bar";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
+import { useStockfish } from "@/hooks/use-stockfish";
 import type { AnalyzedMove } from "@/lib/coach/types";
 import type { BoardTheme } from "@/types/app";
 
@@ -20,9 +21,51 @@ type AnalysisBoardProps = {
 export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = "classic" }: AnalysisBoardProps) {
   const currentMove = selectedMoveIndex !== null ? moves[selectedMoveIndex] : null;
   const fen = currentMove?.fenAfter || moves[0]?.fenBefore || "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const { ready, analyzeFen } = useStockfish();
+  const [stockfishEnabled, setStockfishEnabled] = useState(false);
+  const [liveEval, setLiveEval] = useState<number | null>(null);
+  const [bestMove, setBestMove] = useState<string | null>(null);
 
   const canGoPrevious = selectedMoveIndex !== null && selectedMoveIndex > 0;
   const canGoNext = selectedMoveIndex !== null && selectedMoveIndex < moves.length - 1;
+
+  // Анализ текущей позиции при включенном Stockfish
+  useEffect(() => {
+    if (!stockfishEnabled || !ready) {
+      setLiveEval(null);
+      setBestMove(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    analyzeFen(fen, { depth: 15, movetime: 1000 })
+      .then((analysis) => {
+        if (!cancelled) {
+          setLiveEval(analysis.scoreCp / 100);
+          setBestMove(analysis.bestMove);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLiveEval(null);
+          setBestMove(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fen, stockfishEnabled, ready, analyzeFen]);
+
+  // Определяем оценку для отображения
+  const displayEval = stockfishEnabled && liveEval !== null ? liveEval : (currentMove ? currentMove.scoreAfter / 100 : 0);
+
+  // Преобразуем bestMove в стрелку для доски
+  const bestMoveArrow = bestMove ? {
+    from: bestMove.slice(0, 2),
+    to: bestMove.slice(2, 4)
+  } : null;
 
   function goToStart() {
     onMoveSelect(0);
@@ -46,19 +89,43 @@ export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = 
 
   return (
     <Surface className="p-3 md:p-5">
-      <div className="flex gap-2">
-        {/* Evaluation Bar */}
-        {currentMove && (
-          <EvaluationBar
-            evaluation={currentMove.scoreAfter / 100}
-            className="flex-shrink-0"
+      {/* Coach Header */}
+      <div className="mb-4 flex items-center gap-3">
+        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
+          <img
+            src="/tokayev.jpg"
+            alt="Coach Tokayev"
+            className="h-full w-full object-cover"
           />
-        )}
-
-        {/* Board */}
-        <div className="flex-1">
-          <ChessboardView fen={fen} theme={theme} allowDragging={false} />
         </div>
+        <div className="flex-1">
+          <p className="text-xs uppercase tracking-wider text-primary">Анализ позиции</p>
+          <p className="text-sm text-muted-foreground">Coach Tokayev</p>
+        </div>
+        <Button
+          variant={stockfishEnabled ? "primary" : "secondary"}
+          size="sm"
+          onClick={() => setStockfishEnabled(!stockfishEnabled)}
+          disabled={!ready}
+          type="button"
+          className="gap-2"
+        >
+          <Brain className="size-4" />
+          {stockfishEnabled ? "Stockfish ON" : "Stockfish OFF"}
+        </Button>
+      </div>
+
+      {/* Advantage Bar */}
+      <AdvantageBar evaluation={displayEval} className="mb-4" />
+
+      {/* Board */}
+      <div className="flex-1">
+        <ChessboardView
+          fen={fen}
+          theme={theme}
+          allowDragging={false}
+          bestMoveArrow={stockfishEnabled ? bestMoveArrow : null}
+        />
       </div>
 
       {/* Навигация */}
@@ -83,14 +150,31 @@ export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = 
       {/* Информация о текущем ходе */}
       {currentMove && (
         <div className="mt-4 rounded-xl bg-muted/30 p-3 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Оценка:</span>
-            <span className="font-mono font-semibold">
-              {currentMove.scoreAfter > 0 ? "+" : ""}
-              {(currentMove.scoreAfter / 100).toFixed(2)}
-            </span>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border border-primary/30">
+              <img
+                src="/tokayev.jpg"
+                alt="Coach Tokayev"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Оценка:</span>
+                <span className="font-mono font-semibold">
+                  {displayEval > 0 ? "+" : ""}
+                  {displayEval.toFixed(2)}
+                </span>
+              </div>
+            </div>
           </div>
-          {currentMove.bestMove && currentMove.bestMove !== currentMove.uci && (
+          {stockfishEnabled && bestMove && (
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-muted-foreground">Лучший ход:</span>
+              <span className="font-mono text-green-400">{bestMove}</span>
+            </div>
+          )}
+          {!stockfishEnabled && currentMove.bestMove && currentMove.bestMove !== currentMove.uci && (
             <div className="mt-2 flex items-center justify-between">
               <span className="text-muted-foreground">Лучший ход:</span>
               <span className="font-mono text-green-400">{currentMove.bestMove}</span>

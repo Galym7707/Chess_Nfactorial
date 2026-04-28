@@ -14,6 +14,7 @@ export function ChessboardView({
   onMove,
   allowDragging = true,
   lastMove,
+  bestMoveArrow,
 }: {
   fen: string;
   theme: BoardTheme;
@@ -21,6 +22,7 @@ export function ChessboardView({
   onMove?: (source: string, target: string) => boolean;
   allowDragging?: boolean;
   lastMove?: { from: string; to: string } | null;
+  bestMoveArrow?: { from: string; to: string } | null;
 }) {
   const colors = boardThemes[theme];
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
@@ -39,6 +41,15 @@ export function ChessboardView({
     if (!selectedSquare) return [];
     return chess.moves({ square: selectedSquare as any, verbose: true });
   }, [chess, selectedSquare]);
+
+  const arrows = useMemo(() => {
+    if (!bestMoveArrow) return [];
+    return [{
+      startSquare: bestMoveArrow.from,
+      endSquare: bestMoveArrow.to,
+      color: "rgb(0, 200, 0)"
+    }];
+  }, [bestMoveArrow]);
 
   const squareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {};
@@ -98,7 +109,7 @@ export function ChessboardView({
     }
 
     return styles;
-  }, [selectedSquare, legalMoves, chess, lastMove]);
+  }, [selectedSquare, legalMoves, chess, lastMove, bestMoveArrow]);
 
   function onSquareClick({ square }: { square: string }) {
     if (!allowDragging || !onMove) return;
@@ -154,6 +165,7 @@ export function ChessboardView({
           showAnimations: true,
           showNotation: true,
           allowDrawingArrows: true,
+          arrows,
           boardStyle: {
             borderRadius: "1.25rem",
             overflow: "hidden",
