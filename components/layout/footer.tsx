@@ -14,7 +14,7 @@ export function Footer() {
     <footer className="border-t border-border/70 bg-background/70">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1fr_1.2fr] md:px-6">
         <div>
-          <p className="font-display text-2xl font-semibold">Code <span className="text-primary">Gambit</span></p>
+          <p className="font-display text-2xl font-semibold">Slay <span className="text-primary">Gambit</span></p>
           <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
             Шахматная платформа для анализа позиций, тренировочных партий, онлайн-игры и сохранения прогресса.
           </p>
