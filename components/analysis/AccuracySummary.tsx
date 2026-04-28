@@ -62,7 +62,7 @@ export function AccuracySummary({ analysis }: AccuracySummaryProps) {
             {analysis.topMistakes.map((mistake, index) => (
               <div key={index} className="rounded-xl bg-muted/30 p-3 text-sm">
                 <div className="mb-1 flex items-center gap-2">
-                  <Badge variant="secondary">
+                  <Badge>
                     Ход {mistake.moveNumber}. {mistake.color === "white" ? "Белые" : "Чёрные"}
                   </Badge>
                 </div>

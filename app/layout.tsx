@@ -1,12 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "./providers";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
-const sans = Manrope({ subsets: ["latin", "cyrillic"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Code Gambit — шахматы с анализом Stockfish",
@@ -24,7 +20,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <body className={`${display.variable} ${sans.variable} cg-shell antialiased`}>
+      <body className="cg-shell antialiased">
         <AppProviders>
           <Header />
           <main className="min-h-[calc(100svh-160px)]">{children}</main>

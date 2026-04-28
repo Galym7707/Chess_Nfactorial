@@ -28,7 +28,7 @@ export function EvaluationGraph({ moves, selectedMoveIndex, onMoveSelect }: Eval
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
-            onClick={(e) => {
+            onClick={(e: any) => {
               if (e && e.activePayload && e.activePayload[0]) {
                 const index = e.activePayload[0].payload.index;
                 onMoveSelect(index);
@@ -57,7 +57,10 @@ export function EvaluationGraph({ moves, selectedMoveIndex, onMoveSelect }: Eval
                 borderRadius: "8px",
                 fontSize: "12px",
               }}
-              formatter={(value: number) => [`${value > 0 ? "+" : ""}${value.toFixed(2)}`, "Оценка"]}
+              formatter={(value: any) => {
+                const num = typeof value === 'number' ? value : 0;
+                return [`${num > 0 ? "+" : ""}${num.toFixed(2)}`, "Оценка"];
+              }}
             />
             <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
             <Line

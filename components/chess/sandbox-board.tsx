@@ -240,7 +240,7 @@ export function BoardEditor() {
                 if (!targetSquare) return false;
                 return onPieceDrop(sourceSquare, targetSquare);
               },
-              onSquareClick: (square: string) => onSquareClick(square),
+              onSquareClick: ({ square }: { square: string }) => onSquareClick(square),
             }}
           />
         </div>
