@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Chess } from "chess.js";
 import { ChevronLeft, ChevronRight, SkipBack, SkipForward } from "lucide-react";
 import { ChessboardView } from "@/components/chess/chessboard-view";
+import { EvaluationBar } from "@/components/chess/evaluation-bar";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import type { AnalyzedMove } from "@/lib/coach/types";
@@ -45,7 +46,20 @@ export function AnalysisBoard({ moves, selectedMoveIndex, onMoveSelect, theme = 
 
   return (
     <Surface className="p-3 md:p-5">
-      <ChessboardView fen={fen} theme={theme} allowDragging={false} />
+      <div className="flex gap-2">
+        {/* Evaluation Bar */}
+        {currentMove && (
+          <EvaluationBar
+            evaluation={currentMove.scoreAfter / 100}
+            className="flex-shrink-0"
+          />
+        )}
+
+        {/* Board */}
+        <div className="flex-1">
+          <ChessboardView fen={fen} theme={theme} allowDragging={false} />
+        </div>
+      </div>
 
       {/* Навигация */}
       <div className="mt-4 flex items-center justify-center gap-2">

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
+import { EvaluationBar } from "@/components/chess/evaluation-bar";
 import { useStockfish } from "@/hooks/use-stockfish";
 import { boardThemes } from "@/lib/chess/themes";
 import type { BoardTheme } from "@/types/app";
@@ -216,33 +217,44 @@ export function BoardEditor() {
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_390px]">
       <Surface className="p-3 md:p-5">
-        <div className="board-wrap rounded-[1.75rem] border bg-card p-2 shadow-soft" style={{ borderColor: colors.border }}>
-          <Chessboard
-            options={{
-              position: fen,
-              allowDragging: true,
-              animationDurationInMs: 180,
-              showAnimations: true,
-              showNotation: true,
-              boardStyle: {
-                borderRadius: "1.25rem",
-                overflow: "hidden",
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,.08)",
-              },
-              draggingPieceStyle: {
-                transform: "scale(1.08)",
-                maxWidth: "min(80px, 10.75vmin)",
-                maxHeight: "min(80px, 10.75vmin)",
-              },
-              lightSquareStyle: { backgroundColor: colors.light },
-              darkSquareStyle: { backgroundColor: colors.dark },
-              onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
-                if (!targetSquare) return false;
-                return onPieceDrop(sourceSquare, targetSquare);
-              },
-              onSquareClick: ({ square }: { square: string }) => onSquareClick(square),
-            }}
-          />
+        <div className="flex gap-2">
+          {/* Evaluation Bar */}
+          {analysis && (
+            <EvaluationBar
+              evaluation={analysis.scoreCp / 100}
+              className="flex-shrink-0"
+            />
+          )}
+
+          {/* Board */}
+          <div className="board-wrap flex-1 rounded-[1.75rem] border bg-card p-2 shadow-soft" style={{ borderColor: colors.border }}>
+            <Chessboard
+              options={{
+                position: fen,
+                allowDragging: true,
+                animationDurationInMs: 180,
+                showAnimations: true,
+                showNotation: true,
+                boardStyle: {
+                  borderRadius: "1.25rem",
+                  overflow: "hidden",
+                  boxShadow: "inset 0 0 0 1px rgba(255,255,255,.08)",
+                },
+                draggingPieceStyle: {
+                  transform: "scale(1.08)",
+                  maxWidth: "min(80px, 10.75vmin)",
+                  maxHeight: "min(80px, 10.75vmin)",
+                },
+                lightSquareStyle: { backgroundColor: colors.light },
+                darkSquareStyle: { backgroundColor: colors.dark },
+                onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
+                  if (!targetSquare) return false;
+                  return onPieceDrop(sourceSquare, targetSquare);
+                },
+                onSquareClick: ({ square }: { square: string }) => onSquareClick(square),
+              }}
+            />
+          </div>
         </div>
       </Surface>
 
