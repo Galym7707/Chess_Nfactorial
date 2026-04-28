@@ -2,7 +2,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
-  display_name text not null default 'Code Gambit Player',
+  display_name text not null default 'Slay Gambit Player',
   city text not null default 'Алматы',
   preferred_theme text not null default 'system' check (preferred_theme in ('system', 'light', 'dark')),
   board_theme text not null default 'midnight' check (board_theme in ('classic', 'midnight', 'neon', 'paper')),
@@ -112,7 +112,7 @@ create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
   insert into public.profiles (id, display_name, city)
-  values (new.id, coalesce(new.raw_user_meta_data ->> 'display_name', split_part(new.email, '@', 1), 'Code Gambit Player'), 'Алматы')
+  values (new.id, coalesce(new.raw_user_meta_data ->> 'display_name', split_part(new.email, '@', 1), 'Slay Gambit Player'), 'Алматы')
   on conflict (id) do nothing;
   return new;
 end;

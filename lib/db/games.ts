@@ -4,8 +4,8 @@ import { safeJsonParse } from "@/lib/utils";
 import type { AppGame, CoachReport, GameMode, GameResult, Json, LeaderboardCity, LeaderboardPlayer, Profile } from "@/types/app";
 import type { Database } from "@/types/database";
 
-const GAMES_KEY = "code-gambit:games";
-const REPORTS_KEY = "code-gambit:coach-reports";
+const GAMES_KEY = "slay-gambit:games";
+const REPORTS_KEY = "slay-gambit:coach-reports";
 
 type Db = SupabaseClient<Database>;
 

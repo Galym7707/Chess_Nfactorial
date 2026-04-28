@@ -17,7 +17,7 @@ import { safeJsonParse } from "@/lib/utils";
 import { useAuth } from "@/components/auth/auth-provider";
 import type { BoardTheme } from "@/types/app";
 
-const STORAGE_KEY = "code-gambit:local-duel";
+const STORAGE_KEY = "slay-gambit:local-duel";
 
 type StoredLocal = { pgn: string; theme: BoardTheme; startedAt: number };
 

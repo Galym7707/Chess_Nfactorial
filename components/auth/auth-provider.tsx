@@ -8,10 +8,10 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { safeJsonParse } from "@/lib/utils";
 import type { Profile } from "@/types/app";
 
-const DEMO_USER_KEY = "code-gambit:demo-user";
-const DEMO_PROFILE_KEY = "code-gambit:demo-profile";
-const ANON_USER_KEY = "code-gambit:anon-user";
-const ANON_PROFILE_KEY = "code-gambit:anon-profile";
+const DEMO_USER_KEY = "slay-gambit:demo-user";
+const DEMO_PROFILE_KEY = "slay-gambit:demo-profile";
+const ANON_USER_KEY = "slay-gambit:anon-user";
+const ANON_PROFILE_KEY = "slay-gambit:anon-profile";
 
 export type AppUser = {
   id: string;

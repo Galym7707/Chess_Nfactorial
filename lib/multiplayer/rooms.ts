@@ -5,7 +5,7 @@ import { safeJsonParse } from "@/lib/utils";
 import type { GameResult, RoomState, TimeControlConfig } from "@/types/app";
 import type { Database } from "@/types/database";
 
-const ROOMS_KEY = "code-gambit:rooms";
+const ROOMS_KEY = "slay-gambit:rooms";
 
 type RoomRow = Database["public"]["Tables"]["rooms"]["Row"];
 type Db = SupabaseClient<Database>;
