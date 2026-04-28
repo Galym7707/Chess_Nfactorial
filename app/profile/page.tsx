@@ -56,7 +56,8 @@ function ProfileInner() {
       <div className="grid gap-5">
         <Surface>
           <h2 className="font-display text-3xl font-semibold">Статистика</h2>
-          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-5">
+            <Stat label="Рейтинг" value={profile?.rating ?? 1200} />
             <Stat label="Игр" value={stats.total} />
             <Stat label="Побед" value={stats.wins} />
             <Stat label="Поражений" value={stats.losses} />
@@ -68,8 +69,22 @@ function ProfileInner() {
           <div className="mt-5 grid gap-3">
             {games.length === 0 ? <p className="text-sm text-muted-foreground">Нет партий.</p> : games.map((game) => (
               <div key={game.id} className="rounded-3xl border border-border bg-muted/40 p-4 text-sm">
-                <p className="font-semibold">{game.opponent} · {game.result}</p>
+                <div className="flex items-center justify-between">
+                  <p className="font-semibold">{game.opponent}</p>
+                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                    game.result === "1-0" ? "bg-green-500/20 text-green-700 dark:text-green-300" :
+                    game.result === "0-1" ? "bg-red-500/20 text-red-700 dark:text-red-300" :
+                    "bg-blue-500/20 text-blue-700 dark:text-blue-300"
+                  }`}>
+                    {game.result === "1-0" ? "Победа" : game.result === "0-1" ? "Поражение" : "Ничья"}
+                  </span>
+                </div>
                 <p className="mt-1 text-muted-foreground">{game.summary}</p>
+                {game.rating_change && (
+                  <p className={`mt-2 text-xs font-semibold ${game.rating_change > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
+                    {game.rating_change > 0 ? "+" : ""}{game.rating_change} рейтинг
+                  </p>
+                )}
               </div>
             ))}
           </div>
