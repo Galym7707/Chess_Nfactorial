@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { Chessboard } from "react-chessboard";
+import { Chess } from "chess.js";
 import { boardThemes } from "@/lib/chess/themes";
 import type { BoardTheme } from "@/types/app";
 
@@ -18,6 +20,78 @@ export function ChessboardView({
   allowDragging?: boolean;
 }) {
   const colors = boardThemes[theme];
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+
+  const chess = useMemo(() => {
+    const c = new Chess();
+    try {
+      c.load(fen);
+    } catch {
+      // Invalid FEN, use default
+    }
+    return c;
+  }, [fen]);
+
+  const legalMoves = useMemo(() => {
+    if (!selectedSquare) return [];
+    return chess.moves({ square: selectedSquare as any, verbose: true });
+  }, [chess, selectedSquare]);
+
+  const customSquareStyles = useMemo(() => {
+    const styles: Record<string, React.CSSProperties> = {};
+
+    if (selectedSquare) {
+      styles[selectedSquare] = {
+        backgroundColor: "rgba(255, 255, 0, 0.4)",
+        boxShadow: "inset 0 0 0 2px rgba(255, 255, 0, 0.8)",
+      };
+
+      legalMoves.forEach((move) => {
+        const targetSquare = move.to;
+        const isCapture = move.captured;
+
+        if (isCapture) {
+          styles[targetSquare] = {
+            background: "radial-gradient(circle, rgba(255, 0, 0, 0.3) 50%, transparent 50%)",
+            backgroundSize: "100% 100%",
+          };
+        } else {
+          styles[targetSquare] = {
+            background: "radial-gradient(circle, rgba(0, 0, 0, 0.15) 25%, transparent 25%)",
+            backgroundSize: "100% 100%",
+          };
+        }
+      });
+    }
+
+    return styles;
+  }, [selectedSquare, legalMoves]);
+
+  function onSquareClick(square: string) {
+    if (!allowDragging || !onMove) return;
+
+    const piece = chess.get(square as any);
+
+    if (selectedSquare) {
+      const isLegalMove = legalMoves.some((m) => m.to === square);
+
+      if (isLegalMove) {
+        const success = onMove(selectedSquare, square);
+        setSelectedSquare(null);
+        return;
+      }
+
+      if (piece && piece.color === chess.turn()) {
+        setSelectedSquare(square);
+      } else {
+        setSelectedSquare(null);
+      }
+    } else {
+      if (piece && piece.color === chess.turn()) {
+        setSelectedSquare(square);
+      }
+    }
+  }
 
   return (
     <div className="board-wrap rounded-[1.75rem] border bg-card p-2 shadow-soft" style={{ borderColor: colors.border }}>
@@ -42,8 +116,11 @@ export function ChessboardView({
           },
           lightSquareStyle: { backgroundColor: colors.light },
           darkSquareStyle: { backgroundColor: colors.dark },
+          customSquareStyles,
+          onSquareClick,
           onPieceDrop: ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }) => {
             if (!targetSquare || !onMove) return false;
+            setSelectedSquare(null);
             return onMove(sourceSquare, targetSquare);
           },
         }}
