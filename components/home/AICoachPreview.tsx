@@ -69,21 +69,21 @@ export function AICoachPreview() {
           {/* Фичи */}
           <div className="mt-6 grid gap-3">
             <div className="flex items-start gap-3 rounded-xl bg-muted/30 p-3">
-              <div className="text-2xl">✨</div>
+              <div className="text-2xl">⚡</div>
               <div>
                 <p className="font-semibold">Brilliant moves</p>
                 <p className="text-sm text-muted-foreground">Находи тактические жертвы и комбинации</p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-xl bg-muted/30 p-3">
-              <div className="text-2xl">📊</div>
+              <div className="text-2xl">📈</div>
               <div>
                 <p className="font-semibold">Точность игры</p>
                 <p className="text-sm text-muted-foreground">Оценка каждого хода и общая точность</p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-xl bg-muted/30 p-3">
-              <div className="text-2xl">💡</div>
+              <div className="text-2xl">🎯</div>
               <div>
                 <p className="font-semibold">Объяснения тренера</p>
                 <p className="text-sm text-muted-foreground">Понятные комментарии к каждому ходу</p>
