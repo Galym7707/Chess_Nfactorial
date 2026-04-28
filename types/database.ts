@@ -30,6 +30,9 @@ type GameRow = {
   duration_seconds: number;
   completed_at: string;
   created_at: string;
+  time_control: string | null;
+  initial_time_seconds: number | null;
+  increment_seconds: number | null;
 };
 
 type GameMoveRow = { id: string; game_id: string; ply: number; san: string; fen_after: string; created_at: string };
@@ -47,6 +50,12 @@ type RoomRow = {
   result: "1-0" | "0-1" | "1/2-1/2" | "*";
   created_at: string;
   updated_at: string;
+  time_control: string | null;
+  initial_time_seconds: number | null;
+  increment_seconds: number | null;
+  white_time_remaining_ms: number | null;
+  black_time_remaining_ms: number | null;
+  last_move_at: string | null;
 };
 
 type RoomPlayerRow = { room_id: string; user_id: string; color: "white" | "black" | "spectator"; online_at: string; joined_at: string };

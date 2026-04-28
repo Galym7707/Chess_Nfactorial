@@ -4,6 +4,16 @@ export type GameMode = "local" | "ai" | "friend";
 export type GameResult = "1-0" | "0-1" | "1/2-1/2" | "*";
 export type BoardTheme = "classic" | "midnight" | "neon" | "paper";
 export type CoachMoveClass = "best" | "excellent" | "good" | "inaccuracy" | "mistake" | "blunder";
+export type TimeControl = "bullet" | "blitz" | "rapid" | "classical" | "unlimited";
+
+export interface TimeControlConfig {
+  id: TimeControl;
+  label: string;
+  time: string;
+  initialSeconds: number;
+  incrementSeconds: number;
+  description: string;
+}
 
 export interface Profile {
   id: string;
@@ -32,6 +42,9 @@ export interface AppGame {
   summary: string;
   duration_seconds: number;
   completed_at: string;
+  time_control?: string;
+  initial_time_seconds?: number;
+  increment_seconds?: number;
 }
 
 export interface CoachIssue {
@@ -69,6 +82,12 @@ export interface RoomState {
   result: GameResult;
   created_at?: string;
   updated_at?: string;
+  time_control?: string;
+  initial_time_seconds?: number;
+  increment_seconds?: number;
+  white_time_remaining_ms?: number;
+  black_time_remaining_ms?: number;
+  last_move_at?: string;
 }
 
 export interface LeaderboardPlayer {

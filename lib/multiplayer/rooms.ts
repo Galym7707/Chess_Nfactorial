@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { INITIAL_FEN, moveFromPgn } from "@/lib/chess/core";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { safeJsonParse } from "@/lib/utils";
-import type { GameResult, RoomState } from "@/types/app";
+import type { GameResult, RoomState, TimeControlConfig } from "@/types/app";
 import type { Database } from "@/types/database";
 
 const ROOMS_KEY = "code-gambit:rooms";
@@ -24,6 +24,12 @@ function mapRoom(row: RoomRow): RoomState {
     result: row.result,
     created_at: row.created_at,
     updated_at: row.updated_at,
+    time_control: row.time_control ?? undefined,
+    initial_time_seconds: row.initial_time_seconds ?? undefined,
+    increment_seconds: row.increment_seconds ?? undefined,
+    white_time_remaining_ms: row.white_time_remaining_ms ?? undefined,
+    black_time_remaining_ms: row.black_time_remaining_ms ?? undefined,
+    last_move_at: row.last_move_at ?? undefined,
   };
 }
 
@@ -40,8 +46,10 @@ function upsertLocalRoom(room: RoomState) {
   writeLocalRooms([room, ...rooms].slice(0, 20));
 }
 
-export async function createFriendRoom(userId: string) {
+export async function createFriendRoom(userId: string, timeControl?: TimeControlConfig) {
   const client = getSupabaseBrowserClient();
+  const initialTimeMs = timeControl && timeControl.initialSeconds > 0 ? timeControl.initialSeconds * 1000 : undefined;
+
   if (!client || userId.startsWith("demo")) {
     const room: RoomState = {
       id: crypto.randomUUID().slice(0, 8),
@@ -56,13 +64,30 @@ export async function createFriendRoom(userId: string) {
       result: "*",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      time_control: timeControl?.time,
+      initial_time_seconds: timeControl?.initialSeconds,
+      increment_seconds: timeControl?.incrementSeconds,
+      white_time_remaining_ms: initialTimeMs,
+      black_time_remaining_ms: initialTimeMs,
     };
     upsertLocalRoom(room);
     return room;
   }
   const { data, error } = await client
     .from("rooms")
-    .insert({ host_id: userId, current_fen: INITIAL_FEN, pgn: "", moves: [], white_player_id: userId, status: "waiting" })
+    .insert({
+      host_id: userId,
+      current_fen: INITIAL_FEN,
+      pgn: "",
+      moves: [],
+      white_player_id: userId,
+      status: "waiting",
+      time_control: timeControl?.time,
+      initial_time_seconds: timeControl?.initialSeconds,
+      increment_seconds: timeControl?.incrementSeconds,
+      white_time_remaining_ms: initialTimeMs,
+      black_time_remaining_ms: initialTimeMs,
+    })
     .select("*")
     .single();
   if (error) throw new Error(error.message);

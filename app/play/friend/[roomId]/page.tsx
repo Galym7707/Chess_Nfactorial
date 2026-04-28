@@ -8,6 +8,7 @@ import { AuthGate } from "@/components/auth/auth-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { ChessboardView } from "@/components/chess/chessboard-view";
+import { ChessTimer } from "@/components/chess/chess-timer";
 import { CoachReportView } from "@/components/chess/coach-report-view";
 import { GameShell } from "@/components/chess/game-shell";
 import { GameStatus } from "@/components/chess/game-status";
@@ -107,10 +108,20 @@ function RoomInner() {
       <div className="flex flex-wrap items-center gap-2"><Badge><Users className="size-3" /> Лобби</Badge><Badge>{online > 1 ? "друг онлайн" : "ожидание"}</Badge></div>
       <h2 className="mt-5 font-display text-3xl font-semibold">Пригласите второго игрока</h2>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">Белые уже в комнате. Черные подключатся по ссылке, после чего партия станет активной.</p>
+      {room.time_control && room.time_control !== "∞" && (
+        <div className="mt-4 rounded-xl bg-muted/30 p-3 text-sm">
+          <p className="font-semibold">Контроль времени: {room.time_control}</p>
+        </div>
+      )}
       <Button className="mt-5 w-full" variant="secondary" onClick={copyLink} type="button"><Copy className="size-4" /> {copied ? "Ссылка скопирована" : "Копировать ссылку"}</Button>
       <Button className="mt-3 w-full" variant="ghost" onClick={() => void reload()} type="button"><RotateCcw className="size-4" /> Обновить состояние</Button>
     </Surface>
   ) : null;
+
+  const hasTimeControl = room.initial_time_seconds && room.initial_time_seconds > 0;
+  const whiteTimeMs = room.white_time_remaining_ms ?? (room.initial_time_seconds ?? 0) * 1000;
+  const blackTimeMs = room.black_time_remaining_ms ?? (room.initial_time_seconds ?? 0) * 1000;
+  const activeTimerColor = room.status === "active" && !status.gameOver ? turnColor : null;
 
   return (
     <>
@@ -121,6 +132,13 @@ function RoomInner() {
         side={
           <>
             {lobby}
+            {hasTimeControl && (
+              <ChessTimer
+                whiteTimeMs={whiteTimeMs}
+                blackTimeMs={blackTimeMs}
+                activeColor={activeTimerColor}
+              />
+            )}
             <GameStatus status={status} />
             <Surface>
               <div className="flex flex-wrap items-center gap-2">

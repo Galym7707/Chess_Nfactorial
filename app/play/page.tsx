@@ -10,14 +10,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
 import { createFriendRoom } from "@/lib/multiplayer/rooms";
+import { TIME_CONTROLS } from "@/lib/chess/time-control";
 import { cn } from "@/lib/utils";
-
-const timeControls = [
-  { id: "bullet", label: "Пуля", time: "1+0", icon: Zap, description: "1 минута" },
-  { id: "blitz", label: "Блиц", time: "3+0", icon: Zap, description: "3 минуты" },
-  { id: "rapid", label: "Рапид", time: "10+0", icon: Clock, description: "10 минут" },
-  { id: "classical", label: "Классика", time: "30+0", icon: Clock, description: "30 минут" },
-];
+import type { TimeControl } from "@/types/app";
 
 const gameModes = [
   {
@@ -57,14 +52,15 @@ const gameModes = [
 function PlayModeSelector() {
   const router = useRouter();
   const { user } = useAuth();
-  const [selectedTime, setSelectedTime] = useState("blitz");
+  const [selectedTime, setSelectedTime] = useState<TimeControl>("blitz");
   const [creatingRoom, setCreatingRoom] = useState(false);
 
   async function handleCreateRoom() {
     if (!user) return;
     setCreatingRoom(true);
     try {
-      const room = await createFriendRoom(user.id);
+      const timeControl = TIME_CONTROLS.find((tc) => tc.id === selectedTime);
+      const room = await createFriendRoom(user.id, timeControl);
       router.push(`/play/friend/${room.id}`);
     } catch (err) {
       console.error(err);
@@ -76,7 +72,11 @@ function PlayModeSelector() {
     if (mode.action === "create-room") {
       await handleCreateRoom();
     } else if (mode.href) {
-      router.push(mode.href);
+      const timeControl = TIME_CONTROLS.find((tc) => tc.id === selectedTime);
+      const params = new URLSearchParams({
+        timeControl: timeControl?.id ?? "blitz",
+      });
+      router.push(`${mode.href}?${params.toString()}`);
     }
   }
 
@@ -96,9 +96,9 @@ function PlayModeSelector() {
         <h2 className="mb-4 text-center text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           Контроль времени
         </h2>
-        <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
-          {timeControls.map((control) => {
-            const Icon = control.icon;
+        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-3 md:grid-cols-5">
+          {TIME_CONTROLS.map((control) => {
+            const Icon = control.id === "unlimited" ? Clock : Zap;
             return (
               <button
                 key={control.id}
@@ -157,12 +157,6 @@ function PlayModeSelector() {
             </Surface>
           );
         })}
-      </div>
-
-      <div className="mt-8 text-center">
-        <p className="text-sm text-muted-foreground">
-          Контроль времени пока не реализован. Все игры идут без ограничения времени.
-        </p>
       </div>
     </section>
   );
