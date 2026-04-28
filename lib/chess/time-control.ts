@@ -2,8 +2,9 @@ import type { TimeControl, TimeControlConfig } from "@/types/app";
 
 export const TIME_CONTROLS: TimeControlConfig[] = [
   { id: "bullet", label: "Пуля", time: "1+0", initialSeconds: 60, incrementSeconds: 0, description: "1 минута" },
-  { id: "blitz", label: "Блиц", time: "3+0", initialSeconds: 180, incrementSeconds: 0, description: "3 минуты" },
-  { id: "rapid", label: "Рапид", time: "10+0", initialSeconds: 600, incrementSeconds: 0, description: "10 минут" },
+  { id: "blitz", label: "Блиц", time: "3+2", initialSeconds: 180, incrementSeconds: 2, description: "3 мин + 2 сек" },
+  { id: "blitz5", label: "Блиц", time: "5+3", initialSeconds: 300, incrementSeconds: 3, description: "5 мин + 3 сек" },
+  { id: "rapid", label: "Рапид", time: "10+5", initialSeconds: 600, incrementSeconds: 5, description: "10 мин + 5 сек" },
   { id: "classical", label: "Классика", time: "30+0", initialSeconds: 1800, incrementSeconds: 0, description: "30 минут" },
   { id: "unlimited", label: "Без времени", time: "∞", initialSeconds: 0, incrementSeconds: 0, description: "Без ограничений" },
 ];

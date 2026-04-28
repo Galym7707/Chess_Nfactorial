@@ -4,7 +4,7 @@ export type GameMode = "local" | "ai" | "friend";
 export type GameResult = "1-0" | "0-1" | "1/2-1/2" | "*";
 export type BoardTheme = "classic" | "midnight" | "neon" | "paper";
 export type CoachMoveClass = "best" | "excellent" | "good" | "inaccuracy" | "mistake" | "blunder";
-export type TimeControl = "bullet" | "blitz" | "rapid" | "classical" | "unlimited";
+export type TimeControl = "bullet" | "blitz" | "blitz5" | "rapid" | "classical" | "unlimited";
 
 export interface TimeControlConfig {
   id: TimeControl;
