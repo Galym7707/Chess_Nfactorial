@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bot, Clock, Gamepad2, Link2, Users, Zap, Settings } from "lucide-react";
-import { AuthGate } from "@/components/auth/auth-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -52,22 +51,25 @@ const gameModes = [
 
 function PlayModeSelector() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, startAnonymousSession, loading } = useAuth();
   const [selectedTime, setSelectedTime] = useState<TimeControl>("blitz");
   const [customTime, setCustomTime] = useState<{ minutes: number; increment: number } | null>(null);
   const [showCustomTime, setShowCustomTime] = useState(false);
   const [isRated, setIsRated] = useState(true);
   const [creatingRoom, setCreatingRoom] = useState(false);
 
+  useEffect(() => {
+    if (!loading && !user) {
+      startAnonymousSession();
+    }
+  }, [loading, user, startAnonymousSession]);
+
   const effectiveTime = customTime
     ? { id: "custom" as TimeControl, label: "Своё", time: `${customTime.minutes}+${customTime.increment}`, initialSeconds: customTime.minutes * 60, incrementSeconds: customTime.increment, description: `${customTime.minutes} мин + ${customTime.increment} сек` }
     : TIME_CONTROLS.find((tc) => tc.id === selectedTime) || TIME_CONTROLS[1];
 
   async function handleCreateRoom() {
-    if (!user) {
-      alert("Необходимо войти в систему");
-      return;
-    }
+    if (!user) return;
     setCreatingRoom(true);
     try {
       const timeControl = effectiveTime;
@@ -99,6 +101,10 @@ function PlayModeSelector() {
     setCustomTime({ minutes, increment });
     setSelectedTime("custom" as TimeControl);
     setShowCustomTime(false);
+  }
+
+  if (loading || !user) {
+    return <section className="mx-auto max-w-5xl px-4 py-16 text-center text-muted-foreground">Загрузка...</section>;
   }
 
   if (showCustomTime) {
@@ -247,9 +253,5 @@ function PlayModeSelector() {
 }
 
 export default function PlayPage() {
-  return (
-    <AuthGate>
-      <PlayModeSelector />
-    </AuthGate>
-  );
+  return <PlayModeSelector />;
 }

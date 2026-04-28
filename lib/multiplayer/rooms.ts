@@ -10,9 +10,19 @@ const ROOMS_KEY = "code-gambit:rooms";
 type RoomRow = Database["public"]["Tables"]["rooms"]["Row"];
 type Db = SupabaseClient<Database>;
 
+const ADJECTIVES = ["Быстрая", "Тихая", "Яркая", "Смелая", "Мудрая", "Дерзкая", "Хитрая", "Сильная", "Ловкая", "Грозная"];
+const NOUNS = ["Пешка", "Ладья", "Слон", "Конь", "Ферзь", "Король", "Партия", "Атака", "Защита", "Гамбит"];
+
+function generateRoomName(): string {
+  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+  return `${adj} ${noun}`;
+}
+
 function mapRoom(row: RoomRow): RoomState {
   return {
     id: row.id,
+    name: row.name || generateRoomName(),
     host_id: row.host_id,
     status: row.status,
     current_fen: row.current_fen,
@@ -52,10 +62,12 @@ function upsertLocalRoom(room: RoomState) {
 export async function createFriendRoom(userId: string, timeControl?: TimeControlConfig, isRated: boolean = false) {
   const client = getSupabaseBrowserClient();
   const initialTimeMs = timeControl && timeControl.initialSeconds > 0 ? timeControl.initialSeconds * 1000 : undefined;
+  const roomName = generateRoomName();
 
-  if (!client || userId.startsWith("demo")) {
+  if (!client || userId.startsWith("demo") || userId.startsWith("anon")) {
     const room: RoomState = {
       id: crypto.randomUUID().slice(0, 8),
+      name: roomName,
       host_id: userId,
       status: "waiting",
       current_fen: INITIAL_FEN,
@@ -80,6 +92,7 @@ export async function createFriendRoom(userId: string, timeControl?: TimeControl
   const { data, error } = await client
     .from("rooms")
     .insert({
+      name: roomName,
       host_id: userId,
       current_fen: INITIAL_FEN,
       pgn: "",
@@ -103,17 +116,25 @@ export async function createFriendRoom(userId: string, timeControl?: TimeControl
 export async function fetchRoom(roomId: string) {
   const client = getSupabaseBrowserClient();
   if (!client) return readLocalRooms().find((room) => room.id === roomId) ?? null;
+  console.log('[fetchRoom] Fetching room:', roomId);
   const { data, error } = await client.from("rooms").select("*").eq("id", roomId).maybeSingle();
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error('[fetchRoom] Error:', error);
+    throw new Error(error.message);
+  }
+  console.log('[fetchRoom] Data:', data);
   return data ? mapRoom(data) : null;
 }
 
 export async function joinRoom(roomId: string, userId: string) {
+  console.log('[joinRoom] Attempting to join room:', roomId, 'userId:', userId);
   const client = getSupabaseBrowserClient();
+  console.log('[joinRoom] Client exists:', !!client);
   const current = await fetchRoom(roomId);
+  console.log('[joinRoom] Current room:', current);
   if (!current) throw new Error("Комната не найдена");
 
-  if (!client || userId.startsWith("demo")) {
+  if (!client || userId.startsWith("demo") || userId.startsWith("anon")) {
     let next = current;
     if (!current.black_player_id && current.white_player_id !== userId) {
       next = { ...current, black_player_id: userId, status: "active", updated_at: new Date().toISOString() };
@@ -175,7 +196,7 @@ export async function applyRoomMove({
   };
 
   const client = getSupabaseBrowserClient();
-  if (!client || userId.startsWith("demo")) {
+  if (!client || userId.startsWith("demo") || userId.startsWith("anon")) {
     upsertLocalRoom(next);
     return next;
   }

@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Copy, Radio, RotateCcw, Users } from "lucide-react";
-import { AuthGate } from "@/components/auth/auth-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { ChessboardView } from "@/components/chess/chessboard-view";
@@ -29,7 +28,7 @@ type PendingMove = { from: string; to: string } | null;
 function RoomInner() {
   const params = useParams<{ roomId: string }>();
   const roomId = params.roomId;
-  const { user, profile } = useAuth();
+  const { user, profile, startAnonymousSession, loading: authLoading } = useAuth();
   const { analyzeFen } = useStockfish();
   const { room, color, online, loading, error, reload, makeMove } = useRoom(roomId, user?.id ?? null);
   const [theme, setTheme] = useState<BoardTheme>(profile?.board_theme ?? "midnight");
@@ -39,6 +38,12 @@ function RoomInner() {
   const [reviewing, setReviewing] = useState(false);
   const savedVersion = useRef<number | null>(null);
   const startedAt = useRef(Date.now());
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      startAnonymousSession();
+    }
+  }, [authLoading, user, startAnonymousSession]);
 
   const pgn = room?.pgn ?? "";
   const fen = room?.current_fen ?? INITIAL_FEN;
@@ -68,6 +73,7 @@ function RoomInner() {
 
   useEffect(() => {
     if (!room || !user || room.status !== "finished" || savedVersion.current === room.version) return;
+    if (user.isAnonymous) return;
     savedVersion.current = room.version;
     setReviewing(true);
     void saveGame({
@@ -87,7 +93,7 @@ function RoomInner() {
     }).finally(() => setReviewing(false));
   }, [analyzeFen, profile?.is_pro, room, user]);
 
-  if (loading) {
+  if (authLoading || loading || !user) {
     return <section className="mx-auto max-w-5xl px-4 py-16 text-center text-muted-foreground">Загрузка комнаты...</section>;
   }
 
@@ -126,7 +132,7 @@ function RoomInner() {
   return (
     <>
       <GameShell
-        title={`Комната ${room.id}`}
+        title={room.name}
         description="Партия по ссылке с сохранением последней позиции. Если связь оборвется, игроки вернутся в актуальное состояние комнаты."
         board={<ChessboardView fen={fen} theme={theme} orientation={orientation} onMove={onMove} allowDragging={canMove} />}
         side={
@@ -169,9 +175,5 @@ function RoomInner() {
 }
 
 export default function RoomPage() {
-  return (
-    <AuthGate>
-      <RoomInner />
-    </AuthGate>
-  );
+  return <RoomInner />;
 }

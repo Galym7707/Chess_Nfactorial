@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Link2, Users } from "lucide-react";
-import { AuthGate } from "@/components/auth/auth-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,15 @@ import { createFriendRoom } from "@/lib/multiplayer/rooms";
 
 function CreateFriendRoom() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, startAnonymousSession, loading } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      startAnonymousSession();
+    }
+  }, [loading, user, startAnonymousSession]);
 
   async function createRoom() {
     if (!user) return;
@@ -27,6 +32,10 @@ function CreateFriendRoom() {
       setError(err instanceof Error ? err.message : "Не удалось создать комнату");
       setBusy(false);
     }
+  }
+
+  if (loading || !user) {
+    return <section className="mx-auto max-w-5xl px-4 py-16 text-center text-muted-foreground">Загрузка...</section>;
   }
 
   return (
@@ -63,9 +72,5 @@ function CreateFriendRoom() {
 }
 
 export default function PlayFriendPage() {
-  return (
-    <AuthGate>
-      <CreateFriendRoom />
-    </AuthGate>
-  );
+  return <CreateFriendRoom />;
 }

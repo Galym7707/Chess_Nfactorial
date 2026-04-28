@@ -10,11 +10,14 @@ import type { Profile } from "@/types/app";
 
 const DEMO_USER_KEY = "code-gambit:demo-user";
 const DEMO_PROFILE_KEY = "code-gambit:demo-profile";
+const ANON_USER_KEY = "code-gambit:anon-user";
+const ANON_PROFILE_KEY = "code-gambit:anon-profile";
 
 export type AppUser = {
   id: string;
   email: string;
   isDemo: boolean;
+  isAnonymous?: boolean;
 };
 
 type AuthContextValue = {
@@ -26,6 +29,7 @@ type AuthContextValue = {
   signUp: (email: string, password: string, displayName: string) => Promise<string | null>;
   signOut: () => Promise<void>;
   startDemoSession: () => void;
+  startAnonymousSession: () => void;
   refreshProfile: () => Promise<void>;
   updateProfile: (patch: Partial<Profile>) => Promise<string | null>;
 };
@@ -56,12 +60,35 @@ function demoProfile(userId: string): Profile {
   };
 }
 
+function anonymousProfile(userId: string): Profile {
+  return {
+    id: userId,
+    display_name: "Аноним",
+    city: "Онлайн",
+    preferred_theme: "system",
+    board_theme: "midnight",
+    is_pro: false,
+    rating: 1200,
+    wins: 0,
+    losses: 0,
+    draws: 0,
+  };
+}
+
 async function ensureProfile(user: AppUser) {
   if (user.isDemo) {
     const stored = safeJsonParse<Profile | null>(localStorage.getItem(DEMO_PROFILE_KEY), null);
     if (stored) return stored;
     const profile = demoProfile(user.id);
     localStorage.setItem(DEMO_PROFILE_KEY, JSON.stringify(profile));
+    return profile;
+  }
+
+  if (user.isAnonymous) {
+    const stored = safeJsonParse<Profile | null>(localStorage.getItem(ANON_PROFILE_KEY), null);
+    if (stored) return stored;
+    const profile = anonymousProfile(user.id);
+    localStorage.setItem(ANON_PROFILE_KEY, JSON.stringify(profile));
     return profile;
   }
 
@@ -109,8 +136,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (!nextConfigured || !supabase) {
         const demoUser = safeJsonParse<AppUser | null>(localStorage.getItem(DEMO_USER_KEY), null);
-        setUser(demoUser);
-        if (demoUser) await loadProfile(demoUser);
+        const anonUser = safeJsonParse<AppUser | null>(localStorage.getItem(ANON_USER_KEY), null);
+        const existingUser = demoUser || anonUser;
+        setUser(existingUser);
+        if (existingUser) await loadProfile(existingUser);
         if (mounted) setLoading(false);
         return;
       }
@@ -170,6 +199,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     localStorage.removeItem(DEMO_USER_KEY);
+    localStorage.removeItem(ANON_USER_KEY);
     if (supabase) await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
@@ -178,6 +208,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const startDemoSession = useCallback(() => {
     const nextUser: AppUser = { id: "demo-local-user", email: "demo@codegambit.local", isDemo: true };
     localStorage.setItem(DEMO_USER_KEY, JSON.stringify(nextUser));
+    setUser(nextUser);
+    void loadProfile(nextUser);
+  }, [loadProfile]);
+
+  const startAnonymousSession = useCallback(() => {
+    const anonId = `anon-${crypto.randomUUID()}`;
+    const nextUser: AppUser = { id: anonId, email: `${anonId}@anon.local`, isDemo: false, isAnonymous: true };
+    localStorage.setItem(ANON_USER_KEY, JSON.stringify(nextUser));
     setUser(nextUser);
     void loadProfile(nextUser);
   }, [loadProfile]);
@@ -212,9 +250,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut,
     startDemoSession,
+    startAnonymousSession,
     refreshProfile,
     updateProfile,
-  }), [configured, loading, profile, refreshProfile, signIn, signOut, signUp, startDemoSession, updateProfile, user]);
+  }), [configured, loading, profile, refreshProfile, signIn, signOut, signUp, startDemoSession, startAnonymousSession, updateProfile, user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

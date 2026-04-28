@@ -42,6 +42,7 @@ type GameMoveRow = { id: string; game_id: string; ply: number; san: string; fen_
 
 type RoomRow = {
   id: string;
+  name: string;
   host_id: string;
   status: "waiting" | "active" | "finished" | "abandoned";
   current_fen: string;
@@ -75,7 +76,7 @@ export interface Database {
       profiles: { Row: ProfileRow; Insert: Partial<ProfileRow> & { id: string }; Update: Partial<ProfileRow>; Relationships: EmptyRelationships };
       games: { Row: GameRow; Insert: Partial<GameRow> & Pick<GameRow, "user_id" | "mode" | "result" | "pgn" | "fen">; Update: Partial<GameRow>; Relationships: EmptyRelationships };
       game_moves: { Row: GameMoveRow; Insert: Partial<GameMoveRow> & Pick<GameMoveRow, "game_id" | "ply" | "san" | "fen_after">; Update: Partial<GameMoveRow>; Relationships: EmptyRelationships };
-      rooms: { Row: RoomRow; Insert: Partial<RoomRow> & Pick<RoomRow, "host_id" | "current_fen">; Update: Partial<RoomRow>; Relationships: EmptyRelationships };
+      rooms: { Row: RoomRow; Insert: Partial<RoomRow> & Pick<RoomRow, "host_id" | "current_fen" | "name">; Update: Partial<RoomRow>; Relationships: EmptyRelationships };
       room_players: { Row: RoomPlayerRow; Insert: Partial<RoomPlayerRow> & Pick<RoomPlayerRow, "room_id" | "user_id" | "color">; Update: Partial<RoomPlayerRow>; Relationships: EmptyRelationships };
       coach_reports: { Row: CoachReportRow; Insert: Partial<CoachReportRow> & Pick<CoachReportRow, "game_id" | "user_id" | "quality_score" | "summary" | "issues">; Update: Partial<CoachReportRow>; Relationships: EmptyRelationships };
       purchases: { Row: PurchaseRow; Insert: Partial<PurchaseRow> & Pick<PurchaseRow, "user_id" | "status" | "product">; Update: Partial<PurchaseRow>; Relationships: EmptyRelationships };

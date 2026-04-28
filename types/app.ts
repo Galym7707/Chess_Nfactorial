@@ -74,6 +74,7 @@ export interface CoachReport {
 
 export interface RoomState {
   id: string;
+  name: string;
   host_id: string;
   status: "waiting" | "active" | "finished" | "abandoned";
   current_fen: string;
