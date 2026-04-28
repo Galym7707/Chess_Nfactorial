@@ -40,6 +40,26 @@ export function ChessboardView({
   const customSquareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {};
 
+    // Highlight king in check
+    if (chess.inCheck()) {
+      const board = chess.board();
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          const piece = board[i][j];
+          if (piece && piece.type === "k" && piece.color === chess.turn()) {
+            const file = String.fromCharCode(97 + j);
+            const rank = String(8 - i);
+            const square = file + rank;
+            styles[square] = {
+              backgroundColor: "rgba(255, 0, 0, 0.5)",
+              boxShadow: "inset 0 0 0 3px rgba(255, 0, 0, 0.9)",
+              animation: "pulse 1.5s ease-in-out infinite",
+            };
+          }
+        }
+      }
+    }
+
     if (selectedSquare) {
       styles[selectedSquare] = {
         backgroundColor: "rgba(255, 255, 0, 0.4)",
@@ -65,7 +85,7 @@ export function ChessboardView({
     }
 
     return styles;
-  }, [selectedSquare, legalMoves]);
+  }, [selectedSquare, legalMoves, chess]);
 
   function onSquareClick(square: string) {
     if (!allowDragging || !onMove) return;
