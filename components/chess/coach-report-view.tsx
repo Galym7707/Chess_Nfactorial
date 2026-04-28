@@ -14,11 +14,23 @@ const labels = {
 export function CoachReportView({ report }: { report: CoachReport }) {
   return (
     <Surface>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-primary">Разбор партии</p>
-          <h2 className="mt-2 font-display text-3xl font-semibold">Проверка ключевых решений</h2>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex items-start gap-4">
+          {/* Coach Tokayev avatar */}
+          <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
+            <img
+              src="/tokayev.jpg"
+              alt="Coach Tokayev"
+              className="h-full w-full object-cover"
+            />
+          </div>
+
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-primary">Разбор партии</p>
+            <h2 className="mt-2 font-display text-3xl font-semibold">Проверка ключевых решений</h2>
+          </div>
         </div>
+
         <div className="rounded-3xl bg-primary/15 px-5 py-3 text-center">
           <p className="text-xs text-muted-foreground">качество</p>
           <p className="font-display text-3xl font-semibold text-primary">{report.quality_score}</p>
