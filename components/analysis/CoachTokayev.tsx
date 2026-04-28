@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Surface } from "@/components/ui/surface";
 import type { AnalyzedMove } from "@/lib/coach/types";
@@ -21,10 +22,14 @@ export function CoachTokayev({ move, isDemo = false }: CoachTokayevProps) {
     <Surface className="relative overflow-hidden">
       {/* Аватар Coach Tokayev */}
       <div className="flex items-start gap-4">
-        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50 bg-gradient-to-br from-primary/20 to-primary/5">
-          <div className="flex h-full w-full items-center justify-center text-3xl">
-            🎓
-          </div>
+        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
+          <Image
+            src="/tokayev.jpg"
+            alt="Coach Tokayev"
+            width={64}
+            height={64}
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="flex-1">
@@ -51,7 +56,18 @@ export function CoachTokayev({ move, isDemo = false }: CoachTokayevProps) {
 
       {/* Декоративный элемент для brilliant moves */}
       {classification === "brilliant" && (
-        <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 animate-pulse rounded-full bg-cyan-500/10 blur-3xl" />
+        <>
+          <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 animate-pulse rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute right-4 top-4">
+            <Image
+              src="/brilliant-move.webp"
+              alt="Brilliant Move"
+              width={48}
+              height={48}
+              className="animate-pulse"
+            />
+          </div>
+        </>
       )}
     </Surface>
   );

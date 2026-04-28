@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
@@ -53,9 +54,13 @@ export function AICoachPreview() {
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
               <div className="relative">
                 <div className="absolute inset-0 animate-ping rounded-full bg-cyan-400/50" />
-                <div className="relative rounded-full bg-cyan-400 px-4 py-2 text-sm font-bold text-white shadow-lg">
-                  ✨ Brilliant Move
-                </div>
+                <Image
+                  src="/brilliant-move.webp"
+                  alt="Brilliant Move"
+                  width={80}
+                  height={80}
+                  className="relative animate-pulse"
+                />
               </div>
             </div>
           </div>
@@ -65,10 +70,14 @@ export function AICoachPreview() {
         <div className="flex flex-col justify-center">
           <Surface className="relative overflow-hidden">
             <div className="flex items-start gap-4">
-              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50 bg-gradient-to-br from-primary/20 to-primary/5">
-                <div className="flex h-full w-full items-center justify-center text-4xl">
-                  🎓
-                </div>
+              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
+                <Image
+                  src="/tokayev.jpg"
+                  alt="Coach Tokayev"
+                  width={80}
+                  height={80}
+                  className="h-full w-full object-cover"
+                />
               </div>
 
               <div className="flex-1">
