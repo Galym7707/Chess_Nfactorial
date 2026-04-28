@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Surface } from "@/components/ui/surface";
@@ -25,44 +24,14 @@ export function AICoachPreview() {
       </div>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-2">
-        {/* Mock preview доски */}
+        {/* Brilliant move board image */}
         <Surface className="relative overflow-hidden p-6">
-          <div className="aspect-square w-full rounded-2xl border bg-gradient-to-br from-primary/5 to-primary/10" style={{ borderColor: "hsl(var(--border))" }}>
-            {/* Упрощённая шахматная доска */}
-            <div className="grid h-full grid-cols-8">
-              {Array.from({ length: 64 }).map((_, i) => {
-                const light = (Math.floor(i / 8) + i) % 2 === 0;
-                return (
-                  <div
-                    key={i}
-                    className="flex items-center justify-center text-2xl md:text-4xl"
-                    style={{
-                      backgroundColor: light ? "rgb(222, 227, 230)" : "rgb(140, 162, 173)",
-                    }}
-                  >
-                    {/* Несколько фигур для демонстрации */}
-                    {i === 4 && "♔"}
-                    {i === 60 && "♚"}
-                    {i === 27 && "♕"}
-                    {i === 35 && "♞"}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Highlighted brilliant move */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="relative">
-                <div className="absolute inset-0 animate-ping rounded-full bg-cyan-400/50" />
-                <Image
-                  src="/brilliant-move.webp"
-                  alt="Brilliant Move"
-                  width={80}
-                  height={80}
-                  className="relative animate-pulse"
-                />
-              </div>
-            </div>
+          <div className="aspect-square w-full overflow-hidden rounded-2xl">
+            <img
+              src="/brilliant-move.webp"
+              alt="Brilliant Move Example"
+              className="h-full w-full object-cover"
+            />
           </div>
         </Surface>
 
@@ -71,11 +40,9 @@ export function AICoachPreview() {
           <Surface className="relative overflow-hidden">
             <div className="flex items-start gap-4">
               <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
-                <Image
+                <img
                   src="/tokayev.jpg"
                   alt="Coach Tokayev"
-                  width={80}
-                  height={80}
                   className="h-full w-full object-cover"
                 />
               </div>

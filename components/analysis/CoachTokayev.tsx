@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Surface } from "@/components/ui/surface";
 import type { AnalyzedMove } from "@/lib/coach/types";
@@ -23,11 +22,9 @@ export function CoachTokayev({ move, isDemo = false }: CoachTokayevProps) {
       {/* Аватар Coach Tokayev */}
       <div className="flex items-start gap-4">
         <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/50">
-          <Image
+          <img
             src="/tokayev.jpg"
             alt="Coach Tokayev"
-            width={64}
-            height={64}
             className="h-full w-full object-cover"
           />
         </div>
@@ -59,12 +56,10 @@ export function CoachTokayev({ move, isDemo = false }: CoachTokayevProps) {
         <>
           <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 animate-pulse rounded-full bg-cyan-500/10 blur-3xl" />
           <div className="absolute right-4 top-4">
-            <Image
+            <img
               src="/brilliant-move.webp"
               alt="Brilliant Move"
-              width={48}
-              height={48}
-              className="animate-pulse"
+              className="h-12 w-12 animate-pulse"
             />
           </div>
         </>
