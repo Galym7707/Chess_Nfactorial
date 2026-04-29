@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Clock } from "lucide-react";
 import { formatTime } from "@/lib/chess/time-control";
+import { playTimerWarningSound, playTimerCriticalSound } from "@/lib/chess/sounds";
 import { cn } from "@/lib/utils";
 
 interface ChessTimerProps {
@@ -15,6 +16,7 @@ interface ChessTimerProps {
 export function ChessTimer({ whiteTimeMs, blackTimeMs, activeColor, onTimeExpired }: ChessTimerProps) {
   const [whiteTime, setWhiteTime] = useState(whiteTimeMs);
   const [blackTime, setBlackTime] = useState(blackTimeMs);
+  const lastWarningTime = useRef<{ white: number; black: number }>({ white: -1, black: -1 });
 
   useEffect(() => {
     setWhiteTime(whiteTimeMs);
@@ -28,6 +30,22 @@ export function ChessTimer({ whiteTimeMs, blackTimeMs, activeColor, onTimeExpire
       if (activeColor === "white") {
         setWhiteTime((prev) => {
           const next = Math.max(0, prev - 100);
+
+          // Play warning sounds
+          if (next <= 10000 && next > 0) {
+            const currentSecond = Math.floor(next / 1000);
+            if (currentSecond !== lastWarningTime.current.white) {
+              lastWarningTime.current.white = currentSecond;
+              playTimerCriticalSound();
+            }
+          } else if (next <= 30000 && next > 10000) {
+            const currentSecond = Math.floor(next / 1000);
+            if (currentSecond % 5 === 0 && currentSecond !== lastWarningTime.current.white) {
+              lastWarningTime.current.white = currentSecond;
+              playTimerWarningSound();
+            }
+          }
+
           if (next === 0 && onTimeExpired) {
             onTimeExpired("white");
           }
@@ -36,6 +54,22 @@ export function ChessTimer({ whiteTimeMs, blackTimeMs, activeColor, onTimeExpire
       } else {
         setBlackTime((prev) => {
           const next = Math.max(0, prev - 100);
+
+          // Play warning sounds
+          if (next <= 10000 && next > 0) {
+            const currentSecond = Math.floor(next / 1000);
+            if (currentSecond !== lastWarningTime.current.black) {
+              lastWarningTime.current.black = currentSecond;
+              playTimerCriticalSound();
+            }
+          } else if (next <= 30000 && next > 10000) {
+            const currentSecond = Math.floor(next / 1000);
+            if (currentSecond % 5 === 0 && currentSecond !== lastWarningTime.current.black) {
+              lastWarningTime.current.black = currentSecond;
+              playTimerWarningSound();
+            }
+          }
+
           if (next === 0 && onTimeExpired) {
             onTimeExpired("black");
           }

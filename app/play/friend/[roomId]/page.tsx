@@ -252,7 +252,7 @@ function RoomInner() {
           </>
         }
       />
-      {report ? <section className="mx-auto max-w-7xl px-4 pb-10 md:px-6"><EnhancedAnalysisView report={report} theme={theme} /></section> : null}
+      {report ? <section data-analysis-section className="mx-auto max-w-7xl px-4 pb-10 md:px-6"><EnhancedAnalysisView report={report} theme={theme} /></section> : null}
       <PromotionDialog
         open={Boolean(pending)}
         onCancel={() => setPending(null)}
@@ -272,7 +272,13 @@ function RoomInner() {
             "draw"
           }
           stats={report.move_stats}
+          accuracy={color === "white" ? report.accuracy?.white : report.accuracy?.black}
           onClose={() => setShowResultModal(false)}
+          onAnalyze={() => {
+            setShowResultModal(false);
+            const element = document.querySelector('[data-analysis-section]');
+            element?.scrollIntoView({ behavior: 'smooth' });
+          }}
         />
       )}
     </>

@@ -246,7 +246,7 @@ function AiArenaInner() {
           </>
         }
       />
-      {report ? <section className="mx-auto max-w-7xl px-4 pb-10 md:px-6"><EnhancedAnalysisView report={report} theme={theme} /></section> : null}
+      {report ? <section data-analysis-section className="mx-auto max-w-7xl px-4 pb-10 md:px-6"><EnhancedAnalysisView report={report} theme={theme} /></section> : null}
       <PromotionDialog
         open={Boolean(pending)}
         onCancel={() => setPending(null)}
@@ -260,7 +260,14 @@ function AiArenaInner() {
           open={showResultModal}
           result={status.result === "1-0" ? "win" : status.result === "0-1" ? "loss" : "draw"}
           stats={report.move_stats}
+          accuracy={report.accuracy?.white}
           onClose={() => setShowResultModal(false)}
+          onRematch={reset}
+          onAnalyze={() => {
+            setShowResultModal(false);
+            const element = document.querySelector('[data-analysis-section]');
+            element?.scrollIntoView({ behavior: 'smooth' });
+          }}
         />
       )}
     </>
