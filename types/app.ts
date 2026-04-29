@@ -60,6 +60,8 @@ export interface CoachIssue {
   betterMove: string;
   pv: string[];
   explanation: string;
+  fenBefore?: string;
+  fenAfter?: string;
 }
 
 export interface CoachReport {
@@ -80,6 +82,20 @@ export interface CoachReport {
     mistake: number;
     blunder: number;
   };
+  accuracy?: {
+    white: number;
+    black: number;
+  };
+  all_moves?: Array<{
+    ply: number;
+    move: string;
+    classification: CoachMoveClass;
+    evalBefore: number;
+    evalAfter: number;
+    lossCp: number;
+    fenBefore: string;
+    fenAfter: string;
+  }>;
 }
 
 export interface RoomState {

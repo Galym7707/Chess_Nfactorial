@@ -62,18 +62,53 @@ export async function runCoachReview({
     blunder: 0,
   };
 
+  const allMoves: Array<{
+    ply: number;
+    move: string;
+    classification: CoachMoveClass;
+    evalBefore: number;
+    evalAfter: number;
+    lossCp: number;
+    fenBefore: string;
+    fenAfter: string;
+  }> = [];
+
+  let whiteLosses: number[] = [];
+  let blackLosses: number[] = [];
+
   for (const [index, move] of moves.slice(0, maxPlies).entries()) {
     const beforeFen = cursor.fen();
     const actualUci = uciFromMove(move);
     const before = await analyzeFen(beforeFen, { depth: 8, movetime: 450, skill: 14 });
     cursor.move({ from: move.from, to: move.to, promotion: move.promotion });
-    const after = await analyzeFen(cursor.fen(), { depth: 7, movetime: 350, skill: 14 });
+    const afterFen = cursor.fen();
+    const after = await analyzeFen(afterFen, { depth: 7, movetime: 350, skill: 14 });
     const lossCp = Math.max(0, normalizeScoreForMover(before, after));
     losses.push(lossCp);
+
+    const isWhite = index % 2 === 0;
+    if (isWhite) {
+      whiteLosses.push(lossCp);
+    } else {
+      blackLosses.push(lossCp);
+    }
+
     const classification = classifyLoss(lossCp, before.bestMove, actualUci);
 
     // Count move classifications
     moveStats[classification]++;
+
+    // Store all moves for graph
+    allMoves.push({
+      ply: index + 1,
+      move: move.san,
+      classification,
+      evalBefore: before.scoreCp,
+      evalAfter: -after.scoreCp,
+      lossCp: Math.round(lossCp),
+      fenBefore: beforeFen,
+      fenAfter: afterFen,
+    });
 
     if (["inaccuracy", "mistake", "blunder"].includes(classification)) {
       const best = before.bestMove ?? "улучшить развитие";
@@ -87,12 +122,24 @@ export async function runCoachReview({
         betterMove: best,
         pv: before.pv,
         explanation: explainMove(classification, lossCp, move.san, best, before.pv),
+        fenBefore: beforeFen,
+        fenAfter: afterFen,
       });
     }
   }
 
   const averageLoss = losses.length ? losses.reduce((sum, loss) => sum + Math.min(loss, 320), 0) / losses.length : 0;
   const qualityScore = Math.max(1, Math.min(100, Math.round(100 - averageLoss / 3.2)));
+
+  // Calculate accuracy for white and black (Chess.com style)
+  const calculateAccuracy = (losses: number[]) => {
+    if (losses.length === 0) return 100;
+    const avgLoss = losses.reduce((sum, loss) => sum + Math.min(loss, 300), 0) / losses.length;
+    return Math.max(0, Math.min(100, Math.round(100 - avgLoss / 3)));
+  };
+
+  const whiteAccuracy = calculateAccuracy(whiteLosses);
+  const blackAccuracy = calculateAccuracy(blackLosses);
 
   // Estimate FIDE rating based on quality
   const estimatedRating = Math.round(800 + (qualityScore * 20));
@@ -136,6 +183,11 @@ export async function runCoachReview({
     estimated_rating: estimatedRating,
     weaknesses,
     move_stats: moveStats,
+    accuracy: {
+      white: whiteAccuracy,
+      black: blackAccuracy,
+    },
+    all_moves: allMoves,
   };
 }
 

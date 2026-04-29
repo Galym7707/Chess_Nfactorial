@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AuthGate } from "@/components/auth/auth-gate";
 import { useAuth } from "@/components/auth/auth-provider";
-import { CoachReportView } from "@/components/chess/coach-report-view";
+import { EnhancedAnalysisView } from "@/components/analysis/EnhancedAnalysisView";
 import { MoveList } from "@/components/chess/move-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -81,7 +81,7 @@ function ReviewInner() {
         </Surface>
         <MoveList moves={game.moves} />
       </div>
-      {report ? <CoachReportView report={report} /> : <Surface><h2 className="font-display text-3xl font-semibold">Разбор еще не создан</h2><p className="mt-3 text-sm text-muted-foreground">Нажмите кнопку слева. Бесплатный режим анализирует меньше полуходов; Pro включает расширенный разбор.</p></Surface>}
+      {report ? <EnhancedAnalysisView report={report} /> : <Surface><h2 className="font-display text-3xl font-semibold">Разбор еще не создан</h2><p className="mt-3 text-sm text-muted-foreground">Нажмите кнопку слева. Бесплатный режим анализирует меньше полуходов; Pro включает расширенный разбор.</p></Surface>}
     </section>
   );
 }

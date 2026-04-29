@@ -8,7 +8,7 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { ChessboardView } from "@/components/chess/chessboard-view";
 import { ChessTimer } from "@/components/chess/chess-timer";
-import { CoachReportView } from "@/components/chess/coach-report-view";
+import { EnhancedAnalysisView } from "@/components/analysis/EnhancedAnalysisView";
 import { EvaluationBar } from "@/components/chess/evaluation-bar";
 import { GameResultModal } from "@/components/chess/game-result-modal";
 import { GameShell } from "@/components/chess/game-shell";
@@ -252,7 +252,7 @@ function RoomInner() {
           </>
         }
       />
-      {report ? <section className="mx-auto max-w-7xl px-4 pb-10 md:px-6"><CoachReportView report={report} /></section> : null}
+      {report ? <section className="mx-auto max-w-7xl px-4 pb-10 md:px-6"><EnhancedAnalysisView report={report} theme={theme} /></section> : null}
       <PromotionDialog
         open={Boolean(pending)}
         onCancel={() => setPending(null)}
