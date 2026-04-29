@@ -52,6 +52,7 @@ export function EnhancedAnalysisView({ report, theme = "classic" }: { report: Co
   // Prepare data for analysis board
   const analyzedMoves = (report.all_moves || []).map((move) => ({
     moveNumber: Math.floor((move.ply + 1) / 2),
+    color: (move.ply % 2 === 1 ? "white" : "black") as "white" | "black",
     san: move.move,
     uci: "",
     fenBefore: move.fenBefore,
