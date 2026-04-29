@@ -3,12 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Copy, Radio, RotateCcw, Users } from "lucide-react";
+import { Copy, Radio, RotateCcw, Users, Brain } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { BoardThemePicker } from "@/components/chess/board-theme-picker";
 import { ChessboardView } from "@/components/chess/chessboard-view";
 import { ChessTimer } from "@/components/chess/chess-timer";
 import { CoachReportView } from "@/components/chess/coach-report-view";
+import { EvaluationBar } from "@/components/chess/evaluation-bar";
 import { GameResultModal } from "@/components/chess/game-result-modal";
 import { GameShell } from "@/components/chess/game-shell";
 import { GameStatus } from "@/components/chess/game-status";
@@ -30,7 +31,7 @@ function RoomInner() {
   const params = useParams<{ roomId: string }>();
   const roomId = params.roomId;
   const { user, profile, startAnonymousSession, loading: authLoading } = useAuth();
-  const { analyzeFen } = useStockfish();
+  const { ready, analyzeFen } = useStockfish();
   const { room, color, online, loading, error, reload, makeMove } = useRoom(roomId, user?.id ?? null);
   const [theme, setTheme] = useState<BoardTheme>(profile?.board_theme ?? "midnight");
   const [pending, setPending] = useState<PendingMove>(null);
@@ -40,6 +41,14 @@ function RoomInner() {
   const [showResultModal, setShowResultModal] = useState(false);
   const savedVersion = useRef<number | null>(null);
   const startedAt = useRef(Date.now());
+
+  const [stockfishEnabled, setStockfishEnabled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('slay-gambit:stockfish-enabled');
+    return saved === 'true';
+  });
+  const [liveEval, setLiveEval] = useState<number | null>(null);
+  const [bestMove, setBestMove] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -56,6 +65,38 @@ function RoomInner() {
   const turnColor = fen.split(" ")[1] === "w" ? "white" : "black";
   const canMove = room?.status === "active" && color === turnColor && !status.gameOver;
   const colorLabel = color === "black" ? "черные" : "белые";
+
+  useEffect(() => {
+    localStorage.setItem('slay-gambit:stockfish-enabled', String(stockfishEnabled));
+  }, [stockfishEnabled]);
+
+  useEffect(() => {
+    if (!stockfishEnabled || !ready || status.gameOver) {
+      setLiveEval(null);
+      setBestMove(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    analyzeFen(fen, { depth: 15, movetime: 1000 })
+      .then((analysis) => {
+        if (!cancelled) {
+          setLiveEval(analysis.scoreCp / 100);
+          setBestMove(analysis.bestMove);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLiveEval(null);
+          setBestMove(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fen, stockfishEnabled, ready, analyzeFen, status.gameOver]);
 
   async function copyLink() {
     await navigator.clipboard.writeText(window.location.href);
@@ -132,12 +173,29 @@ function RoomInner() {
   const blackTimeMs = room.black_time_remaining_ms ?? (room.initial_time_seconds ?? 0) * 1000;
   const activeTimerColor = room.status === "active" && !status.gameOver ? turnColor : null;
 
+  const bestMoveArrow = bestMove && canMove ? {
+    from: bestMove.slice(0, 2),
+    to: bestMove.slice(2, 4)
+  } : null;
+
   return (
     <>
       <GameShell
         title={room.name}
         description="Партия по ссылке с сохранением последней позиции. Если связь оборвется, игроки вернутся в актуальное состояние комнаты."
-        board={<ChessboardView fen={fen} theme={theme} orientation={orientation} onMove={onMove} allowDragging={canMove} />}
+        board={
+          <div className="flex flex-col sm:flex-row gap-2">
+            {stockfishEnabled && liveEval !== null && (
+              <EvaluationBar
+                evaluation={liveEval}
+                className="flex-shrink-0 sm:w-8 w-full h-8 sm:h-auto"
+              />
+            )}
+            <div className="flex-1">
+              <ChessboardView fen={fen} theme={theme} orientation={orientation} onMove={onMove} allowDragging={canMove} bestMoveArrow={stockfishEnabled ? bestMoveArrow : null} />
+            </div>
+          </div>
+        }
         side={
           <>
             {lobby}
@@ -156,6 +214,36 @@ function RoomInner() {
                 <Badge>ходов: {room.moves.length}</Badge>
               </div>
               {error ? <p className="mt-3 rounded-2xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{error}</p> : null}
+              <div className="mt-4">
+                <Button
+                  variant={stockfishEnabled ? "primary" : "secondary"}
+                  size="sm"
+                  onClick={() => setStockfishEnabled(!stockfishEnabled)}
+                  disabled={!ready}
+                  type="button"
+                  className="gap-2 w-full"
+                >
+                  <Brain className="size-4" />
+                  {stockfishEnabled ? "Stockfish ON" : "Stockfish OFF"}
+                </Button>
+                {stockfishEnabled && liveEval !== null && (
+                  <div className="mt-3 rounded-xl bg-muted/30 p-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Оценка:</span>
+                      <span className="font-mono font-semibold">
+                        {liveEval > 0 ? "+" : ""}
+                        {liveEval.toFixed(2)}
+                      </span>
+                    </div>
+                    {bestMove && canMove && (
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="text-muted-foreground">Лучший ход:</span>
+                        <span className="font-mono text-green-400">{bestMove}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               <div className="mt-5"><BoardThemePicker value={theme} onChange={setTheme} isPro={profile?.is_pro} /></div>
               <Button className="mt-5 w-full" variant="secondary" onClick={copyLink} type="button"><Copy className="size-4" /> {copied ? "Ссылка скопирована" : "Копировать ссылку"}</Button>
               {reviewing ? <p className="mt-3 text-sm text-primary">Разбор анализирует финальную позицию...</p> : null}

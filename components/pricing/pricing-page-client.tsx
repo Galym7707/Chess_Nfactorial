@@ -104,9 +104,6 @@ export function PricingPageClient() {
       {!canRenderPricingTable && !hasPaymentLink ? (
         <Surface className="mt-8 border-dashed text-center">
           <h2 className="font-display text-2xl font-semibold">Stripe еще не активирован</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Добавьте `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `NEXT_PUBLIC_STRIPE_PRICE_TABLE_ID` для таблицы оплаты, `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` для платежной ссылки или `STRIPE_SECRET_KEY` + `STRIPE_PRO_PRICE_ID` для платежной сессии. Без них сайт работает без ошибок запуска.
-          </p>
           {!user ? <Button className="mt-5" variant="secondary" onClick={startDemoSession} type="button">Демо-сессия</Button> : null}
         </Surface>
       ) : null}
