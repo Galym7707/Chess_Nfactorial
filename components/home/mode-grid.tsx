@@ -45,7 +45,11 @@ export function ModeGrid() {
         </p>
       </div>
       <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {tools.map((tool) => <ModeCard key={tool.href} {...tool} />)}
+        {tools.map((tool, index) => (
+          <div key={tool.href} className="stagger-item" style={{ animationDelay: `${index * 0.1}s` }}>
+            <ModeCard {...tool} />
+          </div>
+        ))}
       </div>
     </section>
   );
